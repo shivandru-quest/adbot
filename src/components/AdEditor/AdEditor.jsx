@@ -179,41 +179,43 @@ const AdEditor = () => {
   };
 
   const downloadCanvas = () => {
-    const stage = stageRef.current;
-    const transformer = stage?.find("Transformer")[0];
-    const elements = stage?.find("Image, Rect, Text, Circle, RegularPolygon");
+    setSelectedId(null);
+    setTimeout(() => {
+      const stage = stageRef.current;
+      const transformer = stage?.find("Transformer")[0];
+      const elements = stage?.find("Image, Rect, Text, Circle, RegularPolygon");
+      if (!elements?.length) return;
 
-    if (!elements?.length) return;
+      const boundingBox = elements.reduce(
+        (box, node) => {
+          const { x, y, width, height } = node.getClientRect();
+          return {
+            minX: Math.min(box.minX, x),
+            minY: Math.min(box.minY, y),
+            maxX: Math.max(box.maxX, x + width),
+            maxY: Math.max(box.maxY, y + height),
+          };
+        },
+        { minX: Infinity, minY: Infinity, maxX: -Infinity, maxY: -Infinity }
+      );
 
-    const boundingBox = elements.reduce(
-      (box, node) => {
-        const { x, y, width, height } = node.getClientRect();
-        return {
-          minX: Math.min(box.minX, x),
-          minY: Math.min(box.minY, y),
-          maxX: Math.max(box.maxX, x + width),
-          maxY: Math.max(box.maxY, y + height),
-        };
-      },
-      { minX: Infinity, minY: Infinity, maxX: -Infinity, maxY: -Infinity }
-    );
+      const croppedWidth = boundingBox.maxX - boundingBox.minX;
+      const croppedHeight = boundingBox.maxY - boundingBox.minY;
 
-    const croppedWidth = boundingBox.maxX - boundingBox.minX;
-    const croppedHeight = boundingBox.maxY - boundingBox.minY;
+      const uri = stage.toDataURL({
+        x: boundingBox.minX,
+        y: boundingBox.minY,
+        width: croppedWidth,
+        height: croppedHeight,
+      });
 
-    const uri = stage.toDataURL({
-      x: boundingBox.minX,
-      y: boundingBox.minY,
-      width: croppedWidth,
-      height: croppedHeight,
-    });
-
-    const link = document.createElement("a");
-    link.download = "canvas.png";
-    link.href = uri;
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
+      const link = document.createElement("a");
+      link.download = "canvas.png";
+      link.href = uri;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    }, 1000);
   };
 
   const selectedElement = elements?.find(
