@@ -1,49 +1,96 @@
 import React, { useState, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { templates } from "../components/TemplateSelection";
+import axios from "axios";
+import { Toast } from "@questlabs/react-sdk";
+import { mainConfig } from "../Config/mainConfig";
+import Loader from "./Loader";
+import { getToken, getUserId } from "../Config/generalFunctions";
 const SelectionModal = ({
   isOpen,
   onClose,
-  selectedPlatform,
-  selectedCategory,
-  selectedTemplate,
+  selectedTemplateId,
+  userTemplates,
+  selectedImage,
+  fetchTemplates,
 }) => {
   const location = useLocation();
   const navigate = useNavigate();
   const [templateData, setTemplateData] = useState({});
+  const [isLoading, setIsLoading] = useState(false);
   const [formData, setFormData] = useState({
     title: "",
     description: "",
-    platform: selectedPlatform || "",
-    category: selectedCategory || "",
+    platform: "",
+    category: "",
+    elements: [],
   });
   useEffect(() => {
     setTemplateData(
-      templates?.find((template) => template.id === selectedTemplate)
+      userTemplates?.find(
+        (template) => template?.templateId === selectedTemplateId
+      )
     );
     return () => setTemplateData({});
-  }, [selectedTemplate]);
+  }, [selectedTemplateId]);
+
   useEffect(() => {
     setFormData((prev) => ({
-      ...prev,
-      platform: selectedPlatform || "",
-      category: selectedCategory || "",
+      title: templateData?.title || "",
+      description: templateData?.description || "",
+      platform: templateData?.platform || "",
+      category: templateData?.category || "",
+      elements: templateData?.elements || [],
     }));
-  }, [selectedPlatform, selectedCategory]);
+  }, [templateData]);
   function handleChange(e) {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
   }
   function handleSubmit(e) {
     e.preventDefault();
-    navigate(`/editor/${selectedTemplate}`, {
+    navigate(`/editor/${selectedTemplateId}`, {
       state: { ...location.state, formData },
     });
   }
+  async function handleDelete() {
+    setIsLoading(true);
+    try {
+      const payload = {
+        isDeleted: true,
+      };
+      const res = await axios.patch(
+        `http://localhost:8080/api/adbot/template/delete/${selectedTemplateId}`,
+        {
+          payload,
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+            entityId: mainConfig.QUEST_ADDBOT_ENTITY_ID,
+            userId: getUserId(),
+            token: getToken(),
+          },
+        }
+      );
+      setIsLoading(false);
+      Toast.success({
+        text: "Ad deleted successfully",
+      });
+      await fetchTemplates();
+      onClose();
+    } catch (error) {
+      setIsLoading(false);
+      Toast.error({
+        text: "An unexpected error occurred. Please try again later.",
+      });
+      console.log("error", error.message);
+    }
+  }
   if (!isOpen) return null;
-  console.log("formData", formData);
+
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 backdrop-blur-sm">
+      {isLoading && <Loader />}
       <div className="bg-white p-6 rounded-2xl shadow-xl max-w-2xl w-full transition-transform transform scale-95 animate-fadeIn">
         <div className="flex justify-between items-center border-b pb-3">
           <h2 className="text-lg font-semibold">Ad Selection</h2>
@@ -54,12 +101,12 @@ const SelectionModal = ({
             ✖
           </button>
         </div>
-        <div className="py-4 flex items-start justify-between w-full gap-3">
-          <div className="w-1/2">
+        <div className="py-4 flex items-start justify-between w-full gap-3 h-80">
+          <div className="w-1/2 h-full">
             <img
-              src={templateData?.src}
+              src={selectedImage}
               alt="templateData"
-              className="w-full object-cover"
+              className="w-full h-full object-cover"
             />
           </div>
           <div className="w-1/2">
@@ -140,7 +187,13 @@ const SelectionModal = ({
             className="text-sm font-semibold px-4 py-2 rounded-lg bg-blue-600 text-white hover:bg-blue-700 w-72"
             onClick={handleSubmit}
           >
-            Create Ad
+            Edit Ad
+          </button>
+          <button
+            className="text-sm font-semibold px-4 py-2 rounded-lg border w-72"
+            onClick={handleDelete}
+          >
+            Delete Ad
           </button>
         </div>
       </div>

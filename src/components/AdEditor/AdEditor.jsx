@@ -30,7 +30,8 @@ const AdEditor = () => {
   const [selectedTemplate, setSelectedTemplate] = useState({});
   const [isLoading, setIsLoading] = useState(false);
   const stageRef = useRef(null);
-
+  console.log("formData", formData);
+  console.log("elements", elements);
   useEffect(() => {
     if (adData?.images?.length > 0) {
       setElements((prev) => {
@@ -288,7 +289,8 @@ const AdEditor = () => {
         elements: updatedElements,
       };
       const res = await axios.post(
-        `https://addons.questprotocol.xyz/api/adbot/template`,
+        // `https://addons.questprotocol.xyz/api/adbot/template`,
+        `http://localhost:8080/api/adbot/template`,
         {
           payload,
         },
@@ -320,7 +322,8 @@ const AdEditor = () => {
     setIsLoading(true);
     try {
       const res = await axios.get(
-        `https://addons.questprotocol.xyz/api/adbot/template/${templateId}`,
+        `http://localhost:8080/api/adbot/template/${templateId}`,
+        // `https://addons.questprotocol.xyz/api/adbot/template/${templateId}`,
         {
           headers: {
             "Content-Type": "application/json",
@@ -345,6 +348,70 @@ const AdEditor = () => {
       getTemplateData();
     }
   }, [templateId]);
+
+  async function updateTemplate() {
+    setIsLoading(true);
+    try {
+      const imageData = elements?.filter(
+        (el) =>
+          el.type === "image" &&
+          (el.src?.startsWith("data:image") || el.url?.startsWith("blob:"))
+      );
+      const uploadImages = await Promise.all(
+        imageData?.map(async (el) => {
+          let file;
+          if (el.src?.startsWith("data:image")) {
+            file = base64ToFile(el.src, el.name);
+          } else if (el.url?.startsWith("blob:")) {
+            file = await blobUrlToFile(el.url, el.name);
+          }
+          const formImgData = new FormData();
+          formImgData.append("uploaded_file", file);
+          const { url, headers } = createUrl("api/upload-img");
+          const res = await axios.post(url, formImgData, { headers });
+          return { id: el.elementId, newSrc: res.data.imageUrl };
+        })
+      );
+      const updatedElements = elements?.map((el) => {
+        const matchedUpload = uploadImages?.find(
+          (img) => img.id === el.elementId
+        );
+        return matchedUpload ? { ...el, src: matchedUpload.newSrc } : el;
+      });
+      const payload = {
+        ...formData,
+        elements: updatedElements,
+      };
+      const res = await axios.patch(
+        `
+        http://localhost:8080/api/adbot/template/${templateId}`,
+        {
+          payload,
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+            entityId: mainConfig.QUEST_ADDBOT_ENTITY_ID,
+            userId: getUserId(),
+            token: getToken(),
+          },
+        }
+      );
+      if (res.data.success) {
+        await getTemplateData();
+        setIsLoading(false);
+        Toast.success({
+          text: "Ad created successfully",
+        });
+      }
+    } catch (error) {
+      setIsLoading(false);
+      Toast.error({
+        text: "An unexpected error occurred. Please try again later.",
+      });
+      console.log("error", error.message);
+    }
+  }
 
   return (
     <div className="flex h-screen bg-gray-100 ml-[275px]">
@@ -431,10 +498,10 @@ const AdEditor = () => {
         <div className="w-full flex justify-center">
           <button
             className="w-full mt-4 py-3 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 font-medium"
-            onClick={publishTemplate}
+            onClick={templateId ? updateTemplate : publishTemplate}
             // onClick={downloadCanvas}
           >
-            Publish Template
+            {templateId ? "Edit Template" : "Publish Template"}
           </button>
         </div>
       </div>
