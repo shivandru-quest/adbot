@@ -15,10 +15,11 @@ import {
   blobUrlToFile,
   getUserId,
   getToken,
+  createUrlBackend,
 } from "../../Config/generalFunctions";
 import { mainConfig } from "../../Config/mainConfig";
 import Loader from "../../ui/Loader";
-
+const MAX_IMAGE_SIZE = 0.5 * 1024 * 1024;
 const AdEditor = () => {
   const location = useLocation();
   const { templateId } = useParams();
@@ -30,7 +31,8 @@ const AdEditor = () => {
   const [selectedTemplate, setSelectedTemplate] = useState({});
   const [isLoading, setIsLoading] = useState(false);
   const stageRef = useRef(null);
-
+  console.log("formData", formData);
+  console.log("elements", elements);
   useEffect(() => {
     if (adData?.images?.length > 0) {
       setElements((prev) => {
@@ -179,41 +181,43 @@ const AdEditor = () => {
   };
 
   const downloadCanvas = () => {
-    const stage = stageRef.current;
-    const transformer = stage?.find("Transformer")[0];
-    const elements = stage?.find("Image, Rect, Text, Circle, RegularPolygon");
+    setSelectedId(null);
+    setTimeout(() => {
+      const stage = stageRef.current;
+      const transformer = stage?.find("Transformer")[0];
+      const elements = stage?.find("Image, Rect, Text, Circle, RegularPolygon");
+      if (!elements?.length) return;
 
-    if (!elements?.length) return;
+      const boundingBox = elements.reduce(
+        (box, node) => {
+          const { x, y, width, height } = node.getClientRect();
+          return {
+            minX: Math.min(box.minX, x),
+            minY: Math.min(box.minY, y),
+            maxX: Math.max(box.maxX, x + width),
+            maxY: Math.max(box.maxY, y + height),
+          };
+        },
+        { minX: Infinity, minY: Infinity, maxX: -Infinity, maxY: -Infinity }
+      );
 
-    const boundingBox = elements.reduce(
-      (box, node) => {
-        const { x, y, width, height } = node.getClientRect();
-        return {
-          minX: Math.min(box.minX, x),
-          minY: Math.min(box.minY, y),
-          maxX: Math.max(box.maxX, x + width),
-          maxY: Math.max(box.maxY, y + height),
-        };
-      },
-      { minX: Infinity, minY: Infinity, maxX: -Infinity, maxY: -Infinity }
-    );
+      const croppedWidth = boundingBox.maxX - boundingBox.minX;
+      const croppedHeight = boundingBox.maxY - boundingBox.minY;
 
-    const croppedWidth = boundingBox.maxX - boundingBox.minX;
-    const croppedHeight = boundingBox.maxY - boundingBox.minY;
+      const uri = stage.toDataURL({
+        x: boundingBox.minX,
+        y: boundingBox.minY,
+        width: croppedWidth,
+        height: croppedHeight,
+      });
 
-    const uri = stage.toDataURL({
-      x: boundingBox.minX,
-      y: boundingBox.minY,
-      width: croppedWidth,
-      height: croppedHeight,
-    });
-
-    const link = document.createElement("a");
-    link.download = "canvas.png";
-    link.href = uri;
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
+      const link = document.createElement("a");
+      link.download = "canvas.png";
+      link.href = uri;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    }, 1000);
   };
 
   const selectedElement = elements?.find(
@@ -223,31 +227,7 @@ const AdEditor = () => {
   //--------------------------api calls------------------------------------//
 
   const removeImgBackground = async () => {
-    if (selectedElement && selectedElement?.type !== "image") return;
-    try {
-      const imgSrc = selectedElement?.src;
-      if (!imgSrc) {
-        console.log("no image selected");
-        return;
-      }
-      const res = await fetch(imgSrc);
-      const imgBlob = await res.blob();
-      const formData = new FormData();
-      formData.append("image_file", imgBlob, "image.png");
-      const apiRes = await fetch(`https://api.pixian.ai/removebg`, {
-        method: "POST",
-        body: formData,
-      });
-      if (!apiRes.ok) {
-        console.error("Background removal failed", apiRes.statusText);
-        return;
-      }
-      const resultBlod = await apiRes.blob();
-      const resultUrl = URL.createObjectURL(resultBlod);
-      selectedElement.src = resultUrl;
-    } catch (error) {
-      console.log("error", error.message);
-    }
+    Toast.info({ text: "Feature Included In Paid Plan Only...!" });
   };
 
   async function publishTemplate() {
@@ -265,6 +245,13 @@ const AdEditor = () => {
             file = base64ToFile(el.src, el.name);
           } else if (el.url?.startsWith("blob:")) {
             file = await blobUrlToFile(el.url, el.name);
+          }
+          if (file.size > MAX_IMAGE_SIZE) {
+            setIsLoading(false);
+            Toast.error({
+              text: "Image size should be less than 500 KB",
+            });
+            return;
           }
           const formImgData = new FormData();
           formImgData.append("uploaded_file", file);
@@ -285,19 +272,11 @@ const AdEditor = () => {
         images: undefined,
         elements: updatedElements,
       };
+      const reqData = createUrlBackend();
       const res = await axios.post(
-        `https://addons.questprotocol.xyz/api/adbot/template`,
-        {
-          payload,
-        },
-        {
-          headers: {
-            "Content-Type": "application/json",
-            entityId: mainConfig.QUEST_ADDBOT_ENTITY_ID,
-            userId: getUserId(),
-            token: getToken(),
-          },
-        }
+        reqData.url,
+        { payload },
+        { headers: reqData.headers }
       );
       if (res.data.success) {
         setIsLoading(false);
@@ -317,17 +296,8 @@ const AdEditor = () => {
   async function getTemplateData() {
     setIsLoading(true);
     try {
-      const res = await axios.get(
-        `https://addons.questprotocol.xyz/api/adbot/template/${templateId}`,
-        {
-          headers: {
-            "Content-Type": "application/json",
-            entityId: mainConfig.QUEST_ADDBOT_ENTITY_ID,
-            userId: getUserId(),
-            token: getToken(),
-          },
-        }
-      );
+      const { url, headers } = createUrlBackend(`${templateId}`);
+      const res = await axios.get(url, { headers });
       const data = res.data;
       setSelectedTemplate(data.data);
       setElements(data.data.elements);
@@ -343,6 +313,68 @@ const AdEditor = () => {
       getTemplateData();
     }
   }, [templateId]);
+
+  async function updateTemplate() {
+    setIsLoading(true);
+    try {
+      const imageData = elements?.filter(
+        (el) =>
+          el.type === "image" &&
+          (el.src?.startsWith("data:image") || el.url?.startsWith("blob:"))
+      );
+      const uploadImages = await Promise.all(
+        imageData?.map(async (el) => {
+          let file;
+          if (el.src?.startsWith("data:image")) {
+            file = base64ToFile(el.src, el.name);
+          } else if (el.url?.startsWith("blob:")) {
+            file = await blobUrlToFile(el.url, el.name);
+          }
+          if (file.size > MAX_IMAGE_SIZE) {
+            setIsLoading(false);
+            Toast.error({
+              text: "Image size should be less than 500 KB",
+            });
+            return;
+          }
+          const formImgData = new FormData();
+          formImgData.append("uploaded_file", file);
+          const { url, headers } = createUrl("api/upload-img");
+          const res = await axios.post(url, formImgData, { headers });
+          return { id: el.elementId, newSrc: res.data.imageUrl };
+        })
+      );
+      const updatedElements = elements?.map((el) => {
+        const matchedUpload = uploadImages?.find(
+          (img) => img.id === el.elementId
+        );
+        return matchedUpload ? { ...el, src: matchedUpload.newSrc } : el;
+      });
+      const payload = {
+        ...formData,
+        elements: updatedElements,
+      };
+      const reqData = createUrlBackend(`${templateId}`);
+      const res = await axios.patch(
+        reqData.url,
+        { payload },
+        { headers: reqData.headers }
+      );
+      if (res.data.success) {
+        await getTemplateData();
+        setIsLoading(false);
+        Toast.success({
+          text: "Ad updated successfully",
+        });
+      }
+    } catch (error) {
+      setIsLoading(false);
+      Toast.error({
+        text: "An unexpected error occurred. Please try again later.",
+      });
+      console.log("error", error.message);
+    }
+  }
 
   return (
     <div className="flex h-screen bg-gray-100 ml-[275px]">
@@ -429,10 +461,10 @@ const AdEditor = () => {
         <div className="w-full flex justify-center">
           <button
             className="w-full mt-4 py-3 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 font-medium"
-            onClick={publishTemplate}
+            onClick={templateId ? updateTemplate : publishTemplate}
             // onClick={downloadCanvas}
           >
-            Publish Template
+            {templateId ? "Edit Template" : "Publish Template"}
           </button>
         </div>
       </div>

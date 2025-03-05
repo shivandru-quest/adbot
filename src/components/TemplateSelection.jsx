@@ -75,9 +75,10 @@ const TemplateSelection = () => {
   const [selectedCategory, setSelectedCategory] = useState("All");
   const [selectedPlatform, setSelectedPlatform] = useState("all");
   const [showModal, setShowModal] = useState(false);
-  const [selectedTemplate, setSelectedTemplate] = useState(null);
+  const [selectedTemplateId, setSelectedTemplateId] = useState(null);
   const [userTemplates, setUserTemplates] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [selectedImage, setSelectedImage] = useState("");
 
   const filteredTemplates = userTemplates?.filter((template) => {
     const categoryMatch =
@@ -91,7 +92,8 @@ const TemplateSelection = () => {
     setIsLoading(true);
     try {
       const res = await axios.get(
-        `https://addons.questprotocol.xyz/api/adbot/template`,
+        `http://localhost:8080/api/adbot/template`,
+        // `https://addons.questprotocol.xyz/api/adbot/template`,
         {
           headers: {
             entityId: mainConfig.QUEST_ADDBOT_ENTITY_ID,
@@ -183,7 +185,7 @@ const TemplateSelection = () => {
         className="bg-white p-6 rounded-lg shadow-sm mb-8 border-2 border-dashed border-gray-300 cursor-pointer"
         onClick={() => {
           toggleModal();
-          setSelectedTemplate("blank");
+          setSelectedTemplateId("blank");
         }}
         // onClick={() => handleTemplateSelect("blank")}
       >
@@ -205,7 +207,7 @@ const TemplateSelection = () => {
             className="bg-white rounded-lg shadow-sm overflow-hidden cursor-pointer"
             onClick={() => {
               toggleModal();
-              setSelectedTemplate(template.id);
+              setSelectedTemplateId(template.id);
             }}
           >
             <img
@@ -237,43 +239,47 @@ const TemplateSelection = () => {
                 (ele) => ele.type === "image"
               );
               return (
-                <motion.div
-                  key={el.templateId}
-                  whileHover={{ y: -5 }}
-                  className="bg-white rounded-lg shadow-sm overflow-hidden cursor-pointer"
-                  onClick={() => {
-                    // toggleModal();
-                    navigate(`/editor/${el.templateId}`);
-                    setSelectedTemplate(el.templateId);
-                  }}
-                >
-                  {tempImage ? (
-                    <div>
-                      <img
-                        src={tempImage?.src}
-                        alt="Image Not Found"
-                        className="w-full h-48 object-cover"
-                      />
-                    </div>
-                  ) : (
-                    <div></div>
-                  )}
-                  <div className="p-4">
-                    <p className="font-semibold">{el.title}</p>
-                    <div className="flex justify-between items-center">
-                      <p className="text-sm text-gray-600">{el.description}</p>
-                      <div className="text-indigo-600">
-                        {el.platform.toLowerCase() === "instagram" ? (
-                          <FaInstagram />
-                        ) : el.platform.toLowerCase() === "reddit" ? (
-                          <FaReddit />
-                        ) : (
-                          <FaFacebook />
-                        )}
+                !el?.isDeleted && (
+                  <motion.div
+                    key={el.templateId}
+                    whileHover={{ y: -5 }}
+                    className="bg-white rounded-lg shadow-sm overflow-hidden cursor-pointer"
+                    onClick={() => {
+                      toggleModal();
+                      setSelectedImage(tempImage?.src);
+                      setSelectedTemplateId(el.templateId);
+                    }}
+                  >
+                    {tempImage ? (
+                      <div>
+                        <img
+                          src={tempImage?.src}
+                          alt="Image Not Found"
+                          className="w-full h-48 object-cover"
+                        />
+                      </div>
+                    ) : (
+                      <div></div>
+                    )}
+                    <div className="p-4">
+                      <p className="font-semibold">{el.title}</p>
+                      <div className="flex justify-between items-center">
+                        <p className="text-sm text-gray-600">
+                          {el.description}
+                        </p>
+                        <div className="text-indigo-600">
+                          {el.platform.toLowerCase() === "instagram" ? (
+                            <FaInstagram />
+                          ) : el.platform.toLowerCase() === "reddit" ? (
+                            <FaReddit />
+                          ) : (
+                            <FaFacebook />
+                          )}
+                        </div>
                       </div>
                     </div>
-                  </div>
-                </motion.div>
+                  </motion.div>
+                )
               );
             })
           : !isLoading && (
@@ -285,9 +291,10 @@ const TemplateSelection = () => {
       <SelectionModal
         isOpen={showModal}
         onClose={toggleModal}
-        selectedPlatform={selectedPlatform}
-        selectedCategory={selectedCategory}
-        selectedTemplate={selectedTemplate}
+        selectedTemplateId={selectedTemplateId}
+        userTemplates={userTemplates}
+        selectedImage={selectedImage}
+        fetchTemplates={fetchTemplates}
       />
     </div>
   );

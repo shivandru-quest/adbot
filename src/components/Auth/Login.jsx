@@ -9,22 +9,22 @@ import axios from "axios";
 import GoogleOAuth from "./GoogleOAuth";
 import Loader from "../../ui/Loader";
 import { Toast } from "@questlabs/react-sdk";
+import { useForm } from "react-hook-form";
+import { createLoginFlowUrl } from "../../Config/generalFunctions";
 
 const Login = () => {
-  const navigate = useNavigate();
-  const [email, setEmail] = useState("");
+  const {
+    register,
+    formState: { errors },
+    watch,
+    handleSubmit,
+  } = useForm();
   const [isModalOpen, setModalOpen] = useState(false);
   const [timer, setTimer] = useState(300);
   const [canResend, setCanResend] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const emailRef = useRef(null);
   const cookies = new Cookies(null, { path: "/" });
-
-  useEffect(() => {
-    if (emailRef.current) {
-      emailRef.current.focus();
-    }
-  }, []);
+  const email = watch("email");
 
   useEffect(() => {
     if (!isModalOpen) return;
@@ -41,20 +41,13 @@ const Login = () => {
     return () => clearInterval(interval);
   }, [isModalOpen]);
 
-  async function handleSendOtp(e) {
-    e.preventDefault();
+  async function handleSendOtp(data) {
     setIsLoading(true);
     try {
-      const res = await axios.post(
-        `https://api.questlabs.ai/api/users/email-login/send-otp?entityId=${mainConfig.QUEST_ADDBOT_ENTITY_ID}`,
-        { email },
-        {
-          headers: {
-            apiKey: mainConfig.QUEST_API_KEY,
-            "Content-Type": "application/json",
-          },
-        }
+      const { url, headers } = createLoginFlowUrl(
+        `api/users/email-login/send-otp?entityId=${mainConfig.QUEST_ADDBOT_ENTITY_ID}`
       );
+      const res = await axios.post(url, { email: data.email }, { headers });
       setCanResend(false);
       setTimer(300);
       if (res.data.success) {
@@ -62,7 +55,7 @@ const Login = () => {
           text: "OTP sent successfully",
         });
         setIsLoading(false);
-        cookies.set("userCredentials", email);
+        cookies.set("userCredentials", data.email);
         openModal();
       }
     } catch (error) {
@@ -104,7 +97,7 @@ const Login = () => {
           <h2 className="text-3xl font-bold text-gray-900 mb-8">
             Continue to Adbot.ai
           </h2>
-          <form className="space-y-6" onSubmit={handleSendOtp}>
+          <form className="space-y-6" onSubmit={handleSubmit(handleSendOtp)}>
             <div>
               <label className="block text-xs font-medium text-gray-700 mb-2">
                 Email
@@ -113,12 +106,22 @@ const Login = () => {
                 <FiMail className="absolute left-3 top-4 text-gray-400" />
                 <input
                   type="email"
-                  value={email}
-                  ref={emailRef}
-                  onChange={(e) => setEmail(e.target.value)}
+                  id="email"
                   className="pl-10 w-full p-3 border border-gray-300 rounded-lg outline-none text-sm"
                   placeholder="Enter your email"
+                  {...register("email", {
+                    required: "Email is required",
+                    pattern: {
+                      value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
+                      message: "Invalid email address",
+                    },
+                  })}
                 />
+                {errors?.email && (
+                  <p className="text-red-500 text-xs">
+                    {errors?.email?.message}
+                  </p>
+                )}
               </div>
             </div>
 

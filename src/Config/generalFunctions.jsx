@@ -58,6 +58,32 @@ export const createUrl = (apiString) => {
   };
 };
 
+export const createUrlBackend = (apiString = "") => {
+  const url = mainConfig.QUEST_ADDONS_BACKEND_URL + apiString;
+  const headers = {
+    apiKey: mainConfig.QUEST_API_KEY,
+    userId: getUserId(),
+    token: getToken(),
+    entityId: mainConfig.QUEST_ADDBOT_ENTITY_ID,
+  };
+
+  return {
+    url,
+    headers,
+  };
+};
+
+export const createLoginFlowUrl = (apiString) => {
+  const url = mainConfig.QUEST_PRODUCTION_URL + apiString;
+  const headers = {
+    apiKey: mainConfig.QUEST_API_KEY,
+  };
+  return {
+    url,
+    headers,
+  };
+};
+
 export function base64ToFile(base64String, fileName) {
   const arr = base64String.split(",");
   const mime = arr[0].match(/:(.*?);/)[1];
@@ -70,7 +96,6 @@ export function base64ToFile(base64String, fileName) {
   return new File([u8arr], fileName, { type: mime });
 }
 
-// Convert Blob URL to File object (binary)
 export async function blobUrlToFile(blobUrl, fileName) {
   try {
     const response = await fetch(blobUrl, {
