@@ -6,6 +6,7 @@ import Cookies from "universal-cookie";
 import axios from "axios";
 import { AppContext } from "../../context/AppContext";
 import Loader from "../../ui/Loader";
+import { createLoginFlowUrl } from "../../Config/generalFunctions";
 const OtpModal = ({ isOpen, onClose, handleSendOtp, timer, canResend }) => {
   const modalRef = useRef();
   const navigate = useNavigate();
@@ -35,6 +36,7 @@ const OtpModal = ({ isOpen, onClose, handleSendOtp, timer, canResend }) => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, [isOpen, onClose]);
+
   useEffect(() => {
     if (isOpen) {
       setTimeout(() => {
@@ -85,17 +87,12 @@ const OtpModal = ({ isOpen, onClose, handleSendOtp, timer, canResend }) => {
 
   async function verifyOtp(payload) {
     try {
-      const response = await axios.post(
-        `https://api.questlabs.ai/api/users/email-login/verify-otp`,
-        payload,
-        {
-          headers: {
-            "Content-Type": "application/json",
-            apiKey: mainConfig.QUEST_API_KEY,
-          },
-        }
+      const { url, headers } = createLoginFlowUrl(
+        `api/users/email-login/verify-otp`
       );
-      const newUserData = await response.data;
+      const response = await axios.post(url, payload, { headers });
+      const newUserData = response.data;
+      console.log("response.data", response.data);
       setIsNewUser(newUserData?.newUser);
       return response.data;
     } catch (error) {
@@ -107,36 +104,26 @@ const OtpModal = ({ isOpen, onClose, handleSendOtp, timer, canResend }) => {
   }
 
   const getEntityApiKey = async (entityId, userId, token) => {
-    const response = await axios.post(
-      `https://api.questlabs.ai/api/admin/new-api-key?userId=${userId}`,
-      {
-        entityId,
-      },
-      {
-        headers: {
-          userId: userId,
-          token: token,
-          apiKey: mainConfig.QUEST_API_KEY,
-        },
-      }
+    const { url, headers } = createLoginFlowUrl(
+      `api/admin/new-api-key?userId=${userId}`
     );
-
+    const response = await axios.post(
+      url,
+      { entityId },
+      { headers: { ...headers, userId, token } }
+    );
     let apiKeyData = response.data;
     return apiKeyData?.data?.key;
   };
 
   const getEntityDetails = async ({ userId, token }) => {
     try {
-      const response = await axios.get(
-        `https://api.questlabs.ai/api/users/${userId}/admin-entities`,
-        {
-          headers: {
-            userId: userId,
-            token: token,
-            apiKey: mainConfig.QUEST_API_KEY,
-          },
-        }
+      const { url, headers } = createLoginFlowUrl(
+        `api/users/${userId}/admin-entities`
       );
+      const response = await axios.get(url, {
+        headers: { ...headers, userId, token },
+      });
       let data = response.data;
       localStorage.setItem("UserEntities", JSON.stringify(data.data));
 
@@ -158,16 +145,12 @@ const OtpModal = ({ isOpen, onClose, handleSendOtp, timer, canResend }) => {
   };
   const getOnboardingDetails = async ({ userId, token }) => {
     try {
-      const response = await axios.get(
-        `https://api.questlabs.ai/api/v2/entities/${mainConfig.QUEST_ADDBOT_ENTITY_ID}/campaigns/${mainConfig.QUEST_ONBOARDING_CAMPAIGN_ID}?platform=REACT`,
-        {
-          headers: {
-            userId: userId,
-            token: token,
-            apiKey: mainConfig.QUEST_API_KEY,
-          },
-        }
+      const { url, headers } = createLoginFlowUrl(
+        `api/v2/entities/${mainConfig.QUEST_ADDBOT_ENTITY_ID}/campaigns/${mainConfig.QUEST_ONBOARDING_CAMPAIGN_ID}?platform=REACT`
       );
+      const response = await axios.get(url, {
+        headers: { ...headers, userId, token },
+      });
       let data = response.data;
       if (data.success) {
         if (data.data.isClaimed) {
@@ -201,16 +184,18 @@ const OtpModal = ({ isOpen, onClose, handleSendOtp, timer, canResend }) => {
         cookies.set("userId", userId);
         let entityDetails = await getEntityDetails({ userId, token });
         let onboardingDetails = await getOnboardingDetails({ userId, token });
-        setIsLoading(false);
         if (entityDetails) {
           if (onboardingDetails) {
             dispatch({ type: "user/isAuthenticated", payload: true });
             localStorage.setItem("isAuthenticated", "true");
+            setIsLoading(false);
             navigate("/dashboard");
           } else {
+            setIsLoading(false);
             navigate("/onboarding");
           }
         } else {
+          setIsLoading(false);
           navigate("/onboarding");
         }
       } else {
@@ -220,6 +205,7 @@ const OtpModal = ({ isOpen, onClose, handleSendOtp, timer, canResend }) => {
         Toast.error({ text: errorMessage });
       }
     } catch (error) {
+      setIsLoading(false);
       Toast.error({
         text: "An unexpected error occurred. Please try again later.",
       });

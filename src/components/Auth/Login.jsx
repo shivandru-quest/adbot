@@ -10,6 +10,7 @@ import GoogleOAuth from "./GoogleOAuth";
 import Loader from "../../ui/Loader";
 import { Toast } from "@questlabs/react-sdk";
 import { useForm } from "react-hook-form";
+import { createLoginFlowUrl } from "../../Config/generalFunctions";
 
 const Login = () => {
   const {
@@ -43,16 +44,10 @@ const Login = () => {
   async function handleSendOtp(data) {
     setIsLoading(true);
     try {
-      const res = await axios.post(
-        `https://api.questlabs.ai/api/users/email-login/send-otp?entityId=${mainConfig.QUEST_ADDBOT_ENTITY_ID}`,
-        { email: data.email },
-        {
-          headers: {
-            apiKey: mainConfig.QUEST_API_KEY,
-            "Content-Type": "application/json",
-          },
-        }
+      const { url, headers } = createLoginFlowUrl(
+        `api/users/email-login/send-otp?entityId=${mainConfig.QUEST_ADDBOT_ENTITY_ID}`
       );
+      const res = await axios.post(url, { email: data.email }, { headers });
       setCanResend(false);
       setTimer(300);
       if (res.data.success) {

@@ -4,7 +4,11 @@ import axios from "axios";
 import { Toast } from "@questlabs/react-sdk";
 import { mainConfig } from "../Config/mainConfig";
 import Loader from "./Loader";
-import { getToken, getUserId } from "../Config/generalFunctions";
+import {
+  createUrlBackend,
+  getToken,
+  getUserId,
+} from "../Config/generalFunctions";
 const SelectionModal = ({
   isOpen,
   onClose,
@@ -58,20 +62,8 @@ const SelectionModal = ({
       const payload = {
         isDeleted: true,
       };
-      const res = await axios.patch(
-        `http://localhost:8080/api/adbot/template/delete/${selectedTemplateId}`,
-        {
-          payload,
-        },
-        {
-          headers: {
-            "Content-Type": "application/json",
-            entityId: mainConfig.QUEST_ADDBOT_ENTITY_ID,
-            userId: getUserId(),
-            token: getToken(),
-          },
-        }
-      );
+      const { url, headers } = createUrlBackend(`delete/${selectedTemplateId}`);
+      const res = await axios.patch(url, { payload }, { headers });
       setIsLoading(false);
       Toast.success({
         text: "Ad deleted successfully",

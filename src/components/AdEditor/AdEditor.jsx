@@ -15,10 +15,11 @@ import {
   blobUrlToFile,
   getUserId,
   getToken,
+  createUrlBackend,
 } from "../../Config/generalFunctions";
 import { mainConfig } from "../../Config/mainConfig";
 import Loader from "../../ui/Loader";
-
+const MAX_IMAGE_SIZE = 0.5 * 1024 * 1024;
 const AdEditor = () => {
   const location = useLocation();
   const { templateId } = useParams();
@@ -226,31 +227,7 @@ const AdEditor = () => {
   //--------------------------api calls------------------------------------//
 
   const removeImgBackground = async () => {
-    if (selectedElement && selectedElement?.type !== "image") return;
-    try {
-      const imgSrc = selectedElement?.src;
-      if (!imgSrc) {
-        console.log("no image selected");
-        return;
-      }
-      const res = await fetch(imgSrc);
-      const imgBlob = await res.blob();
-      const formData = new FormData();
-      formData.append("image_file", imgBlob, "image.png");
-      const apiRes = await fetch(`https://api.pixian.ai/removebg`, {
-        method: "POST",
-        body: formData,
-      });
-      if (!apiRes.ok) {
-        console.error("Background removal failed", apiRes.statusText);
-        return;
-      }
-      const resultBlod = await apiRes.blob();
-      const resultUrl = URL.createObjectURL(resultBlod);
-      selectedElement.src = resultUrl;
-    } catch (error) {
-      console.log("error", error.message);
-    }
+    Toast.info({ text: "Feature Included In Paid Plan Only...!" });
   };
 
   async function publishTemplate() {
@@ -268,6 +245,13 @@ const AdEditor = () => {
             file = base64ToFile(el.src, el.name);
           } else if (el.url?.startsWith("blob:")) {
             file = await blobUrlToFile(el.url, el.name);
+          }
+          if (file.size > MAX_IMAGE_SIZE) {
+            setIsLoading(false);
+            Toast.error({
+              text: "Image size should be less than 500 KB",
+            });
+            return;
           }
           const formImgData = new FormData();
           formImgData.append("uploaded_file", file);
@@ -288,20 +272,11 @@ const AdEditor = () => {
         images: undefined,
         elements: updatedElements,
       };
+      const reqData = createUrlBackend();
       const res = await axios.post(
-        // `https://addons.questprotocol.xyz/api/adbot/template`,
-        `http://localhost:8080/api/adbot/template`,
-        {
-          payload,
-        },
-        {
-          headers: {
-            "Content-Type": "application/json",
-            entityId: mainConfig.QUEST_ADDBOT_ENTITY_ID,
-            userId: getUserId(),
-            token: getToken(),
-          },
-        }
+        reqData.url,
+        { payload },
+        { headers: reqData.headers }
       );
       if (res.data.success) {
         setIsLoading(false);
@@ -321,18 +296,8 @@ const AdEditor = () => {
   async function getTemplateData() {
     setIsLoading(true);
     try {
-      const res = await axios.get(
-        `http://localhost:8080/api/adbot/template/${templateId}`,
-        // `https://addons.questprotocol.xyz/api/adbot/template/${templateId}`,
-        {
-          headers: {
-            "Content-Type": "application/json",
-            entityId: mainConfig.QUEST_ADDBOT_ENTITY_ID,
-            userId: getUserId(),
-            token: getToken(),
-          },
-        }
-      );
+      const { url, headers } = createUrlBackend(`${templateId}`);
+      const res = await axios.get(url, { headers });
       const data = res.data;
       setSelectedTemplate(data.data);
       setElements(data.data.elements);
@@ -365,6 +330,13 @@ const AdEditor = () => {
           } else if (el.url?.startsWith("blob:")) {
             file = await blobUrlToFile(el.url, el.name);
           }
+          if (file.size > MAX_IMAGE_SIZE) {
+            setIsLoading(false);
+            Toast.error({
+              text: "Image size should be less than 500 KB",
+            });
+            return;
+          }
           const formImgData = new FormData();
           formImgData.append("uploaded_file", file);
           const { url, headers } = createUrl("api/upload-img");
@@ -382,26 +354,17 @@ const AdEditor = () => {
         ...formData,
         elements: updatedElements,
       };
+      const reqData = createUrlBackend(`${templateId}`);
       const res = await axios.patch(
-        `
-        http://localhost:8080/api/adbot/template/${templateId}`,
-        {
-          payload,
-        },
-        {
-          headers: {
-            "Content-Type": "application/json",
-            entityId: mainConfig.QUEST_ADDBOT_ENTITY_ID,
-            userId: getUserId(),
-            token: getToken(),
-          },
-        }
+        reqData.url,
+        { payload },
+        { headers: reqData.headers }
       );
       if (res.data.success) {
         await getTemplateData();
         setIsLoading(false);
         Toast.success({
-          text: "Ad created successfully",
+          text: "Ad updated successfully",
         });
       }
     } catch (error) {
