@@ -6,7 +6,7 @@ import { FaFacebook, FaInstagram, FaReddit } from "react-icons/fa";
 import SelectionModal from "../ui/SelectionModal";
 import axios from "axios";
 import { mainConfig } from "../Config/mainConfig";
-import { getToken, getUserId } from "../Config/generalFunctions";
+import { createUrlBackend, getToken, getUserId } from "../Config/generalFunctions";
 import Loader from "../ui/Loader";
 import NoDataYet from "../ui/NoDataYet";
 
@@ -91,17 +91,8 @@ const TemplateSelection = () => {
   async function fetchTemplates() {
     setIsLoading(true);
     try {
-      const res = await axios.get(
-        `http://localhost:8080/api/adbot/template`,
-        // `https://addons.questprotocol.xyz/api/adbot/template`,
-        {
-          headers: {
-            entityId: mainConfig.QUEST_ADDBOT_ENTITY_ID,
-            token: getToken(),
-            userId: getUserId(),
-          },
-        }
-      );
+      const { url, headers } = createUrlBackend();
+      const res = await axios.get(url, { headers });
       setUserTemplates(res.data.data);
       setIsLoading(false);
     } catch (error) {
