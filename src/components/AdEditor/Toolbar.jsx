@@ -21,7 +21,14 @@ const Toolbar = ({
   canRedo,
   removeBackground,
   downloadCanvas,
+  setSelectedId,
 }) => {
+  function downloading() {
+    setSelectedId(null);
+    setTimeout(() => {
+      downloadCanvas();
+    }, 1000);
+  }
   return (
     <div className="w-16 bg-white border-r border-gray-200 py-4">
       <div className="flex flex-col items-center space-y-4">
@@ -93,7 +100,7 @@ const Toolbar = ({
         <motion.button
           whileHover={{ scale: 1.1 }}
           whileTap={{ scale: 0.95 }}
-          onClick={downloadCanvas}
+          onClick={downloading}
           className="p-3 text-gray-700 hover:text-indigo-600 hover:bg-indigo-50 rounded-lg"
           title="Download Canvas"
         >

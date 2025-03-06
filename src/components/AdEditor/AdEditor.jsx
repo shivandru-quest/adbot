@@ -20,6 +20,7 @@ import {
 import { mainConfig } from "../../Config/mainConfig";
 import Loader from "../../ui/Loader";
 const MAX_IMAGE_SIZE = 0.5 * 1024 * 1024;
+
 const AdEditor = () => {
   const location = useLocation();
   const { templateId } = useParams();
@@ -31,8 +32,7 @@ const AdEditor = () => {
   const [selectedTemplate, setSelectedTemplate] = useState({});
   const [isLoading, setIsLoading] = useState(false);
   const stageRef = useRef(null);
-  console.log("formData", formData);
-  console.log("elements", elements);
+
   useEffect(() => {
     if (adData?.images?.length > 0) {
       setElements((prev) => {
@@ -180,14 +180,39 @@ const AdEditor = () => {
     }
   };
 
-  const downloadCanvas = () => {
-    setSelectedId(null);
-    setTimeout(() => {
-      const stage = stageRef.current;
-      const transformer = stage?.find("Transformer")[0];
-      const elements = stage?.find("Image, Rect, Text, Circle, RegularPolygon");
-      if (!elements?.length) return;
+  const downloadCanvas = async () => {
+    const stage = stageRef.current;
+    if (!stage) {
+      console.error("Stage reference is missing");
+      return;
+    }
+    const elements = stage?.find("Image, Rect, Text, Circle, RegularPolygon");
+    if (!elements?.length) {
+      Toast.error({ text: "No elements found to download" });
+      return;
+    }
+    const imageNodes = elements.filter(
+      (node) => node.getClassName() === "Image"
+    );
+    const loadImagesSafely = async () => {
+      for (const node of imageNodes) {
+        const img = node.getImage();
+        if (!img) continue;
 
+        const newImg = new window.Image();
+        newImg.crossOrigin = "Anonymous"; // Fix CORS issue
+        newImg.src = img.src;
+
+        await new Promise((resolve, reject) => {
+          newImg.onload = resolve;
+          newImg.onerror = reject;
+        });
+
+        node.image(newImg);
+      }
+    };
+    try {
+      await loadImagesSafely();
       const boundingBox = elements.reduce(
         (box, node) => {
           const { x, y, width, height } = node.getClientRect();
@@ -203,12 +228,20 @@ const AdEditor = () => {
 
       const croppedWidth = boundingBox.maxX - boundingBox.minX;
       const croppedHeight = boundingBox.maxY - boundingBox.minY;
-
+      if (croppedWidth <= 0 || croppedHeight <= 0) {
+        console.error("Invalid width/height for export", {
+          croppedWidth,
+          croppedHeight,
+        });
+        Toast.error({ text: "Canvas is empty or has invalid dimensions" });
+        return;
+      }
       const uri = stage.toDataURL({
         x: boundingBox.minX,
         y: boundingBox.minY,
         width: croppedWidth,
         height: croppedHeight,
+        mimeType: "image/png",
       });
 
       const link = document.createElement("a");
@@ -217,7 +250,9 @@ const AdEditor = () => {
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
-    }, 1000);
+    } catch (error) {
+      Toast.error({ text: "Failed to download canvas" });
+    }
   };
 
   const selectedElement = elements?.find(
@@ -391,6 +426,7 @@ const AdEditor = () => {
           canRedo={historyStep < history?.length - 1}
           removeBackground={removeImgBackground}
           downloadCanvas={downloadCanvas}
+          setSelectedId={setSelectedId}
         />
       </div>
 
@@ -462,7 +498,6 @@ const AdEditor = () => {
           <button
             className="w-full mt-4 py-3 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 font-medium"
             onClick={templateId ? updateTemplate : publishTemplate}
-            // onClick={downloadCanvas}
           >
             {templateId ? "Edit Template" : "Publish Template"}
           </button>
@@ -476,6 +511,7 @@ const AdEditor = () => {
         onDelete={handleDelete}
         onDuplicate={handleDuplicate}
         onDownload={downloadCanvas}
+        setSelectedId={setSelectedId}
       />
     </div>
   );

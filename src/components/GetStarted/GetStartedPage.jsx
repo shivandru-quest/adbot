@@ -14,58 +14,10 @@ import { getToken, getUserId } from "../../Config/generalFunctions";
 import { mainConfig } from "../../Config/mainConfig";
 
 const GetStartedPage = () => {
-  const navigate = useNavigate();
-  const [completedSteps, setCompletedSteps] = useState([]);
-
-  const steps = [
-    {
-      id: 1,
-      title: "Create Your First Ad",
-      description: "Create your first AI-powered advertisement",
-      icon: FiEdit,
-      link: "/create",
-      time: "5 mins",
-    },
-    {
-      id: 2,
-      title: "Choose a Template",
-      description: "Browse our collection of pre-made templates",
-      icon: FiLayout,
-      link: "/templates",
-      time: "3 mins",
-    },
-    {
-      id: 3,
-      title: "Upload Assets",
-      description: "Upload your brand images and assets",
-      icon: FiImage,
-      link: "/create",
-      time: "4 mins",
-    },
-  ];
-
-  const handleStepClick = (step) => {
-    if (!completedSteps.includes(step.id)) {
-      setCompletedSteps([...completedSteps, step.id]);
-    }
-    navigate(step.link);
-  };
-  const clickAction = (link) => {
-    // switch (link) {
-    //   case "/profile":
-    //     navigate("/settings?section=profile");
-    //     break;
-    //   case "/project":
-    //     setProjectModal(true);
-    //     break;
-    //   default:
-    //     navigate("/settings?section=invite");
-    //     break;
-    // }
-  };
+  const clickAction = (link) => {};
 
   return (
-    <div className="ml-64 p-8 bg-gray-50 min-h-screen">
+    <div className=" p-8 bg-gray-50 min-h-screen">
       <div className="max-w-4xl mx-auto">
         <div className="mb-8">
           <h1 className="text-3xl font-bold mb-2">Welcome to Adbot.ai!</h1>

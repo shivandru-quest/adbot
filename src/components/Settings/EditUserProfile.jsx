@@ -1,12 +1,14 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { Toast, UserProfile } from "@questlabs/react-sdk";
 import { mainConfig } from "../../Config/mainConfig";
 import { createUrl, getToken, getUserId } from "../../Config/generalFunctions";
 import axios from "axios";
 import Loader from "../../ui/Loader";
+import Cookies from "universal-cookie";
 const EditUserProfile = () => {
   const [answer, setAnswer] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
+  const cookies = new Cookies(null, { path: "/" });
 
   async function updateProfile() {
     setIsLoading(true);
@@ -25,6 +27,7 @@ const EditUserProfile = () => {
       Toast.success({
         text: "Profile updated successfully",
       });
+      console.log("resSettings", res.data);
     } catch (error) {
       setIsLoading(false);
       Toast.error({
@@ -33,7 +36,10 @@ const EditUserProfile = () => {
       console.log("error", error.message);
     }
   }
-
+  cookies.set(
+    "UserName",
+    answer["ca-43fbd040-68f5-4384-a572-58ae3e61c317"] || ""
+  );
   return (
     <div>
       <div className="p-6">
