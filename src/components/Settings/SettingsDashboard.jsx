@@ -5,7 +5,7 @@ import SubscriptionPage from "../Subscription/SubscriptionPage";
 const SettingsDashboard = () => {
   const [currTab, setCurrTab] = useState("edit");
   return (
-    <div className="flex flex-col justify-center items-center m-auto w-[calc(100%-16rem)] h-auto ml-64">
+    <div className="flex flex-col justify-center items-center h-auto">
       <div className="pt-[30px] w-full h-auto">
         <div
           className="pl-4 flex w-full items-start h-[52px]"

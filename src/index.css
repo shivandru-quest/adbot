@@ -9,14 +9,16 @@ body {
   --primary: #4f46e5;
   --secondary: #818cf8;
   --accent: #c7d2fe;
-  --background: #f9fafb;
+  /* --background: #f9fafb; */
 }
 
 body {
   margin: 0;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  background-color: var(--background);
+  padding: 0;
+  box-sizing: border-box;
+  /* -webkit-font-smoothing: antialiased; */
+  /* -moz-osx-font-smoothing: grayscale; */
+  /* background-color: var(--background); */
 }
 
 .loader-overlay {

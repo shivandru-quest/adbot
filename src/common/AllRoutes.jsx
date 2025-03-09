@@ -29,7 +29,7 @@ const AllRoutes = () => {
   const { isAuthenticated } = state;
   return (
     <div>
-      {isAuthenticated && !isPublicRoute(location.pathname) && <Sidebar />}
+      {/* {isAuthenticated && !isPublicRoute(location.pathname) && <Sidebar />} */}
       <Routes>
         <Route path="/" element={<LandingPage />} />
         <Route
@@ -45,13 +45,41 @@ const AllRoutes = () => {
 
         {isAuthenticated ? (
           <>
-            <Route path="/dashboard" element={<Dashboard />} />
+            <Route
+              path="/dashboard"
+              element={
+                <Sidebar>
+                  <Dashboard />
+                </Sidebar>
+              }
+            />
 
-            <Route path="/get-started" element={<GetStartedPage />} />
+            <Route
+              path="/get-started"
+              element={
+                <Sidebar>
+                  <GetStartedPage />
+                </Sidebar>
+              }
+            />
             <Route path="/create" element={<AdCreator />} />
-            <Route path="/templates" element={<TemplateSelection />} />
+            <Route
+              path="/templates"
+              element={
+                <Sidebar>
+                  <TemplateSelection />
+                </Sidebar>
+              }
+            />
             <Route path="/editor/:templateId" element={<AdEditor />} />
-            <Route path="/settings" element={<SettingsDashboard />} />
+            <Route
+              path="/settings"
+              element={
+                <Sidebar>
+                  <SettingsDashboard />
+                </Sidebar>
+              }
+            />
             <Route path="/editor/new" element={<AdEditor />} />
             <Route path="/payment" element={<PaymentPage />} />
             <Route

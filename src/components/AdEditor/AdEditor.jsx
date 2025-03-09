@@ -19,6 +19,9 @@ import {
 } from "../../Config/generalFunctions";
 import { mainConfig } from "../../Config/mainConfig";
 import Loader from "../../ui/Loader";
+import AdEditorTopBar from "../../ui/AdEditorTopBar";
+import { motion } from "framer-motion";
+import SidePanel from "../../ui/SidePanel";
 const MAX_IMAGE_SIZE = 0.5 * 1024 * 1024;
 
 const AdEditor = () => {
@@ -30,8 +33,11 @@ const AdEditor = () => {
   const [history, setHistory] = useState([]);
   const [historyStep, setHistoryStep] = useState(0);
   const [selectedTemplate, setSelectedTemplate] = useState({});
+  const [toolbarSelectedElement, setToolbarSelectedElement] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const stageRef = useRef(null);
+
+  console.log("elements", elements);
 
   useEffect(() => {
     if (adData?.images?.length > 0) {
@@ -97,6 +103,7 @@ const AdEditor = () => {
       y: 100,
       width: 200,
       height: 200,
+      points: [0, 0, 100, 0, 100, 100],
       fill: "#e3e3e3",
       stroke: "#000000",
       strokeWidth: 2,
@@ -200,7 +207,7 @@ const AdEditor = () => {
         if (!img) continue;
 
         const newImg = new window.Image();
-        newImg.crossOrigin = "Anonymous"; // Fix CORS issue
+        newImg.crossOrigin = "Anonymous";
         newImg.src = img.src;
 
         await new Promise((resolve, reject) => {
@@ -412,107 +419,146 @@ const AdEditor = () => {
   }
 
   return (
-    <div className="flex h-screen bg-gray-100 ml-[275px]">
-      {/* Left Toolbar */}
+    <div className="h-auto w-full flex flex-col justify-center items-center">
       {isLoading && <Loader />}
-      <div className="w-16 bg-white border-r border-gray-200">
-        <Toolbar
-          onAddImage={() => document.getElementById("imageUpload").click()}
-          onAddText={addText}
-          onAddShape={addShape}
+      <div className="w-full">
+        <AdEditorTopBar
           onUndo={undo}
           onRedo={redo}
           canUndo={historyStep > 0}
           canRedo={historyStep < history?.length - 1}
-          removeBackground={removeImgBackground}
           downloadCanvas={downloadCanvas}
+        />
+      </div>
+      <div className="flex w-full p-4 justify-between gap-4">
+        <div className="w-[6.5rem] min-w-[6.5rem] p-3 bg-[#FAFAFA] flex items-center justify-center rounded-[0.25rem]">
+          <Toolbar
+            onAddImage={() => document.getElementById("imageUpload").click()}
+            onAddText={addText}
+            onAddShape={addShape}
+            onUndo={undo}
+            onRedo={redo}
+            canUndo={historyStep > 0}
+            canRedo={historyStep < history?.length - 1}
+            removeBackground={removeImgBackground}
+            downloadCanvas={downloadCanvas}
+            setSelectedId={setSelectedId}
+            setToolbarSelectedElement={setToolbarSelectedElement}
+            toolbarSelectedElement={toolbarSelectedElement}
+          />
+        </div>
+        {(toolbarSelectedElement === "media" ||
+          toolbarSelectedElement === "elements" ||
+          toolbarSelectedElement === "theme") && (
+          <SidePanel
+            toolbarSelectedElement={toolbarSelectedElement}
+            setElements={setElements}
+            setHistory={setHistory}
+            onAddShape={addShape}
+            selectedElement={selectedElement}
+          />
+        )}
+        <input
+          type="file"
+          id="imageUpload"
+          className="hidden"
+          accept="image/*"
+          onChange={handleImageUpload}
+        />
+
+        {/* Canvas Area */}
+        <div className="flex flex-1">
+          <motion.div
+            className={`bg-[#FAFAFA] rounded-lg`}
+            animate={{
+              width:
+                selectedElement ||
+                (toolbarSelectedElement !== "text" &&
+                  toolbarSelectedElement !== null)
+                  ? 1050
+                  : 1300,
+            }}
+            transition={{ duration: 0.3, ease: "easeInOut" }}
+          >
+            <Stage
+              width={
+                selectedElement ||
+                (toolbarSelectedElement !== "text" &&
+                  toolbarSelectedElement !== null)
+                  ? 1050
+                  : 1300
+              }
+              height={600}
+              ref={stageRef}
+              onClick={(e) => {
+                if (e.target === e.target.getStage()) {
+                  setSelectedId(null);
+                }
+              }}
+            >
+              <Layer>
+                {elements?.map((elem, i) => {
+                  if (elem.type === "image") {
+                    return (
+                      <CanvasImage
+                        key={i}
+                        imageProps={elem}
+                        isSelected={elem.elementId === selectedId}
+                        onSelect={() => setSelectedId(elem.elementId)}
+                        onChange={(newProps) =>
+                          handleElementChange(elem.elementId, newProps)
+                        }
+                      />
+                    );
+                  }
+                  if (elem.type === "text") {
+                    return (
+                      <CanvasText
+                        key={elem.id}
+                        textProps={elem}
+                        isSelected={elem.elementId === selectedId}
+                        onSelect={() => setSelectedId(elem.elementId)}
+                        onChange={(newProps) =>
+                          handleElementChange(elem.elementId, newProps)
+                        }
+                      />
+                    );
+                  }
+                  return (
+                    <CanvasShape
+                      key={elem.id}
+                      shapeProps={elem}
+                      isSelected={elem.elementId === selectedId}
+                      onSelect={() => setSelectedId(elem.elementId)}
+                      onChange={(newProps) =>
+                        handleElementChange(elem.elementId, newProps)
+                      }
+                    />
+                  );
+                })}
+              </Layer>
+            </Stage>
+          </motion.div>
+          {/* <div className="w-full flex justify-center">
+            <button
+              className="w-full mt-4 py-3 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 font-medium"
+              onClick={templateId ? updateTemplate : publishTemplate}
+            >
+              {templateId ? "Edit Template" : "Publish Template"}
+            </button>
+          </div> */}
+        </div>
+
+        {/* Right Property Panel */}
+        <PropertyPanel
+          selectedElement={selectedElement}
+          onChange={(newProps) => handleElementChange(selectedId, newProps)}
+          onDelete={handleDelete}
+          onDuplicate={handleDuplicate}
+          onDownload={downloadCanvas}
           setSelectedId={setSelectedId}
         />
       </div>
-
-      <input
-        type="file"
-        id="imageUpload"
-        className="hidden"
-        accept="image/*"
-        onChange={handleImageUpload}
-      />
-
-      {/* Canvas Area */}
-      <div className="flex-1 p-8">
-        <div className="bg-white rounded-lg shadow-lg w-[800px]">
-          <Stage
-            width={800}
-            height={600}
-            ref={stageRef}
-            onClick={(e) => {
-              if (e.target === e.target.getStage()) {
-                setSelectedId(null);
-              }
-            }}
-          >
-            <Layer>
-              {elements?.map((elem, i) => {
-                if (elem.type === "image") {
-                  return (
-                    <CanvasImage
-                      key={i}
-                      imageProps={elem}
-                      isSelected={elem.elementId === selectedId}
-                      onSelect={() => setSelectedId(elem.elementId)}
-                      onChange={(newProps) =>
-                        handleElementChange(elem.elementId, newProps)
-                      }
-                    />
-                  );
-                }
-                if (elem.type === "text") {
-                  return (
-                    <CanvasText
-                      key={elem.id}
-                      textProps={elem}
-                      isSelected={elem.elementId === selectedId}
-                      onSelect={() => setSelectedId(elem.elementId)}
-                      onChange={(newProps) =>
-                        handleElementChange(elem.elementId, newProps)
-                      }
-                    />
-                  );
-                }
-                return (
-                  <CanvasShape
-                    key={elem.id}
-                    shapeProps={elem}
-                    isSelected={elem.elementId === selectedId}
-                    onSelect={() => setSelectedId(elem.elementId)}
-                    onChange={(newProps) =>
-                      handleElementChange(elem.elementId, newProps)
-                    }
-                  />
-                );
-              })}
-            </Layer>
-          </Stage>
-        </div>
-        <div className="w-full flex justify-center">
-          <button
-            className="w-full mt-4 py-3 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 font-medium"
-            onClick={templateId ? updateTemplate : publishTemplate}
-          >
-            {templateId ? "Edit Template" : "Publish Template"}
-          </button>
-        </div>
-      </div>
-
-      {/* Right Property Panel */}
-      <PropertyPanel
-        selectedElement={selectedElement}
-        onChange={(newProps) => handleElementChange(selectedId, newProps)}
-        onDelete={handleDelete}
-        onDuplicate={handleDuplicate}
-        onDownload={downloadCanvas}
-        setSelectedId={setSelectedId}
-      />
     </div>
   );
 };

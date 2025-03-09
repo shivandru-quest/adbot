@@ -46,7 +46,7 @@ const Dashboard = () => {
   };
 
   return (
-    <div className="ml-64 p-8">
+    <div className="p-4">
       {/* Welcome Section */}
       <div className="flex justify-between items-center mb-8">
         <div>

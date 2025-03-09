@@ -6,9 +6,14 @@ import { FaFacebook, FaInstagram, FaReddit } from "react-icons/fa";
 import SelectionModal from "../ui/SelectionModal";
 import axios from "axios";
 import { mainConfig } from "../Config/mainConfig";
-import { createUrlBackend, getToken, getUserId } from "../Config/generalFunctions";
+import {
+  createUrlBackend,
+  getToken,
+  getUserId,
+} from "../Config/generalFunctions";
 import Loader from "../ui/Loader";
 import NoDataYet from "../ui/NoDataYet";
+import TemplateBanner from "../ui/TemplateBanner";
 
 export const templates = [
   {
@@ -110,9 +115,9 @@ const TemplateSelection = () => {
   }
 
   return (
-    <div className="ml-64 p-8">
+    <div className="p-4">
       <div className="flex items-center justify-between mb-8">
-        <div className="flex items-center">
+        {/* <div className="flex items-center">
           <Link to="/dashboard">
             <motion.button
               whileHover={{ x: -5 }}
@@ -123,13 +128,15 @@ const TemplateSelection = () => {
             </motion.button>
           </Link>
           <h1 className="text-2xl font-bold ml-8">Choose a Template</h1>
-        </div>
+        </div> */}
+      <TemplateBanner setSelectedCategory={setSelectedCategory}/>
       </div>
 
       {/* Filters */}
-      <div className="mb-8">
+
+      {/* <div className="mb-8">
         <div className="flex flex-col space-y-4">
-          {/* Platform filter */}
+          
           <div className="flex space-x-4">
             {platforms.map((platform) => (
               <motion.button
@@ -149,7 +156,7 @@ const TemplateSelection = () => {
             ))}
           </div>
 
-          {/* Category filter */}
+          
           <div className="flex space-x-4">
             {categories.map((category) => (
               <motion.button
@@ -168,7 +175,7 @@ const TemplateSelection = () => {
             ))}
           </div>
         </div>
-      </div>
+      </div> */}
 
       {/* Blank Canvas Option */}
       {/* <motion.div
