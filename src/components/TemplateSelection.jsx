@@ -129,7 +129,10 @@ const TemplateSelection = () => {
           </Link>
           <h1 className="text-2xl font-bold ml-8">Choose a Template</h1>
         </div> */}
-      <TemplateBanner setSelectedCategory={setSelectedCategory}/>
+        <TemplateBanner
+          setSelectedCategory={setSelectedCategory}
+          selectedCategory={selectedCategory}
+        />
       </div>
 
       {/* Filters */}

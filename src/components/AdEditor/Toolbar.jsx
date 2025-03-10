@@ -52,9 +52,22 @@ const Toolbar = ({
         }}
       >
         <div className="w-full p-2 flex justify-center">
-          <AllSvgs type={"textIcon"} />
+          <AllSvgs
+            type={"textIcon"}
+            fillColor={
+              toolbarSelectedElement === "text" ? "#181818" : "#535353"
+            }
+          />
         </div>
-        <span className="text-[#535353] text-sm font-[500]">Text</span>
+        <span
+          className={`${
+            toolbarSelectedElement === "text"
+              ? "text-[#181818] font-[600]"
+              : "text-[#535353] font-[500]"
+          } text-sm `}
+        >
+          Text
+        </span>
       </div>
       <div
         className={`w-full flex flex-col items-center justify-center cursor-pointer py-2 ${
@@ -64,9 +77,22 @@ const Toolbar = ({
         // onClick={() => setToolbarSelectedElement("media")}
       >
         <div className="w-full p-2 flex justify-center">
-          <AllSvgs type={"mediaIcon"} />
+          <AllSvgs
+            type={"mediaIcon"}
+            fillColor={
+              toolbarSelectedElement === "media" ? "#181818" : "#535353"
+            }
+          />
         </div>
-        <span className="text-[#535353] text-sm font-[500]">Media</span>
+        <span
+          className={`${
+            toolbarSelectedElement === "media"
+              ? "text-[#181818] font-[600]"
+              : "text-[#535353] font-[500]"
+          } text-sm `}
+        >
+          Media
+        </span>
       </div>
       <div
         className={`w-full flex flex-col items-center justify-center cursor-pointer py-2 ${
@@ -76,9 +102,22 @@ const Toolbar = ({
         // onClick={() => setToolbarSelectedElement("elements")}
       >
         <div className="w-full p-2 flex justify-center">
-          <AllSvgs type={"elementsIcon"} />
+          <AllSvgs
+            type={"elementsIcon"}
+            fillColor={
+              toolbarSelectedElement === "elements" ? "#181818" : "#535353"
+            }
+          />
         </div>
-        <span className="text-[#535353] text-sm font-[500]">Elements</span>
+        <span
+          className={`${
+            toolbarSelectedElement === "elements"
+              ? "text-[#181818] font-[600]"
+              : "text-[#535353] font-[500]"
+          } text-sm `}
+        >
+          Elements
+        </span>
       </div>
       <div
         className={`w-full flex flex-col items-center justify-center cursor-pointer py-2 ${
@@ -88,9 +127,22 @@ const Toolbar = ({
         // onClick={() => setToolbarSelectedElement("theme")}
       >
         <div className="w-full p-2 flex justify-center">
-          <AllSvgs type={"colorIcon"} />
+          <AllSvgs
+            type={"colorIcon"}
+            fillColor={
+              toolbarSelectedElement === "theme" ? "#181818" : "#535353"
+            }
+          />
         </div>
-        <span className="text-[#535353] text-sm font-[500]">Theme</span>
+        <span
+          className={`${
+            toolbarSelectedElement === "theme"
+              ? "text-[#181818] font-[600]"
+              : "text-[#535353] font-[500]"
+          } text-sm `}
+        >
+          Theme
+        </span>
       </div>
       {/* <motion.button
         whileHover={{ scale: 1.1 }}

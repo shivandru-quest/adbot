@@ -1,5 +1,6 @@
 import Cookies from "universal-cookie";
 import { mainConfig } from "./mainConfig";
+import axios from "axios";
 const cookies = new Cookies(null, { path: "/" });
 
 export const getEntityId = () => {
@@ -108,3 +109,43 @@ export async function blobUrlToFile(blobUrl, fileName) {
     console.log("error", error.message);
   }
 }
+
+const count = 0;
+export const uploadImageToBackend = async (file) => {
+  if (!file) {
+    return null;
+  }
+  if (file.size > 1000000 && count <= 50) {
+    try {
+      // Resize the image to below 1MB
+      const compressedImage = await imageCompression(file, {
+        maxSizeMB: 1,
+        maxWidthOrHeight: 1024,
+        useWebWorker: true,
+        initialQuality: 1 - count * 0.05,
+      });
+      count++;
+
+      return await uploadImageToBackend(compressedImage);
+    } catch (error) {
+      return null;
+    }
+  }
+
+  const { url, headers: baseHeaders } =
+  createUrl(`api/upload-img`);
+  const headers = {
+    ...baseHeaders,
+    "Content-Type": "form-data",
+  };
+
+  const formData = new FormData();
+  formData.append("uploaded_file", file);
+
+  try {
+    const res = await axios.post(url, formData, { headers });
+    return res;
+  } catch (error) {
+    return null;
+  }
+};

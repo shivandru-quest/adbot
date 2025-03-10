@@ -1,6 +1,6 @@
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import {
   FiGrid,
   FiLayout,
@@ -14,14 +14,21 @@ import {
 } from "react-icons/fi";
 import LogoutModal from "./LogoutModal";
 import { AppContext } from "../context/AppContext";
-import { clearAllCookies } from "../Config/generalFunctions";
+import {
+  clearAllCookies,
+  createUrl,
+  getUserId,
+} from "../Config/generalFunctions";
 import AllSvgs from "../assets/AllSvgs";
+import Cookies from "universal-cookie";
+import axios from "axios";
+const cookies = new Cookies(null, { path: "/" });
 
 const Sidebar = ({ children }) => {
   const location = useLocation();
   const navigate = useNavigate();
   const [showLogoutModal, setShowLogoutModal] = useState(false);
-  const { dispatch } = useContext(AppContext);
+  const { dispatch, state } = useContext(AppContext);
   const menuItems = [
     { icon: FiPlayCircle, label: "Get Started", path: "/get-started" },
     { icon: FiGrid, label: "Dashboard", path: "/dashboard" },
@@ -40,6 +47,21 @@ const Sidebar = ({ children }) => {
     window.dispatchEvent(new Event("authChange"));
     navigate("/");
   };
+
+  useEffect(() => {
+    const getUser = async () => {
+      try {
+        const { url, headers } = createUrl(`api/users/${getUserId()}`);
+        const res = await axios.get(url, { headers });
+        // setImageUrl(res.data.data.imageUrl);
+        cookies.set("avatar", res.data.data.imageUrl);
+        console.log("userData", res.data.data);
+      } catch (error) {
+        console.log("error", error.message);
+      }
+    };
+    getUser();
+  }, []);
 
   return (
     <div className="w-full flex">
@@ -95,12 +117,18 @@ const Sidebar = ({ children }) => {
           </motion.div>
           <motion.div
             whileHover={{ x: 5 }}
-            className={`flex items-center justify-between space-x-2 p-2 rounded-lg cursor-pointer text-sm text-[#535353] font-[500]
+            className={`flex items-end justify-between space-x-2 p-2 rounded-lg cursor-pointer text-sm text-[#535353] font-[500]
             `}
           >
-            <div className="flex items-center gap-2">
-              <div className="rounded-full bg-[#D9D9D9] w-8 h-8"></div>
-              <span>Name</span>
+            <div className="flex items-end gap-2">
+              <div className="rounded-full bg-[#D9D9D9] w-8 h-8">
+                <img
+                  src={state.avatar}
+                  alt="user_avatar"
+                  className="rounded-full w-full object-cover"
+                />
+              </div>
+              <span>{state.UserName}</span>
             </div>
             <div>
               <AllSvgs type={"rightArrowIcon"} />

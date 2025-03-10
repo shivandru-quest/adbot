@@ -46,7 +46,7 @@ const floatAnimation3 = {
     ease: "easeInOut",
   },
 };
-const TemplateBanner = ({ setSelectedCategory }) => {
+const TemplateBanner = ({ setSelectedCategory, selectedCategory }) => {
   return (
     <div
       className="relative w-full h-[22rem] rounded-lg flex flex-col items-center justify-center gap-6"
@@ -81,7 +81,11 @@ const TemplateBanner = ({ setSelectedCategory }) => {
           {categories.map((el, i) => (
             <button
               key={i}
-              className="p-2 rounded-md flex items-center justify-center text-[#fff] text-xs"
+              className={`p-2 rounded-md flex items-center justify-center text-[#fff] text-xs ${
+                selectedCategory === el
+                  ? "shadow-[0px_0px_10px_2px_rgba(128,0,128,0.9)]"
+                  : ""
+              }`}
               style={{ border: "1px solid rgba(169, 163, 194, 0.80)" }}
               onClick={() => setSelectedCategory(el)}
             >
