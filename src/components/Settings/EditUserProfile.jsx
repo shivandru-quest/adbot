@@ -12,6 +12,7 @@ import Loader from "../../ui/Loader";
 import Cookies from "universal-cookie";
 import AllSvgs from "../../assets/AllSvgs";
 import { AppContext } from "../../context/AppContext";
+import imageCompression from "browser-image-compression";
 const EditUserProfile = () => {
   const [answer, setAnswer] = useState([]);
   const [imageUrl, setImageUrl] = useState("");
@@ -40,6 +41,32 @@ const EditUserProfile = () => {
     getUser();
   }, []);
 
+  const handleImageUpload = async (fileToUpload) => {
+    if (!fileToUpload) return null;
+
+    const formDataForUpload = new FormData();
+    formDataForUpload.append("uploaded_file", fileToUpload);
+
+    try {
+      // const response = await apiCall().post(
+      //   "api/upload-img",
+      //   formDataForUpload,
+      //   {
+      //     headers: { "Content-Type": "multipart/form-data" },
+      //   }
+      // );
+      const { url, headers } = createUrl("api/upload-img");
+      const response = await axios.post(url, formDataForUpload, { headers });
+
+      if (response.status === 200) {
+        return response.data.imageUrl;
+      }
+      return null;
+    } catch (error) {
+      throw error;
+    }
+  };
+
   async function inputFileChangeHandler(event) {
     const file = event.target.files[0];
     if (file) {
@@ -48,22 +75,24 @@ const EditUserProfile = () => {
         return;
       }
       setSelectedFile(file);
-      const imageUrl = URL.createObjectURL(file);
-      setImageUrl(imageUrl);
-      setCustomImage(imageUrl);
-      const updateProfile = async () => {
-        let data = await uploadImageToBackend(file);
-        setImageUrl(data?.data?.imageUrl);
+      const options = {
+        maxSizeMB: 0.05,
+        maxWidthOrHeight: 500,
+        useWebWorker: true,
       };
+      const compressedFile = await imageCompression(file, options);
+      const uploadedUrl = await handleImageUpload(compressedFile);
+      if (uploadedUrl) {
+        setImageUrl(uploadedUrl);
+      }
       const { url, headers } = createUrl(`api/users/${getUserId()}`);
-      const res = await axios.post(url, { imageUrl }, { headers });
-      if(res.data.success){
-        await updateProfile()
+      const res = await axios.post(url, { imageUrl: uploadedUrl }, { headers });
+      if (res.data.success) {
         await getUser();
       }
     }
   }
-  console.log("imgUrl", imageUrl);
+
   async function updateProfile() {
     setIsLoading(true);
     const userAnswers = {

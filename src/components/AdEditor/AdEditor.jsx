@@ -184,7 +184,27 @@ const AdEditor = () => {
       reader.readAsDataURL(file);
     }
   };
-
+  const loadImageAsBase64 = async (imageUrl) => {
+    try {
+      const response = await fetch(imageUrl, {
+        mode: "cors",
+        credentials: "omit",
+        headers: {
+          "Access-Control-Allow-Origin": "*",
+        },
+      });
+      const blob = await response.blob();
+      return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onloadend = () => resolve(reader.result);
+        reader.onerror = reject;
+        reader.readAsDataURL(blob);
+      });
+    } catch (error) {
+      console.error("Failed to fetch image:", error);
+      return null;
+    }
+  };
   const downloadCanvas = async () => {
     const stage = stageRef.current;
     if (!stage) {
@@ -204,9 +224,11 @@ const AdEditor = () => {
         const img = node.getImage();
         if (!img) continue;
 
+        const base64 = await loadImageAsBase64(img.src);
+        if (!base64) continue;
+
         const newImg = new window.Image();
-        newImg.crossOrigin = "Anonymous";
-        newImg.src = img.src;
+        newImg.src = base64;
 
         await new Promise((resolve, reject) => {
           newImg.onload = resolve;
@@ -246,9 +268,17 @@ const AdEditor = () => {
         y: boundingBox.minY,
         width: croppedWidth,
         height: croppedHeight,
-        mimeType: "image/png",
+        // mimeType: "image/png",
+        // quality: 1.0,
       });
-
+      console.log("uri", uri);
+      // if (!uri || uri === "data:,") {
+      //   console.error("Canvas export failed. Possible CORS issue.");
+      //   Toast.error({
+      //     text: "Image download failed due to security restrictions.",
+      //   });
+      //   return;
+      // }
       const link = document.createElement("a");
       link.download = "canvas.png";
       link.href = uri;
@@ -257,6 +287,7 @@ const AdEditor = () => {
       document.body.removeChild(link);
     } catch (error) {
       Toast.error({ text: "Failed to download canvas" });
+      console.log("error", error);
     }
   };
 
