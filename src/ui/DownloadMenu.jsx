@@ -11,7 +11,11 @@ const platforms = [
   { id: "linkedIn", icon: "linkedInIcon", label: "LinkedIn" },
 ];
 
-const DownloadMenu = ({ showDownLoadMenu, toggleDownloadMenu }) => {
+const DownloadMenu = ({
+  showDownLoadMenu,
+  toggleDownloadMenu,
+  downloadCanvas,
+}) => {
   return (
     showDownLoadMenu && (
       <div className="absolute z-10 top-14 right-9 bg-white shadow-lg w-[17rem] h-auto rounded-xl p-5 border flex flex-col gap-4">
@@ -83,7 +87,7 @@ const DownloadMenu = ({ showDownLoadMenu, toggleDownloadMenu }) => {
           </label>
         </div>
         <div className="w-full flex items-center justify-center">
-          <button className="w-full">
+          <button className="w-full" onClick={downloadCanvas}>
             <img src={importConfig.downloadButton} alt="downloadButton" />
           </button>
         </div>

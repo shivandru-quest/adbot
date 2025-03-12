@@ -1,8 +1,15 @@
 import React from "react";
 import AllSvgs from "../assets/AllSvgs";
 import { importConfig } from "../Config/importConfig";
+import { useParams } from "react-router-dom";
 
-const ShareTemplateMenu = ({ showShareMenu, toggleShareMenu }) => {
+const ShareTemplateMenu = ({
+  showShareMenu,
+  toggleShareMenu,
+  publishTemplate,
+  updateTemplate,
+}) => {
+  const { templateId } = useParams();
   return (
     showShareMenu && (
       <div className="absolute z-10 top-14 right-9 bg-white shadow-lg w-[21rem] h-auto rounded-xl p-5 border flex flex-col gap-4">
@@ -14,7 +21,10 @@ const ShareTemplateMenu = ({ showShareMenu, toggleShareMenu }) => {
             <AllSvgs type={"cancelIcon"} />
           </button>
         </div>
-        <div className="w-full flex items-center justify-center">
+        <div
+          className="w-full flex items-center justify-center cursor-pointer"
+          onClick={templateId ? updateTemplate : publishTemplate}
+        >
           <button className="w-full">
             <img src={importConfig.shareNowButton} alt="shareNowButton" />
           </button>

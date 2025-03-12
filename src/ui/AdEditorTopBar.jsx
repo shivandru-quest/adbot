@@ -10,6 +10,8 @@ const AdEditorTopBar = ({
   canUndo,
   canRedo,
   downloadCanvas,
+  publishTemplate,
+  updateTemplate,
 }) => {
   const navigate = useNavigate();
   const [showDownLoadMenu, setShowDownloadMenu] = useState(false);
@@ -73,10 +75,13 @@ const AdEditorTopBar = ({
       <DownloadMenu
         showDownLoadMenu={showDownLoadMenu}
         toggleDownloadMenu={toggleDownloadMenu}
+        downloadCanvas={downloadCanvas}
       />
       <ShareTemplateMenu
         showShareMenu={showShareMenu}
         toggleShareMenu={toggleShareMenu}
+        publishTemplate={publishTemplate}
+        updateTemplate={updateTemplate}
       />
     </div>
   );

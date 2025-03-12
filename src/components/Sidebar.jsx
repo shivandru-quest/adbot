@@ -20,9 +20,7 @@ import {
   getUserId,
 } from "../Config/generalFunctions";
 import AllSvgs from "../assets/AllSvgs";
-import Cookies from "universal-cookie";
 import axios from "axios";
-const cookies = new Cookies(null, { path: "/" });
 
 const Sidebar = ({ children }) => {
   const location = useLocation();

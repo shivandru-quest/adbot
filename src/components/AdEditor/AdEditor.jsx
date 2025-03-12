@@ -37,8 +37,6 @@ const AdEditor = () => {
   const [isLoading, setIsLoading] = useState(false);
   const stageRef = useRef(null);
 
-  console.log("elements", elements);
-
   useEffect(() => {
     if (adData?.images?.length > 0) {
       setElements((prev) => {
@@ -428,6 +426,8 @@ const AdEditor = () => {
           canUndo={historyStep > 0}
           canRedo={historyStep < history?.length - 1}
           downloadCanvas={downloadCanvas}
+          publishTemplate={publishTemplate}
+          updateTemplate={updateTemplate}
         />
       </div>
       <div className="flex w-full p-4 justify-between gap-4">
