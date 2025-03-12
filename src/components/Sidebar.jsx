@@ -48,21 +48,6 @@ const Sidebar = ({ children }) => {
     navigate("/");
   };
 
-  useEffect(() => {
-    const getUser = async () => {
-      try {
-        const { url, headers } = createUrl(`api/users/${getUserId()}`);
-        const res = await axios.get(url, { headers });
-        // setImageUrl(res.data.data.imageUrl);
-        cookies.set("avatar", res.data.data.imageUrl);
-        console.log("userData", res.data.data);
-      } catch (error) {
-        console.log("error", error.message);
-      }
-    };
-    getUser();
-  }, []);
-
   return (
     <div className="w-full flex">
       <div className="flex flex-col border w-60 h-screen">
@@ -123,12 +108,12 @@ const Sidebar = ({ children }) => {
             <div className="flex items-end gap-2">
               <div className="rounded-full bg-[#D9D9D9] w-8 h-8">
                 <img
-                  src={state.avatar}
+                  src={state?.avatar}
                   alt="user_avatar"
                   className="rounded-full w-full object-cover"
                 />
               </div>
-              <span>{state.UserName}</span>
+              <span>{state?.UserName}</span>
             </div>
             <div>
               <AllSvgs type={"rightArrowIcon"} />

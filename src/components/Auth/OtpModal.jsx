@@ -6,7 +6,11 @@ import Cookies from "universal-cookie";
 import axios from "axios";
 import { AppContext } from "../../context/AppContext";
 import Loader from "../../ui/Loader";
-import { createLoginFlowUrl } from "../../Config/generalFunctions";
+import {
+  createLoginFlowUrl,
+  createUrl,
+  getUserId,
+} from "../../Config/generalFunctions";
 const OtpModal = ({ isOpen, onClose, handleSendOtp, timer, canResend }) => {
   const modalRef = useRef();
   const navigate = useNavigate();
@@ -92,7 +96,6 @@ const OtpModal = ({ isOpen, onClose, handleSendOtp, timer, canResend }) => {
       );
       const response = await axios.post(url, payload, { headers });
       const newUserData = response.data;
-      console.log("response.data", response.data);
       setIsNewUser(newUserData?.newUser);
       return response.data;
     } catch (error) {
@@ -102,6 +105,19 @@ const OtpModal = ({ isOpen, onClose, handleSendOtp, timer, canResend }) => {
       );
     }
   }
+
+  const getUser = async () => {
+    try {
+      const { url, headers } = createUrl(`api/users/${getUserId()}`);
+      const res = await axios.get(url, { headers });
+      cookies.set("avatar", res.data.data.imageUrl);
+      cookies.set("UserName", res.data.data.name);
+      dispatch({ type: "user/UserName", payload: res.data.data.name });
+      dispatch({ type: "user/avatar", payload: res.data.data.imageUrl });
+    } catch (error) {
+      console.log("error", error.message);
+    }
+  };
 
   const getEntityApiKey = async (entityId, userId, token) => {
     const { url, headers } = createLoginFlowUrl(
@@ -184,6 +200,7 @@ const OtpModal = ({ isOpen, onClose, handleSendOtp, timer, canResend }) => {
         cookies.set("userId", userId);
         let entityDetails = await getEntityDetails({ userId, token });
         let onboardingDetails = await getOnboardingDetails({ userId, token });
+        await getUser();
         if (entityDetails) {
           if (onboardingDetails) {
             dispatch({ type: "user/isAuthenticated", payload: true });

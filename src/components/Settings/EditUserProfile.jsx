@@ -40,7 +40,7 @@ const EditUserProfile = () => {
     getUser();
   }, []);
 
-  function inputFileChangeHandler(event) {
+  async function inputFileChangeHandler(event) {
     const file = event.target.files[0];
     if (file) {
       if (file.size > 1048576) {
@@ -55,10 +55,15 @@ const EditUserProfile = () => {
         let data = await uploadImageToBackend(file);
         setImageUrl(data?.data?.imageUrl);
       };
-      updateProfile();
+      const { url, headers } = createUrl(`api/users/${getUserId()}`);
+      const res = await axios.post(url, { imageUrl }, { headers });
+      if(res.data.success){
+        await updateProfile()
+        await getUser();
+      }
     }
   }
-
+  console.log("imgUrl", imageUrl);
   async function updateProfile() {
     setIsLoading(true);
     const userAnswers = {

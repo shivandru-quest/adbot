@@ -7,12 +7,14 @@ import { mainConfig } from "../../Config/mainConfig";
 import axios from "axios";
 import { AppContext } from "../../context/AppContext";
 import Loader from "../../ui/Loader";
+import Cookies from "universal-cookie";
 
 const OnboardingPage = () => {
   const navigate = useNavigate();
   const [answers, setAnswers] = useState([]);
   const { dispatch } = useContext(AppContext);
   const [isLoading, setIsLoading] = useState(false);
+  const cookies = new Cookies(null, { path: "/" });
 
   async function handleGetAnswers() {
     setIsLoading(true);
@@ -32,7 +34,9 @@ const OnboardingPage = () => {
       if (res.data.success) {
         localStorage.setItem("userRecords", JSON.stringify(userAnswers));
         localStorage.setItem("isAuthenticated", "true");
+        cookies.set("UserName", userAnswers.name);
         dispatch({ type: "user/isAuthenticated", payload: true });
+        dispatch({ type: "user/UserName", payload: userAnswers.name });
         setIsLoading(false);
         navigate("/dashboard");
       }
