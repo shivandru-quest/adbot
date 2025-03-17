@@ -1,9 +1,11 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { useSearchParams } from "react-router-dom";
 import EditUserProfile from "./EditUserProfile";
 import SubscriptionPage from "../Subscription/SubscriptionPage";
 
 const SettingsDashboard = () => {
-  const [currTab, setCurrTab] = useState("edit");
+  const [searchParams, setSearchParams] = useSearchParams();
+
   return (
     <div className="flex flex-col justify-center items-center h-auto">
       <div className="pt-[30px] w-full h-auto">
@@ -15,25 +17,28 @@ const SettingsDashboard = () => {
         >
           <p
             className={`text-sm font-semibold font-['Figtree'] h-[52px] p-4 cursor-pointer ${
-              currTab === "edit" && "rounded-t-xl border-b border-[#939393]"
+              searchParams.get("tab") === "edit" &&
+              "rounded-t-xl border-b border-[#939393]"
             }`}
-            onClick={() => setCurrTab("edit")}
+            onClick={() => setSearchParams({ tab: "edit" })}
             style={{
-              color: currTab === "edit"? "#fff":"#000",
-              background: currTab === "edit" ? "#2c2c2c" : "",
+              color: searchParams.get("tab") === "edit" ? "#fff" : "#000",
+              background: searchParams.get("tab") === "edit" ? "#2c2c2c" : "",
             }}
           >
             Edit Profile
           </p>
           <p
             className={`text-sm font-semibold font-['Figtree'] h-[52px] p-4 cursor-pointer ${
-              currTab === "subscription" &&
+              searchParams.get("tab") === "subscription" &&
               "rounded-t-xl border-b border-[#939393]"
             }`}
-            onClick={() => setCurrTab("subscription")}
+            onClick={() => setSearchParams({ tab: "subscription" })}
             style={{
-              color: currTab === "subscription" ? "#fff" : "#000",
-              background: currTab === "subscription" ? "#2c2c2c" : "",
+              color:
+                searchParams.get("tab") === "subscription" ? "#fff" : "#000",
+              background:
+                searchParams.get("tab") === "subscription" ? "#2c2c2c" : "",
             }}
           >
             Subscription
@@ -41,7 +46,11 @@ const SettingsDashboard = () => {
         </div>
 
         <div className="w-full h-auto">
-          {currTab === "edit" ? <EditUserProfile /> : <SubscriptionPage />}
+          {searchParams.get("tab") === "edit" ? (
+            <EditUserProfile />
+          ) : (
+            <SubscriptionPage />
+          )}
         </div>
       </div>
     </div>

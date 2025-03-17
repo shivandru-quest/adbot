@@ -15,6 +15,7 @@ import shareNowButton from "../assets/shareNowButton.png";
 import sendOtpButton from "../assets/sendOtpButton.png";
 import authFlowBgCover from "../assets/authFlowBgCover.png";
 import authFlowContButton from "../assets/authFlowContButton.png";
+import upgradeNowButton from "../assets/upgradeNowButton.png";
 
 export const importConfig = {
   templateBannerBgImage,
@@ -34,4 +35,5 @@ export const importConfig = {
   sendOtpButton,
   authFlowBgCover,
   authFlowContButton,
+  upgradeNowButton,
 };
