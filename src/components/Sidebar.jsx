@@ -21,6 +21,7 @@ const Sidebar = ({ children }) => {
   const [showLogoutModal, setShowLogoutModal] = useState(false);
   const [userMenu, setUserMenu] = useState(false);
   const { dispatch, state } = useContext(AppContext);
+  const [selectedItem, setSelectedItem] = useState(null);
   const menuItems = [
     { icon: FiPlayCircle, label: "Get Started", path: "/get-started" },
     { icon: FiGrid, label: "Dashboard", path: "/dashboard" },
@@ -116,44 +117,74 @@ const Sidebar = ({ children }) => {
           </div>
           <div className="flex items-center gap-2">
             <button
-              className="text-[#181818] text-sm font-[600] p-[0.375rem]"
-              onClick={() => navigate("/get-started")}
+              className={`${
+                selectedItem === "home"
+                  ? "text-[#181818] font-[600]"
+                  : "font-[500] text-[#696969]"
+              }  text-sm  p-[0.375rem]`}
+              onClick={() => {
+                setSelectedItem("home");
+                navigate("/home");
+              }}
             >
               Home
             </button>
             <button
-              className="text-[#696969] font-[500] text-sm p-[0.375rem]"
-              onClick={() => navigate("/templates")}
+              className={`text-sm p-[0.375rem] ${
+                selectedItem === "templates"
+                  ? "text-[#181818] font-[600]"
+                  : "text-[#696969] font-[500]"
+              }`}
+              onClick={() => {
+                setSelectedItem("templates");
+                navigate("/templates");
+              }}
             >
               Templates
             </button>
             <button
-              className="text-[#696969] font-[500] text-sm p-[0.375rem]"
-              onClick={() => navigate("/dashboard")}
+              className={` text-sm p-[0.375rem] ${
+                selectedItem === "myfiles"
+                  ? "text-[#181818] font-[600]"
+                  : "text-[#696969] font-[500]"
+              }`}
+              onClick={() => {
+                setSelectedItem("myfiles");
+                navigate("/myfiles");
+              }}
             >
               My Files
             </button>
-            <div className="flex items-center justify-between gap-1 cursor-pointer p-[0.375rem]">
+            <div className="flex items-center justify-between gap-1 p-[0.375rem]">
               <AllSvgs type={"heartIconTopBar"} />
               <div className="bg-gray-100 text-[#181818] text-xs font-[600] px-[0.38rem] py-[0.12rem] rounded-md">
                 50/100
               </div>
             </div>
             <button
-              className="px-3 py-2 flex items-center gap-1 border border-[#E2E2E2] rounded-md"
-              onClick={() => navigate("/get-started")}
+              className={`px-3 py-2 flex items-center gap-1 border border-[#E2E2E2] rounded-md`}
+              onClick={() => {
+                setSelectedItem("getStarted");
+                navigate("/get-started");
+              }}
             >
-              <span className="text-[#181818] font-[600] text-xs">
+              <span className={`text-[#181818] font-[600] text-xs`}>
                 Get started
               </span>
               <AllSvgs type={"rightPointerTopbar"} />
-              <span className="text-[#696969] font-[500] text-xs">0/4</span>
+              <span className={`text-[#696969] font-[500] text-xs`}>0/4</span>
             </button>
-            <button className="flex w-[6.8rem]">
+            <button
+              className="flex w-[6.8rem]"
+              onClick={() => {
+                setSelectedItem("upgradeNow");
+                navigate("/settings?tab=subscription");
+              }}
+            >
               <img src={importConfig.upgradeNowButton} alt="upgradeNowButton" />
             </button>
             <div
-              className={`flex items-center justify-between rounded-lg cursor-pointer text-sm gap-3 text-[#535353] font-[500]
+              className={`flex items-center justify-between rounded-lg p-2 cursor-pointer text-sm gap-3 text-[#535353] font-[500]
             `}
               onMouseEnter={() => setUserMenu(true)}
             >
@@ -169,7 +200,7 @@ const Sidebar = ({ children }) => {
                   {state?.UserName}
                 </span>
               </div>
-              <div>
+              <div className={`${userMenu && "rotate-180"}`}>
                 <AllSvgs type={"downPointingArrow"} />
               </div>
             </div>

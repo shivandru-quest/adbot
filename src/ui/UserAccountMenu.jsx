@@ -15,7 +15,7 @@ const UserAccountMenu = ({ userMenu, setUserMenu, setShowLogoutModal }) => {
           className="w-full flex items-center justify-center gap-2 cursor-pointer p-2 hover:bg-[#E2E2E2] text-[#535353] hover:text-[#181818] rounded-md hover:font-[500] font-[400]"
           onMouseEnter={() => setHoveredItem("account")}
           onMouseLeave={() => setHoveredItem(null)}
-          onClick={() => navigate("/settings?tab=edit")}
+          onClick={() => navigate("/settings?tab=account")}
         >
           <AllSvgs
             type={"humanIcon"}
@@ -27,7 +27,7 @@ const UserAccountMenu = ({ userMenu, setUserMenu, setShowLogoutModal }) => {
           className="w-full flex items-center justify-center gap-2 cursor-pointer p-2 rounded-md hover:bg-[#E2E2E2] hover:text-[#181818] text-[#535353] hover:font-[500] font-[400]"
           onMouseEnter={() => setHoveredItem("settings")}
           onMouseLeave={() => setHoveredItem(null)}
-          onClick={() => navigate("/settings?tab=subscription")}
+          onClick={() => navigate("/settings?tab=pricing")}
         >
           <AllSvgs
             type={"settingsIcon"}

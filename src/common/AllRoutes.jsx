@@ -17,6 +17,8 @@ import ContactPage from "../components/Contact/ContactPage";
 import HelpPage from "../components/Help/HelpPage";
 import SettingsDashboard from "../components/Settings/SettingsDashboard";
 import OtpModal from "../components/Auth/OtpModal";
+import Home from "../components/Home/Home";
+import MyFiles from "../components/MyFiles/MyFiles";
 
 const isPublicRoute = (pathname) => {
   return ["/", "/login", "/onboarding"].includes(pathname);
@@ -77,6 +79,22 @@ const AllRoutes = () => {
               element={
                 <Sidebar>
                   <SettingsDashboard />
+                </Sidebar>
+              }
+            />
+            <Route
+              path="/home"
+              element={
+                <Sidebar>
+                  <Home />
+                </Sidebar>
+              }
+            />
+            <Route
+              path="/myfiles"
+              element={
+                <Sidebar>
+                  <MyFiles />
                 </Sidebar>
               }
             />

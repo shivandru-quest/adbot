@@ -126,16 +126,14 @@ const EditUserProfile = () => {
   );
   return (
     <div>
-      <div className="p-6">
-        {isLoading && <Loader />}
-        <div
-          className="p-8 flex flex-col items-center gap-8 rounded-[10px]"
-          style={{
-            border: `1.5px solid #E2E2E2`,
-          }}
-        >
+      {isLoading && <Loader />}
+      <div className="flex flex-col gap-8 rounded-[10px] px-8">
+        <p className="text-[#0D0D0D] text-[2.25rem] leading-[2.75rem] tracking-[-0.045rem] font-[600]">
+          Account
+        </p>
+        <div className="flex items-center justify-start gap-6 w-full relative">
           <div
-            className="w-28 h-28 flex items-center justify-center rounded-full bg-[#F4EBFF] relative"
+            className="w-28 h-28 flex items-center justify-center rounded-full bg-[#F4EBFF] relative mb-9"
             onClick={() => fileInputRef.current.click()}
           >
             {(imageUrl || customImage) && (
@@ -169,58 +167,65 @@ const EditUserProfile = () => {
               />
             </div>
           </div>
-          <UserProfile
-            questId={mainConfig.QUEST_ONBOARDING_CAMPAIGN_ID}
-            userId={getUserId()}
-            token={getToken()}
-            answer={answer}
-            setAnswer={setAnswer}
-            getAnswers={updateProfile}
-            styleConfig={{
-              Form: {
-                width: "100%",
-                background: "transparent",
-              },
-              Label: {
-                // color: bgColors[`${theme}-color-premitive-grey-6`],
-                fontFamily: "Figtree",
-                fontSize: "12px",
-                fontStyle: "normal",
-                fontWeight: "500",
-                lineHeight: "16px",
-              },
-              Input: {
-                borderRadius: "10px",
-                // border: `1px solid ${bgColors[`${theme}-primary-border-color`]}`,
-              },
-              MultiChoice: {
-                selectedStyle: {
-                  //   background: "var(--button-background)",
-                  // background: bgColors[`${theme}-primary-bg-color-0`],
-                  color: "#E0E0E0",
-                  //   border: `1px solid ${bgColors[`${theme}-primary-border-color`]}`,
-                },
-                style: {
-                  //   border: `1px solid ${bgColors[`${theme}-primary-border-color`]}`,
-                },
-              },
-              SingleChoice: {
-                style: {
-                  //   border: `1px solid ${bgColors[`${theme}-primary-border-color`]}`,
-                },
-                selectedStyle: {
-                  //   border: `1px solid ${bgColors[`${theme}-primary-border-color`]}`,
-                },
-              },
-              TextArea: {
-                // border: `1px solid ${bgColors[`${theme}-primary-border-color`]}`,
-              },
-              PrimaryButton: {
-                border: "none",
-              },
-            }}
-          />
+          <div>
+            <p>name</p>
+            <p>email</p>
+          </div>
+          <div className="absolute right-0">
+            <button className="border">Edit</button>
+          </div>
         </div>
+        <UserProfile
+          questId={mainConfig.QUEST_ONBOARDING_CAMPAIGN_ID}
+          userId={getUserId()}
+          token={getToken()}
+          answer={answer}
+          setAnswer={setAnswer}
+          getAnswers={updateProfile}
+          styleConfig={{
+            Form: {
+              width: "100%",
+              background: "transparent",
+            },
+            Label: {
+              // color: bgColors[`${theme}-color-premitive-grey-6`],
+              fontFamily: "Figtree",
+              fontSize: "12px",
+              fontStyle: "normal",
+              fontWeight: "500",
+              lineHeight: "16px",
+            },
+            Input: {
+              borderRadius: "10px",
+              // border: `1px solid ${bgColors[`${theme}-primary-border-color`]}`,
+            },
+            MultiChoice: {
+              selectedStyle: {
+                //   background: "var(--button-background)",
+                // background: bgColors[`${theme}-primary-bg-color-0`],
+                color: "#E0E0E0",
+                //   border: `1px solid ${bgColors[`${theme}-primary-border-color`]}`,
+              },
+              style: {
+                //   border: `1px solid ${bgColors[`${theme}-primary-border-color`]}`,
+              },
+            },
+            SingleChoice: {
+              style: {
+                //   border: `1px solid ${bgColors[`${theme}-primary-border-color`]}`,
+              },
+              selectedStyle: {
+                //   border: `1px solid ${bgColors[`${theme}-primary-border-color`]}`,
+              },
+            },
+            TextArea: {
+              // border: `1px solid ${bgColors[`${theme}-primary-border-color`]}`,
+            },
+            PrimaryButton: {
+              border: "none",
+            },
+          }}
+        />
       </div>
     </div>
   );
