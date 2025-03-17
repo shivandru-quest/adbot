@@ -188,12 +188,14 @@ const AdEditor = () => {
     try {
       const response = await fetch(imageUrl, {
         mode: "cors",
-        credentials: "omit",
-        headers: {
-          "Access-Control-Allow-Origin": "*",
-        },
+        credentials: "include", // Use credentials to match referrer policy
+        referrer: "",
       });
+
+      if (!response.ok) throw new Error("Failed to fetch image");
+
       const blob = await response.blob();
+
       return new Promise((resolve, reject) => {
         const reader = new FileReader();
         reader.onloadend = () => resolve(reader.result);
@@ -226,15 +228,17 @@ const AdEditor = () => {
 
         const base64 = await loadImageAsBase64(img.src);
         if (!base64) continue;
-
         const newImg = new window.Image();
+        // newImg.crossOrigin = "Anonymous"; 
         newImg.src = base64;
 
         await new Promise((resolve, reject) => {
           newImg.onload = resolve;
-          newImg.onerror = reject;
+          newImg.onerror = (e) => {
+            console.error("Image load error:", e);
+            reject(e);
+          };
         });
-
         node.image(newImg);
       }
     };
@@ -268,17 +272,16 @@ const AdEditor = () => {
         y: boundingBox.minY,
         width: croppedWidth,
         height: croppedHeight,
-        // mimeType: "image/png",
-        // quality: 1.0,
+        mimeType: "image/png",
+        quality: 1.0,
       });
       console.log("uri", uri);
-      // if (!uri || uri === "data:,") {
-      //   console.error("Canvas export failed. Possible CORS issue.");
-      //   Toast.error({
-      //     text: "Image download failed due to security restrictions.",
-      //   });
-      //   return;
-      // }
+      if (!uri) {
+        Toast.error({
+          text: "uri issue",
+        });
+        return;
+      }
       const link = document.createElement("a");
       link.download = "canvas.png";
       link.href = uri;

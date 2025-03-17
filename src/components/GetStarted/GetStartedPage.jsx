@@ -1,15 +1,4 @@
-import { useState } from "react";
-import { motion } from "framer-motion";
-import { useNavigate } from "react-router-dom";
-import {
-  FiArrowRight,
-  FiCheck,
-  FiPlay,
-  FiEdit,
-  FiLayout,
-  FiImage,
-} from "react-icons/fi";
-import { GetStarted, QuestProvider } from "@questlabs/react-sdk";
+import { GetStarted } from "@questlabs/react-sdk";
 import { getToken, getUserId } from "../../Config/generalFunctions";
 import { mainConfig } from "../../Config/mainConfig";
 

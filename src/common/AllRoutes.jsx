@@ -10,13 +10,13 @@ import GetStartedPage from "../components/GetStarted/GetStartedPage";
 import AdCreator from "../components/AdCreator";
 import TemplateSelection from "../components/TemplateSelection";
 import AdEditor from "../components/AdEditor/AdEditor";
-import SubscriptionPage from "../components/Subscription/SubscriptionPage";
 import PaymentPage from "../components/Payment/PaymentPage";
 import SubscriptionConfirmation from "../components/Subscription/SubscriptionConfirmation";
 import BillingPage from "../components/Billing/BillingPage";
 import ContactPage from "../components/Contact/ContactPage";
 import HelpPage from "../components/Help/HelpPage";
 import SettingsDashboard from "../components/Settings/SettingsDashboard";
+import OtpModal from "../components/Auth/OtpModal";
 
 const isPublicRoute = (pathname) => {
   return ["/", "/login", "/onboarding"].includes(pathname);
@@ -29,13 +29,13 @@ const AllRoutes = () => {
   const { isAuthenticated } = state;
   return (
     <div>
-      {/* {isAuthenticated && !isPublicRoute(location.pathname) && <Sidebar />} */}
       <Routes>
         <Route path="/" element={<LandingPage />} />
         <Route
           path="/login"
           element={isAuthenticated ? <Navigate to="/dashboard" /> : <Login />}
         />
+        <Route path="/sendOtp=true" element={<OtpModal />} />
         <Route
           path="/onboarding"
           element={

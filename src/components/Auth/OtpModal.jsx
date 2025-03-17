@@ -11,45 +11,40 @@ import {
   createUrl,
   getUserId,
 } from "../../Config/generalFunctions";
-const OtpModal = ({ isOpen, onClose, handleSendOtp, timer, canResend }) => {
-  const modalRef = useRef();
+import { importConfig } from "../../Config/importConfig";
+import AllSvgs from "../../assets/AllSvgs";
+const OtpModal = () => {
   const navigate = useNavigate();
   const inputRef = useRef([]);
   const [otp, setOtp] = useState(["", "", "", "", "", ""]);
   const [isNewUser, setIsNewUser] = useState(false);
+  const [timer, setTimer] = useState(300);
+  const [canResend, setCanResend] = useState(false);
   const cookies = new Cookies(null, { path: "/" });
   const [isLoading, setIsLoading] = useState(false);
   const { dispatch } = useContext(AppContext);
 
   useEffect(() => {
-    if (!isOpen) return;
-    const handleClickOutside = (event) => {
-      if (modalRef.current && !modalRef.current.contains(event.target)) {
-        const userConfirmed = window.confirm(
-          "Are you sure you want to close the OTP input?"
-        );
-        if (userConfirmed) {
-          localStorage.clear();
-          onClose();
-          setOtp(["", "", "", "", "", ""]);
-        }
+    setTimeout(() => {
+      if (inputRef.current[0]) {
+        inputRef.current[0].focus();
       }
-    };
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, [isOpen, onClose]);
+    }, 0);
+  }, []);
 
   useEffect(() => {
-    if (isOpen) {
-      setTimeout(() => {
-        if (inputRef.current[0]) {
-          inputRef.current[0].focus();
+    const interval = setInterval(() => {
+      setTimer((prevTimer) => {
+        if (prevTimer <= 1) {
+          clearInterval(interval);
+          setCanResend(true);
+          return 0;
         }
-      }, 0);
-    }
-  }, [isOpen]);
+        return prevTimer - 1;
+      });
+    }, 1000);
+    return () => clearInterval(interval);
+  }, []);
   const formatTime = (seconds) => {
     const minutes = Math.floor(seconds / 60);
     const secs = seconds % 60;
@@ -194,7 +189,6 @@ const OtpModal = ({ isOpen, onClose, handleSendOtp, timer, canResend }) => {
     try {
       const otpResponse = await verifyOtp(payload);
       if (otpResponse.success) {
-        handleClose();
         const { token, userId } = otpResponse;
         cookies.set("token", token);
         cookies.set("userId", userId);
@@ -231,73 +225,128 @@ const OtpModal = ({ isOpen, onClose, handleSendOtp, timer, canResend }) => {
     }
   }
 
-  function handleClose() {
-    setOtp(["", "", "", "", "", ""]);
-    onClose();
+  async function handleResendOtp() {
+    setIsLoading(true);
+    try {
+      const { url, headers } = createLoginFlowUrl(
+        `api/users/email-login/send-otp?entityId=${mainConfig.QUEST_ADDBOT_ENTITY_ID}`
+      );
+      const res = await axios.post(
+        url,
+        { email: cookies.get("userCredentials") },
+        { headers }
+      );
+      setCanResend(false);
+      setTimer(300);
+      if (res.data.success) {
+        Toast.success({
+          text: "OTP sent successfully",
+        });
+        setIsLoading(false);
+      }
+    } catch (error) {
+      setIsLoading(false);
+      Toast.error({
+        text: "An unexpected error occurred. Please try again later.",
+      });
+      console.error("error", error.message);
+    }
   }
-  if (!isOpen) return null;
 
+  function handleUserCredentials() {
+    let userEmail = cookies.get("userCredentials");
+    if (userEmail && userEmail.includes("@")) {
+      let [localPart, domain] = userEmail.split("@");
+      userEmail = `${localPart.slice(0, 4)}...@${domain}`;
+    }
+    return userEmail;
+  }
   return (
-    <div className="fixed inset-0 flex items-center justify-center z-50">
+    <div className="flex items-center justify-between w-full min-h-screen h-screen overflow-hidden">
       {isLoading && <Loader />}
-      <div className="absolute inset-0 bg-[rgba(0,0,0,0.5)] backdrop-blur-sm"></div>
-      <div
-        ref={modalRef}
-        className="bg-[#fff] relative rounded-xl shadow-lg p-10 h-auto flex flex-col justify-between items-start gap-2 max-w-[500px] max-h-[280px]"
-      >
-        <div className="flex w-full justify-between items-center">
-          <p className="text-base font-figtree  text-gray-500">
-            Enter One Time Password
+      <div className="bg-[#fff] w-1/2 h-full flex flex-col justify-start items-start p-8">
+        <div className="flex w-full justify-between items-center  mb-[2.75rem]">
+          <AllSvgs type={"nexaLogo"} />
+        </div>
+        <div className="flex flex-col gap-6 w-full">
+          <AllSvgs type={"emailIconAuthFlow"} />
+          <p className="text-[#181818] text-sm">
+            Please enter your email or login with google.
           </p>
-          <span
-            className="text-2xl font-figtree text-[#2C2C2C] hover:cursor-pointer"
-            onClick={handleClose}
-          >
-            &times;
-          </span>
-        </div>
-        <div className="flex w-full justify-between items-center gap-2">
-          {otp?.map((digit, index) => (
-            <input
-              key={index}
-              type="text"
-              maxLength={1}
-              value={digit}
-              onChange={(e) => handleChange(e.target.value, index)}
-              onKeyDown={(e) => {
-                if (e.key === "Enter") {
-                  handleSubmit();
-                } else {
-                  handleKeyDown(e, index);
-                }
-              }}
-              onPaste={handlePaste}
-              ref={(el) => (inputRef.current[index] = el)}
-              className="flex items-center justify-center text-center py-3 px-4 border border-gray-400 rounded-lg font-[400] font-figtree h-12 w-[4rem] focus:border-purple-500 focus:outline-none"
-            />
-          ))}
-        </div>
-        <div>
-          {canResend ? (
-            <button
-              className="text-xs font-figtree  text-purple-700"
-              onClick={handleSendOtp}
-            >
-              Resend Otp
-            </button>
-          ) : (
-            <p className="text-sm font-figtree  text-gray-500">
-              Resend One Time Password after: {formatTime(timer)}
+          <div className="w-full flex flex-col gap-1">
+            <p className="text-[#535353] text-sm">
+              We’ve sent a verification code to
             </p>
-          )}
+            <p className="text-[#252525] text-[1.125rem] font-[600] leading-[1.75rem] tracking-[-0.01125rem]">
+              {handleUserCredentials()}
+            </p>
+          </div>
+          <div>
+            <div className="flex max-w-[500px] justify-between items-center gap-2">
+              {otp?.map((digit, index) => (
+                <input
+                  key={index}
+                  type="text"
+                  placeholder="-"
+                  maxLength={1}
+                  value={digit}
+                  onChange={(e) => handleChange(e.target.value, index)}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter") {
+                      handleSubmit();
+                    } else {
+                      handleKeyDown(e, index);
+                    }
+                  }}
+                  onPaste={handlePaste}
+                  ref={(el) => (inputRef.current[index] = el)}
+                  className="flex items-center justify-center text-center py-2 px-3 text-[#696969] border border-[#E2E2E2] rounded-md font-[500] text-sm font-figtree h-10 w-[5.6rem] focus:border-purple-500 focus:outline-none"
+                />
+              ))}
+            </div>
+            <div>
+              {canResend ? (
+                <button
+                  className="text-xs font-[600] font-figtree  text-[#2C2C2C]"
+                  onClick={handleResendOtp}
+                >
+                  Resend Otp
+                </button>
+              ) : (
+                <>
+                  <span className="text-xs font-[600] font-figtree  text-[#AFAFAF]">
+                    Did not receive your code yet?
+                  </span>
+                  <span className="text-xs font-[600] font-figtree  text-[#2C2C2C] ml-1">
+                    {formatTime(timer)}
+                  </span>
+                </>
+              )}
+            </div>
+          </div>
+          <div className="w-full">
+            <button
+              className="w-full flex items-center justify-center"
+              onClick={handleSubmit}
+            >
+              <img
+                src={importConfig.authFlowContButton}
+                alt="authFlowContButton"
+              />
+            </button>
+          </div>
         </div>
-        <div className="w-full">
-          <button
-            className="w-full border py-2 px-3 rounded-lg bg-indigo-600 text-white hover:bg-indigo-700 transition-colors font-semibold text-sm"
-            onClick={handleSubmit}
-          >
-            Continue
-          </button>
+      </div>
+      <div className="w-1/2 h-auto overflow-hidden">
+        <div className="w-full h-full">
+          <div className="bg-black opacity-10" />
+          <div className="flex flex-col justify-center items-center w-full">
+            <img
+              src={importConfig.authFlowBgCover}
+              alt="authFlowBgCover"
+              className="w-full object-contain"
+            />
+          </div>
         </div>
       </div>
     </div>

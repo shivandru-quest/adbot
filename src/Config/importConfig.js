@@ -12,6 +12,9 @@ import GraphicsTemplateImage10 from "../assets/GraphicsTemplateImage10.svg";
 import earthButtonIcon from "../assets/EarthButton.png";
 import downloadButton from "../assets/downloadButton.png";
 import shareNowButton from "../assets/shareNowButton.png";
+import sendOtpButton from "../assets/sendOtpButton.png";
+import authFlowBgCover from "../assets/authFlowBgCover.png";
+import authFlowContButton from "../assets/authFlowContButton.png";
 
 export const importConfig = {
   templateBannerBgImage,
@@ -28,4 +31,7 @@ export const importConfig = {
   earthButtonIcon,
   downloadButton,
   shareNowButton,
+  sendOtpButton,
+  authFlowBgCover,
+  authFlowContButton,
 };
