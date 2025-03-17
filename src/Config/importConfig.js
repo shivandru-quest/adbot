@@ -13,7 +13,7 @@ import earthButtonIcon from "../assets/EarthButton.png";
 import downloadButton from "../assets/downloadButton.png";
 import shareNowButton from "../assets/shareNowButton.png";
 import sendOtpButton from "../assets/sendOtpButton.png";
-import authFlowBgCover from "../assets/authFlowBgCover.png";
+import authFlowBgCover from "../assets/AuthFlowBgCover.png";
 import authFlowContButton from "../assets/authFlowContButton.png";
 import upgradeNowButton from "../assets/upgradeNowButton.png";
 
