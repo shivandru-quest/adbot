@@ -200,7 +200,7 @@ const OtpModal = () => {
             dispatch({ type: "user/isAuthenticated", payload: true });
             localStorage.setItem("isAuthenticated", "true");
             setIsLoading(false);
-            navigate("/dashboard");
+            navigate("/home");
           } else {
             setIsLoading(false);
             navigate("/onboarding");

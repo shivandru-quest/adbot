@@ -40,7 +40,7 @@ const OnboardingPage = () => {
         dispatch({ type: "user/isAuthenticated", payload: true });
         dispatch({ type: "user/UserName", payload: userAnswers.name });
         setIsLoading(false);
-        navigate("/dashboard");
+        navigate("/home");
       }
     } catch (error) {
       setIsLoading(false);

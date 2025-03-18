@@ -51,7 +51,7 @@ const TemplateBanner = ({ setSelectedCategory, selectedCategory }) => {
     <div
       className="relative w-full h-[22rem] rounded-lg flex flex-col items-center justify-center gap-6"
       style={{
-        backgroundImage: `url('${importConfig.templateBannerBgImage}')`,
+        backgroundImage: `url('${importConfig.bannerBg}')`,
         backgroundSize: "cover",
         backgroundPosition: "center",
       }}

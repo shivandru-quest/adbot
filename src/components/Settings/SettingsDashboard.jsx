@@ -15,49 +15,22 @@ const SettingsDashboard = () => {
         <AllSvgs type={"rightPointerIcon"} />
         <p className="text-[#474747] text-sm font-[500]">Profile</p>
         <AllSvgs type={"rightPointerIcon"} />
-        <p className="text-[#474747] text-sm font-[500]">Account</p>
+        <p className="text-[#474747] text-sm font-[500]">
+          {searchParams.get("tab") === "account"
+            ? "Account"
+            : searchParams.get("tab") === "pricing"
+            ? "Pricing & Payment"
+            : searchParams.get("tab") === "refer"
+            ? "Refer Friends"
+            : "Login & Security"}
+        </p>
       </div>
       <div className="pt-[30px] w-full h-full flex items-start justify-between gap-10">
-        {/* <div
-          className="pl-4 flex w-full items-start h-[52px]"
-          style={{
-            borderBottom: `1px solid #939393`,
-          }}
-        >
-          <p
-            className={`text-sm font-semibold font-['Figtree'] h-[52px] p-4 cursor-pointer ${
-              searchParams.get("tab") === "edit" &&
-              "rounded-t-xl border-b border-[#939393]"
-            }`}
-            onClick={() => setSearchParams({ tab: "edit" })}
-            style={{
-              color: searchParams.get("tab") === "edit" ? "#fff" : "#000",
-              background: searchParams.get("tab") === "edit" ? "#2c2c2c" : "",
-            }}
-          >
-            Edit Profile
-          </p>
-          <p
-            className={`text-sm font-semibold font-['Figtree'] h-[52px] p-4 cursor-pointer ${
-              searchParams.get("tab") === "subscription" &&
-              "rounded-t-xl border-b border-[#939393]"
-            }`}
-            onClick={() => setSearchParams({ tab: "subscription" })}
-            style={{
-              color:
-                searchParams.get("tab") === "subscription" ? "#fff" : "#000",
-              background:
-                searchParams.get("tab") === "subscription" ? "#2c2c2c" : "",
-            }}
-          >
-            Subscription
-          </p>
-        </div> */}
-        <div className="flex flex-col gap-2 min-w-56 h-[70vh] ml-16 border border-[#E2E2E2] rounded-lg p-4">
+        <div className="flex flex-col gap-2 min-w-56 h-[calc(100vh-10rem)] ml-16 border border-[#E2E2E2] rounded-lg p-4">
           <button
-            className={`${
+            className={`rounded-[0.25rem] p-2 ${
               searchParams.get("tab") === "account"
-                ? "text-[#181818] font-[500]"
+                ? "text-[#181818] font-[500] bg-[#E2E2E2]"
                 : "text-[#535353] font-[400]"
             } text-base flex items-center justify-start gap-2`}
             onClick={() => setSearchParams({ tab: "account" })}
@@ -71,9 +44,9 @@ const SettingsDashboard = () => {
             Account
           </button>
           <button
-            className={`${
+            className={`rounded-[0.25rem] p-2 ${
               searchParams.get("tab") === "pricing"
-                ? "text-[#181818] font-[500]"
+                ? "text-[#181818] font-[500] bg-[#E2E2E2]"
                 : "text-[#535353] font-[400]"
             } text-base flex items-center justify-start gap-2`}
             onClick={() => setSearchParams({ tab: "pricing" })}
@@ -87,9 +60,9 @@ const SettingsDashboard = () => {
             Pricing & Payment
           </button>
           <button
-            className={`${
+            className={`rounded-[0.25rem] p-2 ${
               searchParams.get("tab") === "refer"
-                ? "text-[#181818] font-[500]"
+                ? "text-[#181818] font-[500] bg-[#E2E2E2]"
                 : "text-[#535353] font-[400]"
             } text-base flex items-center justify-start gap-2`}
             onClick={() => setSearchParams({ tab: "refer" })}
@@ -103,9 +76,9 @@ const SettingsDashboard = () => {
             Refer Friends
           </button>
           <button
-            className={`${
+            className={`rounded-[0.25rem] p-2 ${
               searchParams.get("tab") === "login"
-                ? "text-[#181818] font-[500]"
+                ? "text-[#181818] font-[500] bg-[#E2E2E2]"
                 : "text-[#535353] font-[400]"
             } text-base flex items-center justify-start gap-2`}
             onClick={() => setSearchParams({ tab: "login" })}
@@ -119,7 +92,7 @@ const SettingsDashboard = () => {
             Login & Security
           </button>
         </div>
-        <div className="w-full h-auto">
+        <div className="w-full h-[calc(100vh-10rem)] overflow-y-auto">
           {searchParams.get("tab") === "account" ? (
             <EditUserProfile />
           ) : searchParams.get("tab") === "pricing" ? (

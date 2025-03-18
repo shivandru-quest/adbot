@@ -83,7 +83,7 @@ const Login = () => {
           className="w-full max-w-lg flex flex-col  justify-center gap-11"
         >
           <AllSvgs type={"nexaLogo"} />
-          <h2 className="text-[2.25rem]  font-[600] leading-[2.75rem] tracking-[-0.045rem] text-[#0D0D0D] text-center text-ellipsis overflow-hidden whitespace-nowrap">
+          <h2 className="text-[2.25rem]  font-[600] leading-[2.75rem] tracking-[-0.045rem] text-[#0D0D0D] text-ellipsis overflow-hidden whitespace-nowrap">
             Intelligence Meets Creativity
           </h2>
           <div className="flex flex-col gap-6">
@@ -131,9 +131,13 @@ const Login = () => {
                   whileTap={{ scale: 0.98 }}
                   type="submit"
                   disabled={isLoading}
-                  className="w-full text-white px-3 py-2 rounded-md font-semibold text-sm flex justify-center items-center gap-2"
+                  className="w-full h-8 rounded-md flex justify-center items-center"
                 >
-                  <img src={importConfig.sendOtpButton} alt="sendOtpButton" />
+                  <img
+                    src={importConfig.sendOtpButton}
+                    alt="sendOtpButton"
+                    className="w-full h-8"
+                  />
                 </motion.button>
               </form>
             </div>

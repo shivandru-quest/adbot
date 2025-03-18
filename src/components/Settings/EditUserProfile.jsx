@@ -20,8 +20,30 @@ const EditUserProfile = () => {
   const [selectedFile, setSelectedFile] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const fileInputRef = useRef();
+  const primaryButtonRef = useRef(null);
   const cookies = new Cookies(null, { path: "/" });
   const { dispatch } = useContext(AppContext);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      const button = document.querySelector(
+        ".q-prof_main-btn3.q_next_button_main_cont"
+      );
+      if (button) {
+        primaryButtonRef.current = button;
+        clearInterval(interval);
+      }
+    }, 500);
+
+    return () => clearInterval(interval);
+  }, []);
+  const handleEditClick = () => {
+    if (primaryButtonRef.current) {
+      primaryButtonRef.current.click();
+    } else {
+      console.log("Primary button not found.");
+    }
+  };
   const getUser = async () => {
     try {
       const { url, headers } = createUrl(`api/users/${getUserId()}`);
@@ -48,13 +70,6 @@ const EditUserProfile = () => {
     formDataForUpload.append("uploaded_file", fileToUpload);
 
     try {
-      // const response = await apiCall().post(
-      //   "api/upload-img",
-      //   formDataForUpload,
-      //   {
-      //     headers: { "Content-Type": "multipart/form-data" },
-      //   }
-      // );
       const { url, headers } = createUrl("api/upload-img");
       const response = await axios.post(url, formDataForUpload, { headers });
 
@@ -97,12 +112,10 @@ const EditUserProfile = () => {
     setIsLoading(true);
     const userAnswers = {
       avatar: imageUrl,
-      name: answer["ca-43fbd040-68f5-4384-a572-58ae3e61c317"] || "",
-      companyName: answer["ca-1e90263f-5dea-41c3-9376-2e8def433e0f"] || "",
-      role: answer["ca-95273d77-aae1-4dda-aef5-a6a67f6a722d"] || "",
-      lastName: answer["ca-28acc157-493e-4e84-8136-acaf096c8415"] || "",
-      hobbies: answer["ca-3ea2fcc3-a9f7-4a56-bcb2-b232a6e5d2cf"] || "",
-      favColor: answer["ca-cb42439e-0f90-46a9-9864-671259041b01"] || "",
+      fullName: answer["ca-43fbd040-68f5-4384-a572-58ae3e61c317"] || "",
+      email: answer["ca-28acc157-493e-4e84-8136-acaf096c8415"] || "",
+      role: answer["ca-cb42439e-0f90-46a9-9864-671259041b01"] || "",
+      mainGoal: answer["ca-1e90263f-5dea-41c3-9376-2e8def433e0f"] || "",
     };
     try {
       const { url, headers } = createUrl(`api/users/${getUserId()}`);
@@ -124,6 +137,7 @@ const EditUserProfile = () => {
     "UserName",
     answer["ca-43fbd040-68f5-4384-a572-58ae3e61c317"] || ""
   );
+
   return (
     <div>
       {isLoading && <Loader />}
@@ -167,12 +181,22 @@ const EditUserProfile = () => {
               />
             </div>
           </div>
-          <div>
-            <p>name</p>
-            <p>email</p>
+          <div className="flex flex-col gap-[0.38rem]">
+            <p className="text-[#000] text-xl font-[500]">
+              {answer["ca-43fbd040-68f5-4384-a572-58ae3e61c317"]}
+            </p>
+            <p className="opacity-[0.5] text-[#000] text-base font-[400]">
+              {answer["ca-28acc157-493e-4e84-8136-acaf096c8415"]}
+            </p>
           </div>
           <div className="absolute right-0">
-            <button className="border">Edit</button>
+            <button
+              className="flex items-center justify-center gap-2 px-3 py-2 border border-[#E2E2E2] rounded-md w-24"
+              onClick={handleEditClick}
+            >
+              <AllSvgs type={"penIcon"} />{" "}
+              <span className="text-[#181818] text-xs font-[600]">Edit</span>
+            </button>
           </div>
         </div>
         <UserProfile
@@ -222,7 +246,7 @@ const EditUserProfile = () => {
               // border: `1px solid ${bgColors[`${theme}-primary-border-color`]}`,
             },
             PrimaryButton: {
-              border: "none",
+              display: "none",
             },
           }}
         />

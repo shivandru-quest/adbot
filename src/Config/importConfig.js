@@ -16,6 +16,9 @@ import sendOtpButton from "../assets/sendOtpButton.png";
 import authFlowBgCover from "../assets/AuthFlowBgCover.png";
 import authFlowContButton from "../assets/authFlowContButton.png";
 import upgradeNowButton from "../assets/upgradeNowButton.png";
+import homeBannerBg from "../assets/homeBannerBg.png";
+import bannerBg from "../assets/bannerBg.png";
+import fileBannerImage from "../assets/fileBannerImage.png";
 
 export const importConfig = {
   templateBannerBgImage,
@@ -36,4 +39,7 @@ export const importConfig = {
   authFlowBgCover,
   authFlowContButton,
   upgradeNowButton,
+  homeBannerBg,
+  bannerBg,
+  fileBannerImage,
 };

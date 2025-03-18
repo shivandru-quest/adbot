@@ -178,7 +178,7 @@ const Sidebar = ({ children }) => {
               className="flex w-[6.8rem]"
               onClick={() => {
                 setSelectedItem("upgradeNow");
-                navigate("/settings?tab=subscription");
+                navigate("/settings?tab=pricing");
               }}
             >
               <img src={importConfig.upgradeNowButton} alt="upgradeNowButton" />
@@ -186,7 +186,6 @@ const Sidebar = ({ children }) => {
             <div
               className={`flex items-center justify-between rounded-lg p-2 cursor-pointer text-sm gap-3 text-[#535353] font-[500]
             `}
-              onMouseEnter={() => setUserMenu(true)}
             >
               <div className="flex items-center gap-3">
                 <div className="rounded-full bg-[#D9D9D9] w-[1.75rem] h-[1.75rem] mb-1">
@@ -200,7 +199,10 @@ const Sidebar = ({ children }) => {
                   {state?.UserName}
                 </span>
               </div>
-              <div className={`${userMenu && "rotate-180"}`}>
+              <div
+                className={`${userMenu && "rotate-180"}`}
+                onMouseEnter={() => setUserMenu(true)}
+              >
                 <AllSvgs type={"downPointingArrow"} />
               </div>
             </div>
