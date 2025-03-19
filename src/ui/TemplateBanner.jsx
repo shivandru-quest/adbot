@@ -81,12 +81,16 @@ const TemplateBanner = ({ setSelectedCategory, selectedCategory }) => {
           {categories.map((el, i) => (
             <button
               key={i}
-              className={`p-2 rounded-md flex items-center justify-center text-[#fff] text-xs ${
-                selectedCategory === el
-                  ? "shadow-[0px_0px_10px_2px_rgba(128,0,128,0.9)]"
-                  : ""
-              }`}
-              style={{ border: "1px solid rgba(169, 163, 194, 0.80)" }}
+              className={`p-2 rounded-md flex items-center justify-center text-[#fff] text-xs`}
+              style={{
+                border:
+                  selectedCategory === el
+                    ? "1px solid #696969"
+                    : "1px solid rgba(169, 163, 194, 0.80)",
+                background:
+                  selectedCategory === el ? "rgba(255, 255, 255, 0.20)" : "",
+                backdropFilter: selectedCategory === el ? "blur(2px)" : "",
+              }}
               onClick={() => setSelectedCategory(el)}
             >
               {el}

@@ -19,6 +19,7 @@ import upgradeNowButton from "../assets/upgradeNowButton.png";
 import homeBannerBg from "../assets/homeBannerBg.png";
 import bannerBg from "../assets/bannerBg.png";
 import fileBannerImage from "../assets/fileBannerImage.png";
+import emptyBoxIcon from "../assets/emptyBoxIcon.png";
 
 export const importConfig = {
   templateBannerBgImage,
@@ -42,4 +43,5 @@ export const importConfig = {
   homeBannerBg,
   bannerBg,
   fileBannerImage,
+  emptyBoxIcon,
 };

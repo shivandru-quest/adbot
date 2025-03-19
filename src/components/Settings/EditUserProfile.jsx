@@ -212,38 +212,49 @@ const EditUserProfile = () => {
               background: "transparent",
             },
             Label: {
-              // color: bgColors[`${theme}-color-premitive-grey-6`],
+              color: "#535353",
               fontFamily: "Figtree",
-              fontSize: "12px",
+              fontSize: "0.875rem",
               fontStyle: "normal",
               fontWeight: "500",
-              lineHeight: "16px",
+              lineHeight: "1.25rem",
             },
             Input: {
-              borderRadius: "10px",
-              // border: `1px solid ${bgColors[`${theme}-primary-border-color`]}`,
+              borderRadius: "0.375rem",
+              border: `1px solid #E2E2E2`,
+              background: "#FAFAFA",
             },
             MultiChoice: {
               selectedStyle: {
-                //   background: "var(--button-background)",
-                // background: bgColors[`${theme}-primary-bg-color-0`],
+                background: "#FAFAFA",
                 color: "#E0E0E0",
-                //   border: `1px solid ${bgColors[`${theme}-primary-border-color`]}`,
+                border: `1px solid #E2E2E2`,
               },
               style: {
                 //   border: `1px solid ${bgColors[`${theme}-primary-border-color`]}`,
+                border: `1px solid #E2E2E2`,
+                background: "#FAFAFA",
+                color: "#696969",
+                fontSize: "1rem",
+                fontWeight: "500",
+                lineHeight: "1.5rem",
               },
             },
             SingleChoice: {
               style: {
                 //   border: `1px solid ${bgColors[`${theme}-primary-border-color`]}`,
+                border: `1px solid #E2E2E2`,
+                background: "#FAFAFA",
               },
               selectedStyle: {
                 //   border: `1px solid ${bgColors[`${theme}-primary-border-color`]}`,
+                border: `1px solid #E2E2E2`,
+                background: "#FAFAFA",
               },
             },
             TextArea: {
               // border: `1px solid ${bgColors[`${theme}-primary-border-color`]}`,
+              border: `1px solid #E2E2E2`,
             },
             PrimaryButton: {
               display: "none",

@@ -22,12 +22,10 @@ const OnboardingPage = () => {
     setIsLoading(true);
     try {
       const userAnswers = {
-        name: answers["ca-43fbd040-68f5-4384-a572-58ae3e61c317"] || "",
-        companyName: answers["ca-1e90263f-5dea-41c3-9376-2e8def433e0f"] || "",
-        role: answers["ca-95273d77-aae1-4dda-aef5-a6a67f6a722d"] || "",
-        lastName: answers["ca-28acc157-493e-4e84-8136-acaf096c8415"] || "",
-        hobbies: answers["ca-3ea2fcc3-a9f7-4a56-bcb2-b232a6e5d2cf"] || "",
-        favColor: answers["ca-cb42439e-0f90-46a9-9864-671259041b01"] || "",
+        fullName: answers["ca-43fbd040-68f5-4384-a572-58ae3e61c317"] || "",
+        email: answers["ca-28acc157-493e-4e84-8136-acaf096c8415"] || "",
+        role: answers["ca-cb42439e-0f90-46a9-9864-671259041b01"] || "",
+        mainGoal: answers["ca-1e90263f-5dea-41c3-9376-2e8def433e0f"] || "",
       };
       const { url, headers } = createUrl(`api/users/${getUserId()}`);
       const res = await axios.post(url, userAnswers, {
@@ -36,9 +34,9 @@ const OnboardingPage = () => {
       if (res.data.success) {
         localStorage.setItem("userRecords", JSON.stringify(userAnswers));
         localStorage.setItem("isAuthenticated", "true");
-        cookies.set("UserName", userAnswers.name);
+        cookies.set("UserName", userAnswers.fullName);
         dispatch({ type: "user/isAuthenticated", payload: true });
-        dispatch({ type: "user/UserName", payload: userAnswers.name });
+        dispatch({ type: "user/UserName", payload: userAnswers.fullName });
         setIsLoading(false);
         navigate("/home");
       }

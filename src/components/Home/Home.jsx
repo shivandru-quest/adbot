@@ -2,6 +2,7 @@ import React from "react";
 import { importConfig } from "../../Config/importConfig";
 import AllSvgs from "../../assets/AllSvgs";
 import { useNavigate } from "react-router-dom";
+import NoDataYet from "../../ui/NoDataYet";
 const Home = () => {
   const navigate = useNavigate();
   return (
@@ -36,39 +37,39 @@ const Home = () => {
         <AllSvgs type={"rightLightIcon"} />
       </div>
       <div className="w-full flex items-center justify-between gap-4 h-[4.5rem]">
-        <div className="w-[12.5rem] h-full p-4 flex items-center justify-start gap-5 border border-[#E2E2E2] rounded-xl">
+        <div className="w-[12.5rem] h-full p-4 flex items-center justify-start gap-5 border border-[#E2E2E2] rounded-xl cursor-pointer">
           <AllSvgs type={"customIcon"} />
           <p className="text-[#181818] text-base font-[600]">Custom</p>
         </div>
-        <div className="w-[12.5rem] h-full p-4 flex items-center justify-start gap-5 border border-[#E2E2E2] rounded-xl">
+        <div className="w-[12.5rem] h-full p-4 flex items-center justify-start gap-5 border border-[#E2E2E2] rounded-xl cursor-pointer">
           <AllSvgs type={"postIcon"} />
           <div>
             <p className="text-[#181818] text-base font-[600]">Post</p>
             <p className="text-[#535353] text-xs font-[400]">(1080x1080)</p>
           </div>
         </div>
-        <div className="w-[12.5rem] h-full p-4 flex items-center justify-start gap-5 border border-[#E2E2E2] rounded-xl">
+        <div className="w-[12.5rem] h-full p-4 flex items-center justify-start gap-5 border border-[#E2E2E2] rounded-xl cursor-pointer">
           <AllSvgs type={"landscapeIcon"} />
           <div>
             <p className="text-[#181818] text-base font-[600]">Landscape</p>
             <p className="text-[#535353] text-xs font-[400]">(1200x628)</p>
           </div>
         </div>
-        <div className="w-[12.5rem] h-full p-4 flex items-center justify-start gap-5 border border-[#E2E2E2] rounded-xl">
+        <div className="w-[12.5rem] h-full p-4 flex items-center justify-start gap-5 border border-[#E2E2E2] rounded-xl cursor-pointer">
           <AllSvgs type={"storyIcon"} />
           <div>
             <p className="text-[#181818] text-base font-[600]">Story</p>
             <p className="text-[#535353] text-xs font-[400]">(1080x1920)</p>
           </div>
         </div>
-        <div className="w-[12.5rem] h-full p-4 flex items-center justify-start gap-5 border border-[#E2E2E2] rounded-xl">
+        <div className="w-[12.5rem] h-full p-4 flex items-center justify-start gap-5 border border-[#E2E2E2] rounded-xl cursor-pointer">
           <AllSvgs type={"verticalIcon"} />
           <div>
             <p className="text-[#181818] text-base font-[600]">Vertical</p>
             <p className="text-[#535353] text-xs font-[400]">(1080x1350)</p>
           </div>
         </div>
-        <div className="w-[12.5rem] h-full p-4 flex items-center justify-start gap-5 border border-[#E2E2E2] rounded-xl">
+        <div className="w-[12.5rem] h-full p-4 flex items-center justify-start gap-5 border border-[#E2E2E2] rounded-xl cursor-pointer">
           <AllSvgs type={"pinIcon"} />
           <div>
             <p className="text-[#181818] text-base font-[600]">Pin</p>
@@ -83,6 +84,7 @@ const Home = () => {
           </p>
           <AllSvgs type={"rightLightIcon"} />
         </div>
+        <NoDataYet onAction={() => navigate("/templates")} />
       </div>
       <div className="py-4 px-6 flex flex-col gap-4 bg-[#FAFAFA] rounded-[1rem] h-[23rem] w-full">
         <div className="w-full flex items-center justify-between">
@@ -91,6 +93,7 @@ const Home = () => {
           </p>
           <AllSvgs type={"rightLightIcon"} />
         </div>
+        <NoDataYet onAction={() => navigate("/templates")} />
       </div>
     </div>
   );

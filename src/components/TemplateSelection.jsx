@@ -269,9 +269,9 @@ const TemplateSelection = () => {
                           {el.description}
                         </p>
                         <div className="text-indigo-600">
-                          {el.platform.toLowerCase() === "instagram" ? (
+                          {el.platform?.toLowerCase() === "instagram" ? (
                             <FaInstagram />
-                          ) : el.platform.toLowerCase() === "reddit" ? (
+                          ) : el.platform?.toLowerCase() === "reddit" ? (
                             <FaReddit />
                           ) : (
                             <FaFacebook />
@@ -285,7 +285,7 @@ const TemplateSelection = () => {
             })
           : !isLoading && (
               <div className="w-full m-auto border">
-                <NoDataYet onAction={() => navigate("/create")} flag={true} />
+                <NoDataYet onAction={() => navigate("/templates")} />
               </div>
             )}
       </div>

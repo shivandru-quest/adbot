@@ -2,12 +2,15 @@ import React, { useState } from "react";
 import { importConfig } from "../../Config/importConfig";
 import GeneralSelect from "../../ui/GeneralSelect";
 import AllSvgs from "../../assets/AllSvgs";
+import NoDataYet from "../../ui/NoDataYet";
+import { useNavigate } from "react-router-dom";
 const categoryOptions = [{ value: "category", label: "Category" }];
 const dateOptions = [{ value: "date", label: "Date" }];
 const MyFiles = () => {
   const [selectedItem, setSelectedItem] = useState(null);
   const [selectedCategory, setSelectedCategory] = useState(null);
   const [selectedDate, setSelectedDate] = useState(null);
+  const navigate = useNavigate();
   function handleCategoryChange(selectedOption) {
     setSelectedCategory(selectedOption.value);
   }
@@ -101,6 +104,9 @@ const MyFiles = () => {
             </div>
           </div>
         </div>
+      </div>
+      <div>
+        <NoDataYet onAction={() => navigate("/templates")} />
       </div>
     </div>
   );

@@ -33,6 +33,9 @@ const AdEditorTopBar = ({
         <span className="text-[#3E3E3E] text-sm font-[400]">
           Super sell 50% off
         </span>
+        <button>
+          <AllSvgs type={"pencilIcon"} />
+        </button>
       </div>
       <div className="flex items-center gap-2">
         <button

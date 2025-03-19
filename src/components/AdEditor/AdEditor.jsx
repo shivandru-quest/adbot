@@ -68,6 +68,7 @@ const AdEditor = () => {
       rotation: 0,
       scaleX: 1,
       scaleY: 1,
+      opacity: 1,
     };
     addElement(newElement);
   };
@@ -88,6 +89,7 @@ const AdEditor = () => {
       rotation: 0,
       scaleX: 1,
       scaleY: 1,
+      opacity: 1,
     };
     addElement(newElement);
   };
@@ -108,6 +110,8 @@ const AdEditor = () => {
       rotation: 0,
       scaleX: 1,
       scaleY: 1,
+      cornerRadius: 0,
+      opacity: 1,
     };
     addElement(newElement);
   };
@@ -184,24 +188,55 @@ const AdEditor = () => {
       reader.readAsDataURL(file);
     }
   };
+  async function getImageBlobFromImgTag(imgElement) {
+    return new Promise((resolve, reject) => {
+      const canvas = document.createElement("canvas");
+      const ctx = canvas.getContext("2d");
+
+      imgElement.onload = () => {
+        canvas.width = imgElement.naturalWidth;
+        canvas.height = imgElement.naturalHeight;
+        ctx.drawImage(imgElement, 0, 0);
+
+        // Convert to Blob
+        canvas.toBlob((blob) => {
+          if (blob) {
+            resolve(blob);
+          } else {
+            reject(new Error("Canvas toBlob failed"));
+          }
+        }, "image/png"); // Change format if needed
+      };
+
+      imgElement.onerror = () => reject(new Error("Image failed to load"));
+    });
+  }
   const loadImageAsBase64 = async (imageUrl) => {
     try {
-      const response = await fetch(imageUrl, {
-        mode: "cors",
-        credentials: "include", // Use credentials to match referrer policy
-        referrer: "",
-      });
+      // const response = await axios.get(
+      //   imageUrl
+      //   //    {
+      //   //   mode: "cors",
+      //   //   credentials: "include",
+      //   //   referrer: "",
+      //   // }
+      // );
 
-      if (!response.ok) throw new Error("Failed to fetch image");
+      // if (!response.ok) throw new Error("Failed to fetch image");
 
-      const blob = await response.blob();
+      // const blob = await response.blob();
 
-      return new Promise((resolve, reject) => {
-        const reader = new FileReader();
-        reader.onloadend = () => resolve(reader.result);
-        reader.onerror = reject;
-        reader.readAsDataURL(blob);
-      });
+      // return new Promise((resolve, reject) => {
+      //   const reader = new FileReader();
+      //   reader.onloadend = () => resolve(reader.result);
+      //   reader.onerror = reject;
+      //   reader.readAsDataURL(blob);
+      // });
+      const newImg = document.createElement("img");
+      newImg.src = imageUrl;
+      const blob = await getImageBlobFromImgTag(newImg);
+      console.log("blob", blob);
+      return blob;
     } catch (error) {
       console.error("Failed to fetch image:", error);
       return null;
@@ -223,27 +258,34 @@ const AdEditor = () => {
     );
     const loadImagesSafely = async () => {
       for (const node of imageNodes) {
+        console.log("node", node);
         const img = node.getImage();
+        console.log("img", img);
+        // let ans = await node.toBlob();
+        // console.log("ans", ans);
         if (!img) continue;
 
-        const base64 = await loadImageAsBase64(img.src);
-        if (!base64) continue;
-        const newImg = new window.Image();
-        // newImg.crossOrigin = "Anonymous"; 
-        newImg.src = base64;
+        // const base64 = await loadImageAsBase64(img.src);
+        // if (!base64) continue;
+        // const newImg = document.createElement("img");
+        // const newImg = new window.Image();
+        // newImg.crossOrigin = "anonymous";
+        // console.log("img.src", img.src);
+        // newImg.src = node.attrs.url;
 
-        await new Promise((resolve, reject) => {
-          newImg.onload = resolve;
-          newImg.onerror = (e) => {
-            console.error("Image load error:", e);
-            reject(e);
-          };
-        });
-        node.image(newImg);
+        // await new Promise((resolve, reject) => {
+        //   newImg.onload = resolve;
+        // });
+        // newImg.onerror = (e) => {
+        //   console.error("Image load error:", e);
+        //   reject(e);
+        // };
+        node.image(node.attrs.url);
       }
     };
+
     try {
-      await loadImagesSafely();
+      // await loadImagesSafely();
       const boundingBox = elements.reduce(
         (box, node) => {
           const { x, y, width, height } = node.getClientRect();
@@ -273,7 +315,7 @@ const AdEditor = () => {
         width: croppedWidth,
         height: croppedHeight,
         mimeType: "image/png",
-        quality: 1.0,
+        // quality: 1.0,
       });
       console.log("uri", uri);
       if (!uri) {

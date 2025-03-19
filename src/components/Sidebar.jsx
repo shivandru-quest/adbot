@@ -1,6 +1,6 @@
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import {
   FiGrid,
   FiLayout,
@@ -14,7 +14,12 @@ import { clearAllCookies } from "../Config/generalFunctions";
 import AllSvgs from "../assets/AllSvgs";
 import { importConfig } from "../Config/importConfig";
 import UserAccountMenu from "../ui/UserAccountMenu";
-
+const menuItems = [
+  { icon: FiPlayCircle, label: "Get Started", path: "/get-started" },
+  { icon: FiGrid, label: "Dashboard", path: "/dashboard" },
+  { icon: FiLayout, label: "Templates", path: "/templates" },
+  { icon: FiSettings, label: "Settings", path: "/settings" },
+];
 const Sidebar = ({ children }) => {
   const location = useLocation();
   const navigate = useNavigate();
@@ -22,12 +27,22 @@ const Sidebar = ({ children }) => {
   const [userMenu, setUserMenu] = useState(false);
   const { dispatch, state } = useContext(AppContext);
   const [selectedItem, setSelectedItem] = useState(null);
-  const menuItems = [
-    { icon: FiPlayCircle, label: "Get Started", path: "/get-started" },
-    { icon: FiGrid, label: "Dashboard", path: "/dashboard" },
-    { icon: FiLayout, label: "Templates", path: "/templates" },
-    { icon: FiSettings, label: "Settings", path: "/settings" },
-  ];
+
+  useEffect(() => {
+    const path = location.pathname;
+    console.log("path", path);
+    if (path.includes("home")) {
+      setSelectedItem("home");
+    } else if (path.includes("templates")) {
+      setSelectedItem("templates");
+    } else if (path.includes("myfiles")) {
+      setSelectedItem("myfiles");
+    } else if (path.includes("get-started")) {
+      setSelectedItem("get-started");
+    } else if (path.includes("settings?tab=pricing")) {
+      setSelectedItem("settings?tab=pricing");
+    }
+  }, [location.pathname]);
 
   const handleLogoutConfirm = () => {
     localStorage.clear();
@@ -123,7 +138,6 @@ const Sidebar = ({ children }) => {
                   : "font-[500] text-[#696969]"
               }  text-sm  p-[0.375rem]`}
               onClick={() => {
-                setSelectedItem("home");
                 navigate("/home");
               }}
             >
@@ -136,7 +150,6 @@ const Sidebar = ({ children }) => {
                   : "text-[#696969] font-[500]"
               }`}
               onClick={() => {
-                setSelectedItem("templates");
                 navigate("/templates");
               }}
             >
@@ -149,7 +162,6 @@ const Sidebar = ({ children }) => {
                   : "text-[#696969] font-[500]"
               }`}
               onClick={() => {
-                setSelectedItem("myfiles");
                 navigate("/myfiles");
               }}
             >
@@ -164,7 +176,6 @@ const Sidebar = ({ children }) => {
             <button
               className={`px-3 py-2 flex items-center gap-1 border border-[#E2E2E2] rounded-md`}
               onClick={() => {
-                setSelectedItem("getStarted");
                 navigate("/get-started");
               }}
             >
@@ -177,7 +188,6 @@ const Sidebar = ({ children }) => {
             <button
               className="flex w-[6.8rem]"
               onClick={() => {
-                setSelectedItem("upgradeNow");
                 navigate("/settings?tab=pricing");
               }}
             >

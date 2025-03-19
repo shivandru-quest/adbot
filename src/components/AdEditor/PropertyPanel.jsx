@@ -1,9 +1,7 @@
+import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
-import { useState } from "react";
 import { HexColorPicker } from "react-colorful";
-import {
-  FiTrash2,
-} from "react-icons/fi";
+import { FiTrash2 } from "react-icons/fi";
 import AllSvgs from "../../assets/AllSvgs";
 import ReactSelect from "../../ui/ReactSelect";
 
@@ -37,6 +35,30 @@ const PropertyPanel = ({
   onDownload,
 }) => {
   const [showColorPicker, setShowColorPicker] = useState(false);
+  const [customColor, setCustomColor] = useState("");
+  const [customOpacity, setCustomOpacity] = useState("");
+
+  useEffect(() => {
+    if (selectedElement) {
+      if (selectedElement.type === "shape") {
+        selectedElement.fill = customColor;
+      }
+      if (selectedElement.type === "text") {
+        selectedElement.fill = customColor;
+      }
+    }
+  }, [customColor, selectedElement]);
+
+  useEffect(() => {
+    if (selectedElement) {
+      if (selectedElement.type === "shape") {
+        selectedElement.opacity = parseFloat(customOpacity || 1);
+      }
+      if (selectedElement.type === "text") {
+        selectedElement.opacity = parseFloat(customOpacity || 1);
+      }
+    }
+  }, [selectedElement, customOpacity]);
 
   return (
     selectedElement && (
@@ -269,7 +291,7 @@ const PropertyPanel = ({
 
           {/* Color picker */}
 
-          <div className="w-full flex flex-col gap-1">
+          <div className="w-full flex flex-col gap-3">
             <label className="block text-sm font-medium text-[#181818]">
               Color
             </label>
@@ -300,8 +322,78 @@ const PropertyPanel = ({
                 />
               </div>
             )}
+            {(selectedElement.type === "shape" ||
+              selectedElement.type === "text") && (
+              <div className="w-full flex items-center gap-5">
+                <div className="flex flex-col gap-1">
+                  <label
+                    htmlFor="overlayColor"
+                    className="text-[#535353] text-xs font-[500] block"
+                  >
+                    Overlay color
+                  </label>
+                  <input
+                    type="text"
+                    name="overlayColor"
+                    id="overlayColor"
+                    placeholder="Enter Hex code"
+                    className="px-3 py-2 rounded-md border border-[#979797] text-[#535353] text-ellipsis overflow-hidden whitespace-nowrap font-[500] text-sm placeholder:text-[#696969] placeholder:text-sm placeholder:font-[400] h-9 w-28 outline-none"
+                    onChange={(e) => setCustomColor(e.target.value)}
+                  />
+                </div>
+                <div className="flex flex-col gap-1">
+                  <label
+                    htmlFor="opacity"
+                    className="text-[#535353] text-xs font-[500] block"
+                  >
+                    Opacity
+                  </label>
+                  <input
+                    type="text"
+                    name="opacity"
+                    id="opacity"
+                    placeholder="For eg. 20%"
+                    className="px-3 py-2 rounded-md border border-[#979797] text-[#535353] text-ellipsis overflow-hidden whitespace-nowrap font-[500] text-sm placeholder:text-[#696969] placeholder:text-sm placeholder:font-[400] h-9 w-28 outline-none"
+                    onChange={(e) => setCustomOpacity(e.target.value)}
+                  />
+                </div>
+              </div>
+            )}
           </div>
         </div>
+        {selectedElement.type === "shape" && (
+          <div className="w-full flex flex-col gap-2 p-4">
+            <span className="text-[#181818] text-sm font-[500]">
+              Border radius
+            </span>
+            <div className="w-full flex items-center justify-between gap-4">
+              <button
+                className="px-3 py-2 rounded-md border border-[#B0B0B0] flex items-center justify-center text-[#535353] text-sm font-[500] w-[3.45rem]"
+                onClick={() => (selectedElement.cornerRadius = 4)}
+              >
+                4
+              </button>
+              <button
+                className="px-3 py-2 rounded-md border border-[#B0B0B0] flex items-center justify-center text-[#535353] text-sm font-[500] w-[3.45rem]"
+                onClick={() => (selectedElement.cornerRadius = 8)}
+              >
+                8
+              </button>
+              <button
+                className="px-3 py-2 rounded-md border border-[#B0B0B0] flex items-center justify-center text-[#535353] text-sm font-[500] w-[3.45rem]"
+                onClick={() => (selectedElement.cornerRadius = 12)}
+              >
+                12
+              </button>
+              <button
+                className="px-3 py-2 rounded-md border border-[#B0B0B0] flex items-center justify-center text-[#535353] text-sm font-[500] w-[3.45rem]"
+                onClick={() => (selectedElement.cornerRadius = 16)}
+              >
+                16
+              </button>
+            </div>
+          </div>
+        )}
       </div>
     )
   );

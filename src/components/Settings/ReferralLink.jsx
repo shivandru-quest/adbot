@@ -1,5 +1,6 @@
 "use client";
 import React from "react";
+import AllSvgs from "../../assets/AllSvgs";
 
 export const ReferralLink = () => {
   const copyToClipboard = () => {
@@ -49,26 +50,14 @@ export const ReferralLink = () => {
           </button>
           <div className="mt-5 w-full">
             <div className="flex gap-2 justify-center items-center w-full">
-              <button className="flex gap-2 items-center self-stretch p-2.5 my-auto w-10 h-10 bg-neutral-200 rounded-[48px]">
-                <img
-                  src="https://cdn.builder.io/api/v1/image/assets/TEMP/87166fda2157b33eb63c3d7d6fca6a1dc6bcc06b4613bf7bcb09b6f15e1573df?placeholderIfAbsent=true&apiKey=a7712d980bfb46c2be2ec5204f77df41"
-                  alt="Social Share 1"
-                  className="object-contain w-5 aspect-square"
-                />
+              <button className="flex gap-2 items-center justify-center self-stretch p-2.5 my-auto w-10 h-10 bg-neutral-200 rounded-[48px]">
+                <AllSvgs type={"linkedInIcon"} fillColor="#181818"/>
               </button>
-              <button className="flex gap-2 items-center self-stretch p-2.5 my-auto w-10 h-10 bg-neutral-200 rounded-[48px]">
-                <img
-                  src="https://cdn.builder.io/api/v1/image/assets/TEMP/4f3f83ccc5cdfcd806700fc0cee474f37232b8847b9136abaac193d69580f229?placeholderIfAbsent=true&apiKey=a7712d980bfb46c2be2ec5204f77df41"
-                  alt="Social Share 2"
-                  className="object-contain w-5 aspect-square"
-                />
+              <button className="flex gap-2 items-center justify-center self-stretch p-2.5 my-auto w-10 h-10 bg-neutral-200 rounded-[48px]">
+                <AllSvgs type={"instagramIcon"} fillColor="#181818" />
               </button>
-              <button className="flex gap-2 items-center self-stretch p-2.5 my-auto w-10 h-10 bg-neutral-200 rounded-[48px]">
-                <img
-                  src="https://cdn.builder.io/api/v1/image/assets/TEMP/d890e4ce57e012289cca6235d0494b7699bfbffb5f9be63a68eea1936e73174e?placeholderIfAbsent=true&apiKey=a7712d980bfb46c2be2ec5204f77df41"
-                  alt="Social Share 3"
-                  className="object-contain w-5 aspect-square"
-                />
+              <button className="flex gap-2 items-center justify-center self-stretch p-2.5 my-auto w-10 h-10 bg-neutral-200 rounded-[48px]">
+                <AllSvgs type={"facebookIcon"} fillColor="#181818" />
               </button>
             </div>
           </div>

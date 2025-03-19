@@ -1,4 +1,5 @@
 import React from "react";
+import AllSvgs from "../../assets/AllSvgs";
 
 export const ReferralSteps = () => {
   return (
@@ -17,11 +18,12 @@ export const ReferralSteps = () => {
         </div>
         <div className="flex relative gap-5 justify-center items-start mt-10 w-full max-md:max-w-full">
           <div className="flex z-0 flex-col flex-1 shrink text-center basis-5">
-            <img
-              src="https://cdn.builder.io/api/v1/image/assets/TEMP/922c68f028f6c3342186536ffec2beca5814f6b0f741a63e933bb2021ab992eb?placeholderIfAbsent=true&apiKey=a7712d980bfb46c2be2ec5204f77df41"
-              alt="Share Link Step"
-              className="object-contain self-center w-14 aspect-square rounded-[112px]"
-            />
+            <div
+              className="object-contain self-center w-14 aspect-square rounded-full border flex items-center justify-center"
+              style={{ border: "1px solid rgba(0, 0, 0, 0.10)" }}
+            >
+              <AllSvgs type={"messageReferIcon"} />
+            </div>
             <div className="flex gap-3 items-start mt-3 w-full">
               <div className="flex flex-col justify-center items-start w-[201px]">
                 <h3 className="text-base font-semibold text-ellipsis text-zinc-800">
@@ -34,11 +36,12 @@ export const ReferralSteps = () => {
             </div>
           </div>
           <div className="flex z-0 flex-col flex-1 shrink text-center basis-5">
-            <img
-              src="https://cdn.builder.io/api/v1/image/assets/TEMP/f766e57855e119a01faba66e762cd8e6cfd9567df1d898ee5ea17780a5f658cf?placeholderIfAbsent=true&apiKey=a7712d980bfb46c2be2ec5204f77df41"
-              alt="Friends Sign Up Step"
-              className="object-contain self-center w-14 aspect-square rounded-[112px]"
-            />
+            <div
+              className="object-contain self-center w-14 aspect-square rounded-full border flex items-center justify-center"
+              style={{ border: "1px solid rgba(0, 0, 0, 0.10)" }}
+            >
+              <AllSvgs type={"humanReferIcon"} />
+            </div>
             <div className="flex gap-3 items-start mt-3 w-full">
               <div className="flex flex-col flex-1 shrink justify-center items-start w-full basis-0">
                 <h3 className="text-base font-semibold text-ellipsis text-zinc-800">
@@ -51,11 +54,12 @@ export const ReferralSteps = () => {
             </div>
           </div>
           <div className="flex z-0 flex-col flex-1 shrink text-center basis-5">
-            <img
-              src="https://cdn.builder.io/api/v1/image/assets/TEMP/addbc84573966966e48f856b034410fe62096e4d48f2db1d7d8de3c445618728?placeholderIfAbsent=true&apiKey=a7712d980bfb46c2be2ec5204f77df41"
-              alt="Earn Rewards Step"
-              className="object-contain self-center w-14 aspect-square rounded-[112px]"
-            />
+            <div
+              className="object-contain self-center w-14 aspect-square rounded-full border flex items-center justify-center"
+              style={{ border: "1px solid rgba(0, 0, 0, 0.10)" }}
+            >
+              <AllSvgs type={"sparkleReferIcon"} />
+            </div>
             <div className="flex gap-3 items-start mt-3 w-full">
               <div className="flex flex-col flex-1 shrink justify-center items-start w-full basis-0">
                 <h3 className="text-base font-semibold text-ellipsis text-zinc-800">
