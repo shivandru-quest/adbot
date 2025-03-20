@@ -98,7 +98,7 @@ const GoogleOAuth = () => {
         {
           code,
           redirectUri: mainConfig.APP_URL + "login",
-          entityId: mainConfig.QUEST_ADDBOT_ENTITY_ID,
+          entityId: mainConfig.QUEST_COMMUNITY_ID,
         },
         {
           headers: {
@@ -118,7 +118,7 @@ const GoogleOAuth = () => {
             if (onboardingDetails) {
               dispatch({ type: "user/isAuthenticated", payload: true });
               localStorage.setItem("isAuthenticated", "true");
-              navigate("/campaigns");
+              navigate("/home");
             } else {
               navigate("/onboarding");
             }
