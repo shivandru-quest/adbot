@@ -1,5 +1,4 @@
 import React, { useContext, useEffect } from "react";
-import { FcGoogle } from "react-icons/fc";
 import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
 import Cookies from "universal-cookie";
@@ -7,8 +6,9 @@ import { AppContext } from "../../context/AppContext";
 import { mainConfig } from "../../Config/mainConfig";
 import axios from "axios";
 import AllSvgs from "../../assets/AllSvgs";
+import { createUrl, getUserId } from "../../Config/generalFunctions";
 const cookies = new Cookies(null, { path: "/" });
-const GoogleOAuth = () => {
+const GoogleOAuth = ({ setIsLoading }) => {
   const navigate = useNavigate();
   const { dispatch } = useContext(AppContext);
   useEffect(() => {
@@ -18,6 +18,18 @@ const GoogleOAuth = () => {
       googleLogin(code);
     }
   }, []);
+  const getUser = async () => {
+    try {
+      const { url, headers } = createUrl(`api/users/${getUserId()}`);
+      const res = await axios.get(url, { headers });
+      cookies.set("avatar", res.data.data.imageUrl);
+      cookies.set("UserName", res.data.data.name);
+      dispatch({ type: "user/UserName", payload: res.data.data.name });
+      dispatch({ type: "user/avatar", payload: res.data.data.imageUrl });
+    } catch (error) {
+      console.log("error", error.message);
+    }
+  };
   const getEntityApiKey = async (entityId, userId, token) => {
     const response = await axios.post(
       `https://api.questlabs.ai/api/admin/new-api-key?userId=${userId}`,
@@ -92,6 +104,7 @@ const GoogleOAuth = () => {
     }
   };
   function googleLogin(code) {
+    setIsLoading(true);
     axios
       .post(
         `https://api.questlabs.ai/api/users/google/login`,
@@ -114,6 +127,8 @@ const GoogleOAuth = () => {
           cookies.set("userId", userId);
           let entityDetails = await getEntityDetails({ userId, token });
           let onboardingDetails = await getOnboardingDetails({ userId, token });
+          await getUser();
+          setIsLoading(false);
           if (entityDetails) {
             if (onboardingDetails) {
               dispatch({ type: "user/isAuthenticated", payload: true });
@@ -128,6 +143,7 @@ const GoogleOAuth = () => {
         }
       })
       .catch((err) => {
+        setIsLoading(false);
         console.error(err.message);
       });
   }

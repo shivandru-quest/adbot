@@ -2,7 +2,7 @@ import { Route, Routes, Navigate, useLocation } from "react-router-dom";
 import { useContext } from "react";
 import { AppContext } from "../context/AppContext";
 import Sidebar from "../components/Sidebar";
-import LandingPage from "../components/LandingPage";
+import LandingPage from "../components/landingPage/LandingPage";
 import Login from "../components/Auth/Login";
 import Dashboard from "../components/Dashboard";
 import OnboardingPage from "../components/Auth/Onboarding";
@@ -35,13 +35,13 @@ const AllRoutes = () => {
         <Route path="/" element={<LandingPage />} />
         <Route
           path="/login"
-          element={isAuthenticated ? <Navigate to="/dashboard" /> : <Login />}
+          element={isAuthenticated ? <Navigate to="/home" /> : <Login />}
         />
         <Route path="/sendOtp=true" element={<OtpModal />} />
         <Route
           path="/onboarding"
           element={
-            isAuthenticated ? <Navigate to="/dashboard" /> : <OnboardingPage />
+            isAuthenticated ? <Navigate to="/home" /> : <OnboardingPage />
           }
         />
 
@@ -109,7 +109,7 @@ const AllRoutes = () => {
             <Route path="/help" element={<HelpPage />} />
           </>
         ) : (
-          <Route path="*" element={<Navigate to="/" replace />} />
+          <Route path="*" element={<Navigate to="/login" />} />
         )}
       </Routes>
     </div>

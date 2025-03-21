@@ -1,5 +1,7 @@
 import React from "react";
 import AllSvgs from "../../assets/AllSvgs";
+import { button } from "framer-motion/client";
+import { importConfig } from "../../Config/importConfig";
 
 const PriceCard = ({
   tier,
@@ -10,7 +12,7 @@ const PriceCard = ({
   index,
 }) => {
   return (
-    <div key={index}>
+    <div key={index} className="relative">
       <section className="flex-1 h-[35rem] p-8 rounded-xl border border-[#E2E2E2] max-sm:p-4">
         <div className="w-full flex items-center justify-start gap-4">
           <div
@@ -56,18 +58,22 @@ const PriceCard = ({
             ))}
           </ul>
         </section>
-        <button
-          className={`w-full px-3 py-2 border border-[#E2E2E2] text-sm font-[600] text-center rounded-md cursor-pointer ${
-            tier.title === "Free" ? "text-[#181818]" : "text-[#FAFAFA]"
-          }`}
-          style={{
-            background:
-              tier.title !== "Free" &&
-              "linear-gradient(to bottom right, var(--neutral-white-100, #FFF) 0%, #000 38%) bottom right / 50% 50% no-repeat, linear-gradient(to bottom left, var(--neutral-white-100, #FFF) 0%, #000 38%) bottom left / 50% 50% no-repeat, linear-gradient(to top left, var(--neutral-white-100, #FFF) 0%, #000 38%) top left / 50% 50% no-repeat, linear-gradient(to top right, var(--neutral-white-100, #FFF) 0%, #000 38%) top right / 50% 50% no-repeat",
-          }}
-        >
-          {tier.title === "Free" ? "Get started" : "Subscribe now"}
-        </button>
+        {tier.title === "Free" ? (
+          <button
+            className={`absolute bottom-8 right-4 left-4 w-[90%] px-3 py-2 border border-[#E2E2E2] text-sm font-[600] text-center rounded-md cursor-pointer ${
+              tier.title === "Free" ? "text-[#181818]" : "text-[#FAFAFA]"
+            }`}
+          >
+            Get started
+          </button>
+        ) : (
+          <button>
+            <img
+              src={importConfig.subscribeNowButton}
+              alt="subscribeNowButton"
+            />
+          </button>
+        )}
       </section>
     </div>
   );

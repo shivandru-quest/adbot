@@ -232,62 +232,72 @@ const TemplateSelection = () => {
           </motion.div>
         ))}
       </div> */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-6">
-        {isLoading && <Loader />}
-        {!isLoading && userTemplates?.length > 0
-          ? filteredTemplates?.map((el) => {
-              const tempImage = el.elements?.find(
-                (ele) => ele.type === "image"
-              );
-              return (
-                !el?.isDeleted && (
-                  <motion.div
-                    key={el.templateId}
-                    whileHover={{ y: -5 }}
-                    className="bg-white rounded-lg shadow-sm overflow-hidden cursor-pointer"
-                    onClick={() => {
-                      toggleModal();
-                      setSelectedImage(tempImage?.src);
-                      setSelectedTemplateId(el.templateId);
-                    }}
-                  >
-                    {tempImage ? (
-                      <div>
-                        <img
-                          src={tempImage?.src}
-                          alt="Image Not Found"
-                          className="w-full h-48 object-cover"
-                        />
-                      </div>
-                    ) : (
-                      <div></div>
-                    )}
-                    <div className="p-4">
-                      <p className="font-semibold">{el.title}</p>
-                      <div className="flex justify-between items-center">
-                        <p className="text-sm text-gray-600">
-                          {el.description}
-                        </p>
-                        <div className="text-indigo-600">
-                          {el.platform?.toLowerCase() === "instagram" ? (
-                            <FaInstagram />
-                          ) : el.platform?.toLowerCase() === "reddit" ? (
-                            <FaReddit />
-                          ) : (
-                            <FaFacebook />
-                          )}
+      <div>
+        {!isLoading && userTemplates.length === 0 && (
+          <div className="w-full flex items-center justify-center">
+            <NoDataYet onAction={() => navigate("/templates")} />
+          </div>
+        )}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-6">
+          {isLoading && <Loader />}
+          {
+            !isLoading &&
+              userTemplates?.length > 0 &&
+              filteredTemplates?.map((el) => {
+                const tempImage = el.elements?.find(
+                  (ele) => ele.type === "image"
+                );
+                return (
+                  !el?.isDeleted && (
+                    <motion.div
+                      key={el.templateId}
+                      whileHover={{ y: -5 }}
+                      className="bg-white rounded-lg shadow-sm overflow-hidden cursor-pointer"
+                      onClick={() => {
+                        toggleModal();
+                        setSelectedImage(tempImage?.src);
+                        setSelectedTemplateId(el.templateId);
+                      }}
+                    >
+                      {tempImage ? (
+                        <div>
+                          <img
+                            src={tempImage?.src}
+                            alt="Image Not Found"
+                            className="w-full h-48 object-cover"
+                          />
+                        </div>
+                      ) : (
+                        <div></div>
+                      )}
+                      <div className="p-4">
+                        <p className="font-semibold">{el.title}</p>
+                        <div className="flex justify-between items-center">
+                          <p className="text-sm text-gray-600">
+                            {el.description}
+                          </p>
+                          <div className="text-indigo-600">
+                            {el.platform?.toLowerCase() === "instagram" ? (
+                              <FaInstagram />
+                            ) : el.platform?.toLowerCase() === "reddit" ? (
+                              <FaReddit />
+                            ) : (
+                              <FaFacebook />
+                            )}
+                          </div>
                         </div>
                       </div>
-                    </div>
-                  </motion.div>
-                )
-              );
-            })
-          : !isLoading && (
-              <div className="w-full m-auto border">
-                <NoDataYet onAction={() => navigate("/templates")} />
-              </div>
-            )}
+                    </motion.div>
+                  )
+                );
+              })
+            // : !isLoading && (
+            //     <div className="w-full m-auto">
+            //       <NoDataYet onAction={() => navigate("/templates")} />
+            //     </div>
+            //   )
+          }
+        </div>
       </div>
       <SelectionModal
         isOpen={showModal}

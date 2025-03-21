@@ -91,7 +91,7 @@ const Login = () => {
               Please enter your email or login with google.
             </p>
             <div className="flex flex-col gap-4">
-              <GoogleOAuth />
+              <GoogleOAuth setIsLoading={setIsLoading} />
               <p className="text-[#181818] text-sm font-[500] text-center w-full">
                 Or
               </p>

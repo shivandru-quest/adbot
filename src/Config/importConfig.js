@@ -20,6 +20,20 @@ import homeBannerBg from "../assets/homeBannerBg.png";
 import bannerBg from "../assets/bannerBg.png";
 import fileBannerImage from "../assets/fileBannerImage.png";
 import emptyBoxIcon from "../assets/emptyBoxIcon.png";
+import getStartedButtonIcon from "../assets/getStartedButtonIcon.png";
+import featuresIcon1 from "../assets/featuresIcon1.png";
+import featuresIcon2 from "../assets/featuresIcon2.png";
+import featuresIcon3 from "../assets/featuresIcon3.png";
+import footerScreenBg from "../assets/footerScreenBg.png";
+import footerBg from "../assets/footerBg.png";
+import getStartedPriceButton from "../assets/getStartedPriceButton.png";
+import shoppingCartIcon from "../assets/shopping_cart.svg";
+import getStartedGroupBg from "../assets/getStartedGroupBg.png";
+import getStartedButtonIcon1 from "../assets/getStartedButtonIcon1.png";
+import getStartedButtonIcon2 from "../assets/getStartedButtonIcon2.png";
+import getStartedButtonIcon3 from "../assets/getStartedButtonIcon3.png";
+import subscribeNowButton from "../assets/subscribeNowButton.png";
+import referralButton from "../assets/referralButton.png";
 
 export const importConfig = {
   templateBannerBgImage,
@@ -44,4 +58,18 @@ export const importConfig = {
   bannerBg,
   fileBannerImage,
   emptyBoxIcon,
+  getStartedButtonIcon,
+  featuresIcon1,
+  featuresIcon2,
+  featuresIcon3,
+  footerScreenBg,
+  footerBg,
+  getStartedPriceButton,
+  shoppingCartIcon,
+  getStartedGroupBg,
+  getStartedButtonIcon1,
+  getStartedButtonIcon2,
+  getStartedButtonIcon3,
+  subscribeNowButton,
+  referralButton,
 };

@@ -264,7 +264,7 @@ const OtpModal = () => {
   return (
     <div className="flex items-center justify-between w-full min-h-screen h-screen overflow-hidden">
       {isLoading && <Loader />}
-      <div className="bg-[#fff] w-1/2 h-full flex flex-col justify-start items-start p-8">
+      <div className="bg-[#fff] w-1/2 h-full flex flex-col justify-start items-center p-16">
         <div className="flex w-full justify-between items-center  mb-[2.75rem]">
           <AllSvgs type={"nexaLogo"} />
         </div>

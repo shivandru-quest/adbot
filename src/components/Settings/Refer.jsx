@@ -9,11 +9,11 @@ const Refer = () => {
       <p className="text-[#0D0D0D] text-[2.25rem] leading-[2.75rem] tracking-[-0.045rem] font-[600]">
         Refer Friends
       </p>
-      <div className="flex items-center justify-between gap-4">
-        <div className="rounded-xl border border-[#EAECF0] h-[20.5rem]">
+      <div className="flex flex-col md:flex-row items-center justify-between gap-4 md:h-[22rem]">
+        <div className="rounded-xl border border-[#EAECF0] h-full md:w-[60%] w-full">
           <ReferralSteps />
         </div>
-        <div>
+        <div className="w-full md:w-[35%]">
           <ReferralLink />
         </div>
       </div>

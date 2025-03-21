@@ -27,7 +27,8 @@ body {
   left: 0;
   width: 100vw;
   height: 100vh;
-  background: rgba(255, 255, 255, 0.7); /* Semi-transparent background */
+  background: rgba(240, 240, 240, 0.6);
+  backdrop-filter: brightness(0.9);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -56,4 +57,11 @@ body {
   80% {
     background-position: 0% 50%, 50% 50%, 100% 100%;
   }
+}
+
+.gs-card-head {
+  color: #181818 !important;
+  font-size: 1rem !important;
+  font-weight: 600 !important;
+  line-height: 1.5rem !important;
 }

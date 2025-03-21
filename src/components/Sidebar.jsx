@@ -127,7 +127,10 @@ const Sidebar = ({ children }) => {
       </div>
       <div className="flex flex-col w-full">
         <div className="py-4 px-6 border-b border-[#C9C9C9] w-full h-[4.7rem] flex items-center justify-between">
-          <div className="w-fit h-full flex items-center">
+          <div
+            className="w-fit h-full flex items-center cursor-pointer"
+            onClick={() => navigate("/")}
+          >
             <AllSvgs type={"nexaLogoTopBar"} />
           </div>
           <div className="flex items-center gap-2">
