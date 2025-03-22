@@ -34,6 +34,9 @@ import getStartedButtonIcon2 from "../assets/getStartedButtonIcon2.png";
 import getStartedButtonIcon3 from "../assets/getStartedButtonIcon3.png";
 import subscribeNowButton from "../assets/subscribeNowButton.png";
 import referralButton from "../assets/referralButton.png";
+import shareDetailsButton from "../assets/shareDetailsButton.png";
+import goToDashboardButton from "../assets/goToDashboardButton.png";
+import penIcon from "../assets/penIcon.png";
 
 export const importConfig = {
   templateBannerBgImage,
@@ -72,4 +75,7 @@ export const importConfig = {
   getStartedButtonIcon3,
   subscribeNowButton,
   referralButton,
+  shareDetailsButton,
+  goToDashboardButton,
+  penIcon,
 };

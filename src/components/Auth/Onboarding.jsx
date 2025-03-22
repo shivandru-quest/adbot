@@ -1,4 +1,4 @@
-import { useContext, useState } from "react";
+import { useContext, useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { OnBoarding } from "@questlabs/react-sdk";
@@ -10,6 +10,7 @@ import Loader from "../../ui/Loader";
 import Cookies from "universal-cookie";
 import AllSvgs from "../../assets/AllSvgs";
 import { importConfig } from "../../Config/importConfig";
+import LoginSuccessModal from "./LoginSuccessModal";
 
 const OnboardingPage = () => {
   const navigate = useNavigate();
@@ -17,6 +18,26 @@ const OnboardingPage = () => {
   const { dispatch } = useContext(AppContext);
   const [isLoading, setIsLoading] = useState(false);
   const cookies = new Cookies(null, { path: "/" });
+  const btnRef = useRef(null);
+
+  useEffect(() => {
+    function handleClick() {
+      const triggeredButton = document.querySelector(
+        ".q-onb-main-btn3.q_next_button_main_cont"
+      );
+      if (triggeredButton) {
+        triggeredButton.click();
+      }
+    }
+    if (btnRef.current) {
+      btnRef.current.addEventListener("click", handleClick);
+    }
+    return () => {
+      if (btnRef.current) {
+        btnRef.current.removeEventListener("click", handleClick);
+      }
+    };
+  }, []);
 
   async function handleGetAnswers() {
     setIsLoading(true);
@@ -38,7 +59,6 @@ const OnboardingPage = () => {
         dispatch({ type: "user/isAuthenticated", payload: true });
         dispatch({ type: "user/UserName", payload: userAnswers.fullName });
         setIsLoading(false);
-        navigate("/home");
       }
     } catch (error) {
       setIsLoading(false);
@@ -48,14 +68,12 @@ const OnboardingPage = () => {
 
   return (
     <div className="min-h-screen flex h-screen overflow-hidden">
-      {/* Left Panel */}
       {isLoading && <Loader />}
-
       <div className="w-full lg:w-1/2 flex flex-col items-center justify-center p-8">
         <div className="w-full flex items-center justify-start pl-[8rem]">
           <AllSvgs type={"nexaLogo"} />
         </div>
-        <div className="w-full flex items-center justify-center">
+        <div className="w-full flex items-center justify-center relative">
           <OnBoarding
             userId={getUserId()}
             questId={mainConfig.QUEST_ONBOARDING_CAMPAIGN_ID}
@@ -79,9 +97,11 @@ const OnboardingPage = () => {
               Form: { width: "68%" },
               Topbar: {},
               Heading: {
-                fontSize: "24px",
-                lineHeight: "32px",
-                letterSpacing: "-2%",
+                fontSize: "2.25rem",
+                lineHeight: "2.75rem",
+                letterSpacing: "-0.045rem",
+                color: "#0D0D0D",
+                fontWeight: "600",
               },
               Description: {
                 fontSize: "14px",
@@ -92,7 +112,9 @@ const OnboardingPage = () => {
               Input: { lineHeight: "20px" },
               Label: { fontWeight: "500" },
               TextArea: {},
-              PrimaryButton: {},
+              PrimaryButton: {
+                display: "none",
+              },
               SecondaryButton: {},
               SingleChoice: {
                 hoverBackground: "#e2e2e2",
@@ -113,6 +135,16 @@ const OnboardingPage = () => {
             setAnswer={setAnswers}
             showFooter={false}
           />
+          <button
+            className="absolute bottom-[-1rem] h-9 w-[437px]"
+            ref={btnRef}
+          >
+            <img
+              src={importConfig.shareDetailsButton}
+              alt="shareDetailsButton"
+              className="h-full w-full object-contain"
+            />
+          </button>
         </div>
       </div>
       <div className="w-1/2 h-auto overflow-hidden">

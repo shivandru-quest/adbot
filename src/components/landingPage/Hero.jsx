@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { importConfig } from "../../Config/importConfig";
 import { motion } from "framer-motion";
+import { useNavigate } from "react-router-dom";
 const floatAnimation1 = {
   y: [0, -8, 0],
   x: [0, 4, -4, 0],
@@ -33,6 +34,7 @@ const floatAnimation3 = {
   },
 };
 const Hero = () => {
+  const navigate = useNavigate();
   const [showSlideUp, setShowSlideUp] = useState(false);
   return (
     <motion.div
@@ -74,70 +76,101 @@ const Hero = () => {
           <button
             className="text-[#181818] text-sm font-[600] p-3 rounded-lg border border-[#E2E2E2] bg-[#fff] mt-4"
             style={{ backdropFilter: "blur(2.5px)" }}
+            onClick={() => navigate("/get-started")}
           >
             Get started today
           </button>
         </div>
         <div className="w-full flex flex-col items-center justify-center gap-4"></div>
         <motion.div
-          className="absolute top-[7rem] left-[17rem]"
+          className="absolute top-[7rem] left-[17rem] w-9 h-9"
           animate={floatAnimation1}
         >
-          <img src={importConfig.GraphicsTemplateImage1} />
+          <img
+            src={importConfig.GraphicsTemplateImage1}
+            className="w-full object-contain"
+          />
         </motion.div>
         <motion.div
-          className="absolute top-[5rem] left-[13rem]"
+          className="absolute top-[3rem] left-[11rem] w-9 h-9"
           animate={floatAnimation2}
         >
-          <img src={importConfig.GraphicsTemplateImage2} />
+          <img
+            src={importConfig.GraphicsTemplateImage2}
+            className="w-full object-contain"
+          />
         </motion.div>
         <motion.div
-          className="absolute top-[10rem] left-[7rem]"
+          className="absolute top-[8rem] left-[6rem] w-9 h-9"
           animate={floatAnimation1}
         >
-          <img src={importConfig.GraphicsTemplateImage3} />
+          <img
+            src={importConfig.GraphicsTemplateImage3}
+            className="w-full object-contain"
+          />
         </motion.div>
         <motion.div
-          className="absolute top-[14rem] left-[10rem]"
+          className="absolute top-[14rem] left-[15rem] w-9 h-9"
           animate={floatAnimation3}
         >
-          <img src={importConfig.GraphicsTemplateImage4} />
+          <img
+            src={importConfig.GraphicsTemplateImage4}
+            className="w-full object-contain"
+          />
         </motion.div>
         <motion.div
-          className="absolute top-[18rem] right-[15rem]"
+          className="absolute top-[23rem] right-[15rem] w-9 h-9"
           animate={floatAnimation2}
         >
-          <img src={importConfig.GraphicsTemplateImage5} />
+          <img
+            src={importConfig.GraphicsTemplateImage5}
+            className="w-full object-contain"
+          />
         </motion.div>
         <motion.div
-          className="absolute top-[7rem] right-[17rem]"
+          className="absolute top-[1.5rem] right-[14rem] w-9 h-9"
           animate={floatAnimation3}
         >
-          <img src={importConfig.GraphicsTemplateImage6} />
+          <img
+            src={importConfig.GraphicsTemplateImage6}
+            className="w-full object-contain"
+          />
         </motion.div>
         <motion.div
-          className="absolute top-[5rem] right-[12rem]"
+          className="absolute top-[2rem] right-[25rem] w-9 h-9"
           animate={floatAnimation2}
         >
-          <img src={importConfig.GraphicsTemplateImage7} />
+          <img
+            src={importConfig.GraphicsTemplateImage7}
+            className="w-full object-contain"
+          />
         </motion.div>
         <motion.div
-          className="absolute top-[10rem] right-[9rem]"
+          className="absolute top-[6rem] right-[19rem] w-9 h-9"
           animate={floatAnimation1}
         >
-          <img src={importConfig.GraphicsTemplateImage8} />
+          <img
+            src={importConfig.GraphicsTemplateImage8}
+            className="w-full object-contain"
+          />
         </motion.div>
         <motion.div
-          className="absolute top-[14rem] right-[11rem]"
+          className="absolute top-[14rem] right-[11rem] w-9 h-9"
           animate={floatAnimation2}
         >
-          <img src={importConfig.GraphicsTemplateImage9} />
+          <img
+            src={importConfig.GraphicsTemplateImage9}
+            className="w-full object-contain"
+          />
         </motion.div>
         <motion.div
-          className="absolute top-[18rem] left-[13rem]"
+          className="absolute top-[22rem] left-[10rem] w-9 h-9"
           animate={floatAnimation3}
         >
-          <img src={importConfig.GraphicsTemplateImage10} />
+          <img
+            src={importConfig.GraphicsTemplateImage10}
+            className="w-full object-contain"
+          />
         </motion.div>
       </div>
       <div

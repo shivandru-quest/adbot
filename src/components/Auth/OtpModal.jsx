@@ -300,7 +300,7 @@ const OtpModal = () => {
                   }}
                   onPaste={handlePaste}
                   ref={(el) => (inputRef.current[index] = el)}
-                  className="flex items-center justify-center text-center py-2 px-3 text-[#696969] border border-[#E2E2E2] rounded-md font-[500] text-sm font-figtree h-10 w-[5.6rem] focus:border-purple-500 focus:outline-none"
+                  className="flex items-center justify-center text-center py-2 px-3 text-[#696969] border border-[#E2E2E2] rounded-md font-[500] text-sm font-figtree h-10 w-[5.6rem] focus:outline-none"
                 />
               ))}
             </div>

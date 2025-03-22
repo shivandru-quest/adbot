@@ -34,7 +34,7 @@ const Features = () => {
           {features?.map((feature, index) => (
             <motion.article
               key={index}
-              className={`flex items-center justify-between gap-6 ${
+              className={`flex items-center justify-center gap-6 ${
                 index % 2 === 0 ? "flex-row" : "flex-row-reverse"
               }`}
               initial={{ x: index % 2 === 0 ? -100 : 100, opacity: 0 }}

@@ -4,6 +4,7 @@ import GeneralSelect from "../../ui/GeneralSelect";
 import AllSvgs from "../../assets/AllSvgs";
 import NoDataYet from "../../ui/NoDataYet";
 import { useNavigate } from "react-router-dom";
+import LoginSuccessModal from "../Auth/LoginSuccessModal";
 const categoryOptions = [{ value: "category", label: "Category" }];
 const dateOptions = [{ value: "date", label: "Date" }];
 const MyFiles = () => {

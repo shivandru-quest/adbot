@@ -51,7 +51,7 @@ const Pricing = () => {
         }}
       ></section>
       <motion.div
-        className="absolute top-[6.25rem] left-[7.5rem]"
+        className="w-full absolute top-[6.25rem] flex flex-col items-center justify-center gap-4"
         initial={{ opacity: 0, y: 50 }}
         animate={isInView ? { opacity: 1, y: 0 } : {}}
         transition={{ duration: 0.8 }}

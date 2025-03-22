@@ -1,10 +1,22 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { importConfig } from "../../Config/importConfig";
 import AllSvgs from "../../assets/AllSvgs";
 import { useNavigate } from "react-router-dom";
 import NoDataYet from "../../ui/NoDataYet";
+import LoginSuccessModal from "../Auth/LoginSuccessModal";
 const Home = () => {
   const navigate = useNavigate();
+  const [showModal, setShowModal] = useState(false);
+  function toggleModal() {
+    setShowModal((prev) => !prev);
+    localStorage.setItem("counter", "1");
+  }
+  useEffect(() => {
+    const counter = localStorage.getItem("counter");
+    if (!counter) {
+      setShowModal(true);
+    }
+  }, []);
   return (
     <div className="w-full flex flex-col gap-6 mt-6">
       <div
@@ -94,6 +106,7 @@ const Home = () => {
           <AllSvgs type={"rightLightIcon"} />
         </div>
         <NoDataYet onAction={() => navigate("/templates")} />
+        <LoginSuccessModal isOpen={showModal} onClick={toggleModal} />
       </div>
     </div>
   );
