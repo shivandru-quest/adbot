@@ -24,17 +24,17 @@ const features = [
 ];
 const Features = () => {
   return (
-    <div className="px-[7.5rem] py-[4rem]">
+    <div className="px-[7.5rem] py-[4rem]" id="features">
       <section>
         <SectionHeader
           title="Features"
           subtitle="Smart Automation for Seamless Ad Campaigns"
         />
-        <div className="flex flex-col gap-[7.25rem]">
+        <div className="flex flex-col gap-[7.25rem] w-full">
           {features?.map((feature, index) => (
             <motion.article
               key={index}
-              className={`flex items-center justify-center gap-6 ${
+              className={`flex items-center justify-start gap-6 ${
                 index % 2 === 0 ? "flex-row" : "flex-row-reverse"
               }`}
               initial={{ x: index % 2 === 0 ? -100 : 100, opacity: 0 }}
@@ -51,7 +51,7 @@ const Features = () => {
                 alt={feature.title}
                 className="w-[36rem] h-auto"
               />
-              <div className="px-[4rem] py-[2.5rem] w-[28rem] flex flex-col gap-4">
+              <div className="px-[4rem] py-[2.5rem] w-1/2 flex flex-col gap-4">
                 <h3 className="text-[#181818] text-[1.875rem] font-[500] leading-[2.5rem] tracking-[-0.01875rem]">
                   {feature.title}
                 </h3>

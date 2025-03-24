@@ -8,11 +8,37 @@ import { createUrlBackend } from "../../Config/generalFunctions";
 import axios from "axios";
 import Loader from "../../ui/Loader";
 import TemplateCard from "../../ui/TemplateCard";
-import { div } from "framer-motion/client";
 import SelectionCardHandle from "../../ui/SelectionCardHandle";
+import { templates } from "../Home/Home";
 
-const categoryOptions = [{ value: "category", label: "Category" }];
-const dateOptions = [{ value: "date", label: "Date" }];
+const categoryOptions = [
+  { value: "facebook", label: "Facebook" },
+  { value: "instagram", label: "Instagram" },
+  { value: "linkedin", label: "LinkedIn" },
+  { value: "reddit", label: "Reddit" },
+  { value: "saas", label: "SaaS" },
+  { value: "eCommerce", label: "E-commerce" },
+  { value: "fintech", label: "FinTech" },
+  { value: "agency", label: "Agency" },
+  { value: "fashion", label: "Fashion" },
+  { value: "food", label: "Food" },
+  { value: "travel", label: "Travel" },
+  { value: "realEstate", label: "Real-estate" },
+  { value: "custom", label: "Custom" },
+  { value: "post", label: "Post" },
+  { value: "landscape", label: "Landscape" },
+  { value: "story", label: "Story" },
+  { value: "vertical", label: "Vertical" },
+  { value: "pin", label: "Pin" },
+  { value: "all", label: "All" },
+];
+const dateOptions = [
+  { value: "today", label: "Today" },
+  { value: "thisWeek", label: "This Week" },
+  { value: "thisMonth", label: "This Month" },
+  { value: "thisYear", label: "This Year" },
+  { value: "all", label: "All" },
+];
 const MyFiles = () => {
   const [selectedItem, setSelectedItem] = useState("all");
   const [selectedCategory, setSelectedCategory] = useState(null);
@@ -24,10 +50,10 @@ const MyFiles = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedTemplateId, setSelectedTemplateId] = useState([]);
   function handleCategoryChange(selectedOption) {
-    setSelectedCategory(selectedOption.value);
+    setSelectedCategory(selectedOption);
   }
   function handleDateChange(selectedOption) {
-    setSelectedDate(selectedOption.value);
+    setSelectedDate(selectedOption);
   }
   async function fetchTemplates() {
     setIsLoading(true);
@@ -123,18 +149,22 @@ const MyFiles = () => {
           </button>
         </div>
         <div className="w-1/2 flex items-center justify-end gap-3">
-          <GeneralSelect
-            options={categoryOptions}
-            value={selectedCategory}
-            Placeholder={"Category"}
-            onChange={handleCategoryChange}
-          />
-          <GeneralSelect
-            options={dateOptions}
-            value={selectedDate}
-            Placeholder={"Date modified"}
-            onChange={handleDateChange}
-          />
+          <div className="w-[9rem]">
+            <GeneralSelect
+              options={categoryOptions}
+              value={selectedCategory}
+              Placeholder={"Category"}
+              onChange={handleCategoryChange}
+            />
+          </div>
+          <div className="w-[9rem]">
+            <GeneralSelect
+              options={dateOptions}
+              value={selectedDate}
+              Placeholder={"Date modified"}
+              onChange={handleDateChange}
+            />
+          </div>
           <div className="relative">
             <input
               type="text"
@@ -152,28 +182,46 @@ const MyFiles = () => {
       </div>
       {isLoading && <Loader />}
       <div className="py-4 px-6 grid grid-cols-4 gap-x-4 gap-y-4 rounded-[1rem] h-auto w-full">
-        {filteredData?.map((ele, i) => {
-          const tempImage = ele.elements?.find((ele) => ele.type === "image");
-          return (
-            <div
-              className="relative"
-              key={i}
-              onClick={() => handleClick(ele?.templateId)}
-            >
+        {selectedItem === "favourite" ? (
+          <>
+            {filteredData?.map((ele, i) => {
+              const tempImage = ele.elements?.find(
+                (ele) => ele.type === "image"
+              );
+              return (
+                <div
+                  className="relative"
+                  key={i}
+                  onClick={() => handleClick(ele?.templateId)}
+                >
+                  <TemplateCard
+                    idx={i}
+                    imgFile={tempImage?.src}
+                    platform={ele?.platform}
+                    title={ele?.title}
+                  />
+                  {selectedTemplateId?.includes(ele?.templateId) && (
+                    <button className="absolute top-6 left-6">
+                      <AllSvgs type={"priceTickIcon"} />
+                    </button>
+                  )}
+                </div>
+              );
+            })}
+          </>
+        ) : (
+          selectedItem === "myTemplates" &&
+          templates?.map((ele, i) => (
+            <div key={i}>
               <TemplateCard
                 idx={i}
-                imgFile={tempImage?.src}
-                platform={ele?.platform}
+                imgFile={ele?.imgFile}
                 title={ele?.title}
+                platform={ele?.platform}
               />
-              {selectedTemplateId?.includes(ele?.templateId) && (
-                <button className="absolute top-6 left-6">
-                  <AllSvgs type={"priceTickIcon"} />
-                </button>
-              )}
             </div>
-          );
-        })}
+          ))
+        )}
       </div>
       {!isLoading && userTemplates?.length === 0 && (
         <div className="w-full flex items-center justify-center">
@@ -189,7 +237,12 @@ const MyFiles = () => {
       )}
       {selectedTemplateId?.length > 0 && (
         <div className="absolute z-10 bottom-4 left-1/4">
-          <SelectionCardHandle setSelectedTemplateId={setSelectedTemplateId}/>
+          <SelectionCardHandle
+            setSelectedTemplateId={setSelectedTemplateId}
+            selectedTemplateId={selectedTemplateId}
+            setIsLoading={setIsLoading}
+            fetchTemplates={fetchTemplates}
+          />
         </div>
       )}
     </div>

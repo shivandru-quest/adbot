@@ -8,6 +8,28 @@ import { createUrlBackend } from "../../Config/generalFunctions";
 import axios from "axios";
 import TemplateCard from "../../ui/TemplateCard";
 import Loader from "../../ui/Loader";
+export const templates = [
+  {
+    imgFile: importConfig.dummyTemplate1,
+    title: "Template 1",
+    platform: "Instagram",
+  },
+  {
+    imgFile: importConfig.dummyTemplate2,
+    title: "Template 2",
+    platform: "facebook",
+  },
+  {
+    imgFile: importConfig.dummyTemplate3,
+    title: "Template 3",
+    platform: "Linkedin",
+  },
+  {
+    imgFile: importConfig.dummyTemplate4,
+    title: "Template 4",
+    platform: "Reddit",
+  },
+];
 const Home = () => {
   const navigate = useNavigate();
   const [showModal, setShowModal] = useState(false);
@@ -149,9 +171,20 @@ const Home = () => {
             <AllSvgs type={"rightLightIcon"} />
           </button>
         </div>
-        <NoDataYet onAction={() => navigate("/templates")} />
-        <LoginSuccessModal isOpen={showModal} onClick={toggleModal} />
+        {/* <NoDataYet onAction={() => navigate("/templates")} /> */}
+        <div className="w-full flex flex-wrap gap-4">
+          {templates?.map((el, i) => (
+            <div key={i}>
+              <TemplateCard
+                imgFile={el.imgFile}
+                title={el.title}
+                platform={el.platform}
+              />
+            </div>
+          ))}
+        </div>
       </div>
+      <LoginSuccessModal isOpen={showModal} onClick={toggleModal} />
     </div>
   );
 };

@@ -6,7 +6,7 @@ import CanvasText from "../Canvas/CanvasText";
 import CanvasShape from "./CanvasShape";
 import Toolbar from "./Toolbar";
 import PropertyPanel from "./PropertyPanel";
-import { useParams, useLocation } from "react-router-dom";
+import { useParams, useLocation, useNavigate } from "react-router-dom";
 import { Toast } from "@questlabs/react-sdk";
 import axios from "axios";
 import {
@@ -26,6 +26,7 @@ const MAX_IMAGE_SIZE = 0.5 * 1024 * 1024;
 
 const AdEditor = () => {
   const location = useLocation();
+  const navigate = useNavigate();
   const { templateId } = useParams();
   const { formData } = location?.state || {};
   const [elements, setElements] = useState([]);
@@ -345,7 +346,7 @@ const AdEditor = () => {
   const selectedElement = elements?.find(
     (elem) => elem.elementId === selectedId
   );
-
+  
   //--------------------------api calls------------------------------------//
 
   const removeImgBackground = async () => {
@@ -405,6 +406,7 @@ const AdEditor = () => {
         Toast.success({
           text: "Ad created successfully",
         });
+        navigate("/myFiles");
       }
     } catch (error) {
       setIsLoading(false);
@@ -485,6 +487,7 @@ const AdEditor = () => {
       if (res.data.success) {
         await getTemplateData();
         setIsLoading(false);
+        navigate("/myFiles");
         Toast.success({
           text: "Ad updated successfully",
         });
@@ -639,8 +642,10 @@ const AdEditor = () => {
           onChange={(newProps) => handleElementChange(selectedId, newProps)}
           onDelete={handleDelete}
           onDuplicate={handleDuplicate}
-          onDownload={downloadCanvas}
-          setSelectedId={setSelectedId}
+          selectedId={selectedId}
+          setElements={setElements}
+          setHistory={setHistory}
+          elements={elements}
         />
       </div>
     </div>

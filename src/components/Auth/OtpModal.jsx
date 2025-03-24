@@ -116,7 +116,7 @@ const OtpModal = () => {
   };
   const createEntity = async (userId, token) => {
     try {
-      const { url, headers } = createUrl(
+      const { url, headers } = createLoginFlowUrl(
         `api/entities?userId=${userId}`
       );
       const response = await axios.post(
@@ -302,8 +302,8 @@ const OtpModal = () => {
   return (
     <div className="flex items-center justify-between w-full min-h-screen h-screen overflow-hidden">
       {isLoading && <Loader />}
-      <div className="bg-[#fff] w-1/2 h-full flex flex-col justify-start items-center p-16">
-        <div className="flex w-full justify-between items-center  mb-[2.75rem]">
+      <div className="bg-[#fff] w-full lg:w-1/2 h-full flex flex-col justify-start items-center p-16">
+        <div className="flex w-full justify-between items-center mb-[2.75rem]">
           <AllSvgs type={"nexaLogo"} />
         </div>
         <div className="flex flex-col gap-6 w-full">
@@ -320,7 +320,7 @@ const OtpModal = () => {
             </p>
           </div>
           <div>
-            <div className="flex max-w-[500px] justify-between items-center gap-2">
+            <div className="flex w-full max-w-[700px] justify-between items-center gap-2">
               {otp?.map((digit, index) => (
                 <input
                   key={index}
@@ -362,7 +362,7 @@ const OtpModal = () => {
               )}
             </div>
           </div>
-          <div className="w-full">
+          <div className="w-full flex items-center justify-center">
             <button
               className="w-full flex items-center justify-center"
               onClick={handleSubmit}
@@ -376,7 +376,7 @@ const OtpModal = () => {
         </div>
       </div>
       <div className="w-1/2 h-auto overflow-hidden">
-        <div className="w-full h-full">
+        <div className="hidden lg:flex w-full h-full">
           <div className="bg-black opacity-10" />
           <div className="flex flex-col justify-center items-center w-full">
             <img

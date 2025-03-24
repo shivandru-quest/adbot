@@ -201,12 +201,16 @@ const Sidebar = ({ children }) => {
             `}
             >
               <div className="flex items-center gap-3">
-                <div className="rounded-full bg-[#D9D9D9] w-[1.75rem] h-[1.75rem] mb-1">
-                  <img
-                    src={state?.avatar}
-                    alt="user_avatar"
-                    className="rounded-full w-full object-cover"
-                  />
+                <div className="rounded-full bg-[#D9D9D9] w-[1.75rem] h-[1.75rem] mb-1 flex items-center justify-center">
+                  {state?.avatar ? (
+                    <img
+                      src={state?.avatar}
+                      alt="user_avatar"
+                      className="rounded-full w-full object-cover"
+                    />
+                  ) : (
+                    <AllSvgs type={"humanIcon"} fillColor={"#181818"} />
+                  )}
                 </div>
                 <span className="text-[#2C2C2C] font-[600] text-xs">
                   {state?.UserName}

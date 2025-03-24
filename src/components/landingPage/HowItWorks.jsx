@@ -28,12 +28,12 @@ const steps = [
 ];
 const HowItWorks = () => {
   return (
-    <section className="px-[7.5rem] py-[5rem]">
+    <section className="px-[7.5rem] py-[5rem]" id="howItWorks">
       <SectionHeader
         title="How it works"
         subtitle="Simple steps to create stunning ad creatives"
       />
-      <div className="grid gap-x-8 gap-y-5 mx-auto my-0 grid-cols-[repeat(2,1fr)] max-w-[1200px] max-md:grid-cols-[repeat(2,1fr)] max-sm:grid-cols-[1fr]">
+      <div className="grid gap-x-8 gap-y-5 my-0 grid-cols-[repeat(2,1fr)] w-full max-md:grid-cols-[repeat(2,1fr)] max-sm:grid-cols-[1fr]">
         {steps.map((step, index) => (
           <motion.article
             key={index}

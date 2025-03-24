@@ -42,6 +42,7 @@ const Pricing = () => {
   return (
     <div ref={ref} className="relative">
       <section
+        id="pricing"
         className="w-full min-h-[130vh] inset-0 flex flex-col items-center justify-center"
         style={{
           backgroundImage: `url('${importConfig.footerBg}')`,
@@ -63,11 +64,11 @@ const Pricing = () => {
           Affordable Plans That Grow With You
         </p>
       </motion.div>
-      <div className="flex gap-10 justify-center mx-auto my-0 max-w-[1200px] max-md:flex-col absolute top-[15rem] left-[7.5rem] px-[5rem]">
+      <div className="flex gap-10 justify-center w-full max-md:flex-col absolute top-[15rem] px-[5rem]">
         {plans.map((plan, index) => (
           <motion.article
             key={index}
-            className={`relative flex-1 p-8 rounded-xl min-w-[32rem] h-auto ${
+            className={`relative flex-1 p-8 rounded-xl max-w-[32rem] h-auto ${
               plan.name === "Pro"
                 ? "bg-white/10 border border-[#696969]"
                 : "bg-[#fff]"

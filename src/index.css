@@ -65,3 +65,10 @@ body {
   font-weight: 600 !important;
   line-height: 1.5rem !important;
 }
+.gs_card_body_image{
+background-color: #E2E2E2 !important;
+}
+
+html {
+  scroll-behavior: smooth;
+}

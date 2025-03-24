@@ -13,7 +13,7 @@ const problems = [
 ];
 const ProblemAndSolution = () => {
   return (
-    <section className="px-[7.5rem] py-[5rem]">
+    <section className="px-[7.5rem] py-[5rem]" id="solutions">
       <SectionHeader
         title="Problem and Solution"
         subtitle="Maximize Engagement, Minimize Effort with Nexa"

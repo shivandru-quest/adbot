@@ -37,6 +37,10 @@ import referralButton from "../assets/referralButton.png";
 import shareDetailsButton from "../assets/shareDetailsButton.png";
 import goToDashboardButton from "../assets/goToDashboardButton.png";
 import penIcon from "../assets/penIcon.png";
+import dummyTemplate1 from "../assets/dummyTemplate1.png";
+import dummyTemplate2 from "../assets/dummyTemplate2.png";
+import dummyTemplate3 from "../assets/dummyTemplate3.png";
+import dummyTemplate4 from "../assets/dummyTemplate4.png";
 
 export const importConfig = {
   templateBannerBgImage,
@@ -78,4 +82,8 @@ export const importConfig = {
   shareDetailsButton,
   goToDashboardButton,
   penIcon,
+  dummyTemplate1,
+  dummyTemplate2,
+  dummyTemplate3,
+  dummyTemplate4,
 };

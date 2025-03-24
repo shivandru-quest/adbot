@@ -53,7 +53,7 @@ const GetStartedPage = () => {
       </div>
       <div className="flex flex-col gap-2 mb-6">
         <p className="text-[#181818] text-[1.25rem] leading-[1.875rem] tracking-[-0.025rem] font-semibold">
-          Hi, I’m Nexa 👋🏼
+          Welcome to Nexa
         </p>
         <p className="text-[#535353] text-sm font-[400]">
           Follow there steps to start creating amazing ads with AI.

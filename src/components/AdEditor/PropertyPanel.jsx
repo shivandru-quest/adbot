@@ -32,33 +32,81 @@ const PropertyPanel = ({
   onChange,
   onDelete,
   onDuplicate,
-  onDownload,
+  setHistory,
+  setElements,
+  selectedId,
 }) => {
   const [showColorPicker, setShowColorPicker] = useState(false);
-  const [customColor, setCustomColor] = useState("");
-  const [customOpacity, setCustomOpacity] = useState("");
+  const [customColor, setCustomColor] = useState(selectedElement?.fill || "");
+  const [customOpacity, setCustomOpacity] = useState("1");
 
   useEffect(() => {
     if (selectedElement) {
       if (selectedElement.type === "shape") {
-        selectedElement.fill = customColor;
-      }
-      if (selectedElement.type === "text") {
-        selectedElement.fill = customColor;
+        setElements((prev) =>
+          prev.map((el) =>
+            el.elementId === selectedId ? { ...el, fill: customColor } : el
+          )
+        );
+        setHistory((prev) =>
+          prev.map((el) =>
+            el.elementId === selectedId ? { ...el, fill: customColor } : el
+          )
+        );
+      } else if (selectedElement.type === "text") {
+        setElements((prev) =>
+          prev.map((el) =>
+            el.elementId === selectedId ? { ...el, fill: customColor } : el
+          )
+        );
+        setHistory((prev) =>
+          prev.map((el) =>
+            el.elementId === selectedId ? { ...el, fill: customColor } : el
+          )
+        );
       }
     }
   }, [customColor, selectedElement]);
 
   useEffect(() => {
-    if (selectedElement) {
+    if (selectedElement && customOpacity) {
       if (selectedElement.type === "shape") {
-        selectedElement.opacity = parseFloat(customOpacity || 1);
-      }
-      if (selectedElement.type === "text") {
-        selectedElement.opacity = parseFloat(customOpacity || 1);
+        setElements((prev) =>
+          prev.map((el) =>
+            el.elementId === selectedId
+              ? { ...el, opacity: parseFloat(customOpacity || 1) }
+              : el
+          )
+        );
+        setHistory((prev) =>
+          prev.map((el) =>
+            el.elementId === selectedId
+              ? { ...el, opacity: parseFloat(customOpacity || 1) }
+              : el
+          )
+        );
+      } else if (selectedElement.type === "text") {
+        setElements((prev) =>
+          prev.map((el) =>
+            el.elementId === selectedId
+              ? { ...el, opacity: parseFloat(customOpacity || 1) }
+              : el
+          )
+        );
+        setHistory((prev) =>
+          prev.map((el) =>
+            el.elementId === selectedId
+              ? { ...el, opacity: parseFloat(customOpacity || 1) }
+              : el
+          )
+        );
       }
     }
   }, [selectedElement, customOpacity]);
+
+  function handleColorPicker() {
+    setShowColorPicker(!showColorPicker);
+  }
 
   return (
     selectedElement && (
@@ -298,27 +346,24 @@ const PropertyPanel = ({
             <div
               className="w-full h-10 rounded cursor-pointer"
               style={{
-                backgroundColor: selectedElement.fill || selectedElement.color,
+                backgroundColor:
+                  customColor || selectedElement?.fill || "#E2E2E2",
               }}
-              onClick={() => setShowColorPicker(!showColorPicker)}
+              onClick={handleColorPicker}
             />
             {showColorPicker && selectedElement.type === "shape" && (
               <div className="absolute mt-2 bottom-1 right-72">
                 <HexColorPicker
-                  color={selectedElement.fill || "#ffffff"}
-                  onChange={(color) => {
-                    onChange({ fill: color });
-                  }}
+                  color={customColor}
+                  onChange={(color) => setCustomColor(color)}
                 />
               </div>
             )}
             {showColorPicker && selectedElement.type === "text" && (
               <div className="absolute mt-2 bottom-1 right-72">
                 <HexColorPicker
-                  color={selectedElement.color || "#000000"}
-                  onChange={(color) => {
-                    onChange({ fill: color });
-                  }}
+                  color={customColor}
+                  onChange={(color) => setCustomColor(color)}
                 />
               </div>
             )}
@@ -334,8 +379,8 @@ const PropertyPanel = ({
                   </label>
                   <input
                     type="text"
-                    name="overlayColor"
-                    id="overlayColor"
+                    name="customColor"
+                    id="customColor"
                     placeholder="Enter Hex code"
                     className="px-3 py-2 rounded-md border border-[#979797] text-[#535353] text-ellipsis overflow-hidden whitespace-nowrap font-[500] text-sm placeholder:text-[#696969] placeholder:text-sm placeholder:font-[400] h-9 w-28 outline-none"
                     onChange={(e) => setCustomColor(e.target.value)}

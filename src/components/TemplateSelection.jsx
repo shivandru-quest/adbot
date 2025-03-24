@@ -8,6 +8,8 @@ import { createUrlBackend } from "../Config/generalFunctions";
 import Loader from "../ui/Loader";
 import NoDataYet from "../ui/NoDataYet";
 import TemplateBanner from "../ui/TemplateBanner";
+import TemplateCard from "../ui/TemplateCard";
+import { templates } from "./Home/Home";
 
 const TemplateSelection = () => {
   const navigate = useNavigate();
@@ -62,55 +64,43 @@ const TemplateSelection = () => {
             <NoDataYet onAction={() => navigate("/templates")} />
           </div>
         )}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-6">
+        <div className="flex flex-wrap gap-6 mt-6">
           {isLoading && <Loader />}
           {!isLoading &&
             userTemplates?.length > 0 &&
-            filteredTemplates?.map((el) => {
+            filteredTemplates?.map((el, i) => {
               const tempImage = el.elements?.find(
                 (ele) => ele.type === "image"
               );
               return (
                 !el?.isDeleted && (
-                  <motion.div
-                    key={el.templateId}
-                    whileHover={{ y: -5 }}
-                    className="bg-white rounded-lg shadow-sm overflow-hidden cursor-pointer"
-                    onClick={() => {
-                      toggleModal();
-                      setSelectedImage(tempImage?.src);
-                      setSelectedTemplateId(el.templateId);
-                    }}
-                  >
-                    {tempImage ? (
-                      <div>
-                        <img
-                          src={tempImage?.src}
-                          alt="Image Not Found"
-                          className="w-full h-48 object-cover"
-                        />
-                      </div>
-                    ) : (
-                      <div></div>
-                    )}
-                    <div className="p-4">
-                      <p className="font-semibold">{el.title}</p>
-                      <div className="flex justify-between items-center">
-                        <p className="text-sm text-gray-600">
-                          {el.description}
-                        </p>
-                        <div className="text-indigo-600">
-                          {el.platform?.toLowerCase() === "instagram" ? (
-                            <FaInstagram />
-                          ) : el.platform?.toLowerCase() === "reddit" ? (
-                            <FaReddit />
-                          ) : (
-                            <FaFacebook />
-                          )}
-                        </div>
-                      </div>
-                    </div>
-                  </motion.div>
+                  <div key={i}>
+                    <TemplateCard
+                      imgFile={tempImage?.src}
+                      title={el.title}
+                      platform={el.platform}
+                      idx={i}
+                    />
+                  </div>
+                )
+              );
+            })}
+        </div>
+        <div className="flex flex-wrap gap-6 mt-6">
+          {isLoading && <Loader />}
+          {!isLoading &&
+            userTemplates?.length > 0 &&
+            templates?.map((el, i) => {
+              return (
+                !el?.isDeleted && (
+                  <div key={i}>
+                    <TemplateCard
+                      imgFile={el.imgFile}
+                      title={el.title}
+                      platform={el.platform}
+                      idx={i}
+                    />
+                  </div>
                 )
               );
             })}

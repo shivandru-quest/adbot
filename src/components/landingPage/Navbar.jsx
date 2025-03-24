@@ -18,29 +18,44 @@ const Navbar = () => {
       <nav className="flex flex-col flex-1 shrink items-start self-stretch my-auto text-sm leading-none basis-0 min-w-60 text-neutral-900 max-md:max-w-full">
         <ul className="flex gap-2 items-center">
           <li>
-            <button className="gap-1 self-stretch p-1.5 my-auto whitespace-nowrap rounded-md text-[#181818] text-sm font-[600]">
+            <a
+              href="#solutions"
+              className="gap-1 self-stretch p-1.5 my-auto whitespace-nowrap rounded-md text-[#181818] text-sm font-[600]"
+            >
               Solutions
-            </button>
+            </a>
           </li>
           <li>
-            <button className="gap-1 self-stretch p-1.5 my-auto rounded-md text-[#181818] text-sm font-[600]">
+            <a
+              href="#howItWorks"
+              className="gap-1 self-stretch p-1.5 my-auto rounded-md text-[#181818] text-sm font-[600]"
+            >
               How It Works
-            </button>
+            </a>
           </li>
           <li>
-            <button className="gap-1 self-stretch p-1.5 my-auto whitespace-nowrap rounded-md text-[#181818] text-sm font-[600]">
+            <a
+              href="#features"
+              className="gap-1 self-stretch p-1.5 my-auto whitespace-nowrap rounded-md text-[#181818] text-sm font-[600]"
+            >
               Features
-            </button>
+            </a>
           </li>
           <li>
-            <button className="gap-1 self-stretch p-1.5 my-auto whitespace-nowrap rounded-md text-[#181818] text-sm font-[600]">
+            <a
+              href="#pricing"
+              className="gap-1 self-stretch p-1.5 my-auto whitespace-nowrap rounded-md text-[#181818] text-sm font-[600]"
+            >
               Pricing
-            </button>
+            </a>
           </li>
           <li>
-            <button className="gap-1 self-stretch p-1.5 my-auto rounded-md text-[#181818] text-sm font-[600]">
+            <a
+              href="#useCases"
+              className="gap-1 self-stretch p-1.5 my-auto rounded-md text-[#181818] text-sm font-[600]"
+            >
               Use Cases
-            </button>
+            </a>
           </li>
         </ul>
       </nav>
