@@ -4,19 +4,42 @@ import AllSvgs from "../../assets/AllSvgs";
 import { useNavigate } from "react-router-dom";
 import NoDataYet from "../../ui/NoDataYet";
 import LoginSuccessModal from "../Auth/LoginSuccessModal";
+import { createUrlBackend } from "../../Config/generalFunctions";
+import axios from "axios";
+import TemplateCard from "../../ui/TemplateCard";
+import Loader from "../../ui/Loader";
 const Home = () => {
   const navigate = useNavigate();
   const [showModal, setShowModal] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [userTemplates, setUserTemplates] = useState([]);
   function toggleModal() {
     setShowModal((prev) => !prev);
     localStorage.setItem("counter", "1");
   }
   useEffect(() => {
-    const counter = localStorage.getItem("counter");
+    const counter = localStorage.getItem("counter")?.trim();
     if (!counter) {
       setShowModal(true);
     }
   }, []);
+  async function fetchTemplates() {
+    setIsLoading(true);
+    try {
+      const { url, headers } = createUrlBackend();
+      const res = await axios.get(url, { headers });
+      setUserTemplates(res.data.data);
+      setIsLoading(false);
+    } catch (error) {
+      setIsLoading(false);
+      console.log("error", error.message);
+    }
+  }
+
+  useEffect(() => {
+    fetchTemplates();
+  }, []);
+
   return (
     <div className="w-full flex flex-col gap-6 mt-6">
       <div
@@ -89,21 +112,42 @@ const Home = () => {
           </div>
         </div>
       </div>
+      {isLoading && <Loader />}
       <div className="py-4 px-6 flex flex-col gap-4 bg-[#FAFAFA] rounded-[1rem] h-[23rem] w-full">
         <div className="w-full flex items-center justify-between">
           <p className="text-[#0D0D0D] text-[1.125rem] font-[600] leading-[1.75rem] tracking-[-0.01125rem] text-ellipsis overflow-hidden whitespace-nowrap">
             Recent files
           </p>
-          <AllSvgs type={"rightLightIcon"} />
+          <button onClick={() => navigate("/myFiles")}>
+            <AllSvgs type={"rightLightIcon"} />
+          </button>
         </div>
-        <NoDataYet onAction={() => navigate("/templates")} />
+        {!isLoading && userTemplates?.length === 0 && (
+          <NoDataYet onAction={() => navigate("/templates")} />
+        )}
+        <div className="w-full flex flex-wrap gap-4">
+          {userTemplates?.map((el) => {
+            const tempImage = el.elements?.find((ele) => ele.type === "image");
+            return (
+              <TemplateCard
+                imgFile={tempImage?.src}
+                title={el.title}
+                platform={el.platform}
+                idx={el.id}
+                key={el.id}
+              />
+            );
+          })}
+        </div>
       </div>
       <div className="py-4 px-6 flex flex-col gap-4 bg-[#FAFAFA] rounded-[1rem] h-[23rem] w-full">
         <div className="w-full flex items-center justify-between">
           <p className="text-[#0D0D0D] text-[1.125rem] font-[600] leading-[1.75rem] tracking-[-0.01125rem] text-ellipsis overflow-hidden whitespace-nowrap">
             Browse templates
           </p>
-          <AllSvgs type={"rightLightIcon"} />
+          <button onClick={() => navigate("/templates")}>
+            <AllSvgs type={"rightLightIcon"} />
+          </button>
         </div>
         <NoDataYet onAction={() => navigate("/templates")} />
         <LoginSuccessModal isOpen={showModal} onClick={toggleModal} />

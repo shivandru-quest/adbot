@@ -44,7 +44,7 @@ const SidePanel = ({
   };
   function handleAddElements() {
     setElements((els) => [...els, ...selectedImages]);
-    setHistory((history) => [...history, selectedImages]);
+    setHistory((history) => [...history, ...selectedImages]);
     setSelectedImages([]);
   }
   return (

@@ -2549,6 +2549,51 @@ const AllSvgs = ({
           </defs>
         </svg>
       );
+    case "cancelIcon":
+      return (
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          fill="none"
+        >
+          <path
+            d="M19 6.41L17.59 5L12 10.59L6.41 5L5 6.41L10.59 12L5 17.59L6.41 19L12 13.41L17.59 19L19 17.59L13.41 12L19 6.41Z"
+            fill="#181818"
+          />
+        </svg>
+      );
+    case "deleteIcon":
+      return (
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="16"
+          height="16"
+          viewBox="0 0 16 16"
+          fill="none"
+        >
+          <path
+            d="M10.6673 6V12.6667H5.33398V6H10.6673ZM9.66732 2H6.33398L5.66732 2.66667H3.33398V4H12.6673V2.66667H10.334L9.66732 2ZM12.0007 4.66667H4.00065V12.6667C4.00065 13.4 4.60065 14 5.33398 14H10.6673C11.4007 14 12.0007 13.4 12.0007 12.6667V4.66667Z"
+            fill="#A60724"
+          />
+        </svg>
+      );
+    case "downloadIcon":
+      return (
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="16"
+          height="16"
+          viewBox="0 0 16 16"
+          fill="none"
+        >
+          <path
+            d="M11.9993 9.99996V12H3.99935V9.99996H2.66602V12C2.66602 12.7333 3.26602 13.3333 3.99935 13.3333H11.9993C12.7327 13.3333 13.3327 12.7333 13.3327 12V9.99996H11.9993ZM11.3327 7.33329L10.3927 6.39329L8.66602 8.11329V2.66663H7.33268V8.11329L5.60602 6.39329L4.66602 7.33329L7.99935 10.6666L11.3327 7.33329Z"
+            fill="#181818"
+          />
+        </svg>
+      );
     default:
       return <>No Svg Found of type</>;
   }

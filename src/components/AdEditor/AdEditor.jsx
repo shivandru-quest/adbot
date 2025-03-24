@@ -27,7 +27,7 @@ const MAX_IMAGE_SIZE = 0.5 * 1024 * 1024;
 const AdEditor = () => {
   const location = useLocation();
   const { templateId } = useParams();
-  const { adData, formData } = location?.state || {};
+  const { formData } = location?.state || {};
   const [elements, setElements] = useState([]);
   const [selectedId, setSelectedId] = useState(null);
   const [history, setHistory] = useState([]);
@@ -36,25 +36,31 @@ const AdEditor = () => {
   const [toolbarSelectedElement, setToolbarSelectedElement] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const stageRef = useRef(null);
+  const [adData, setAdData] = useState({
+    title: "",
+    platform: "",
+    category: "",
+    images: [],
+  });
 
-  useEffect(() => {
-    if (adData?.images?.length > 0) {
-      setElements((prev) => {
-        const existingElements = new Set(prev.map((el) => el.elementId));
-        const uniqueElements = adData.images.filter(
-          (el) => !existingElements.has(el.elementId)
-        );
-        return [...prev, ...uniqueElements];
-      });
-      setHistory((prev) => {
-        const existingElements = new Set(prev.map((el) => el.elementId));
-        const uniqueElements = adData.images.filter(
-          (el) => !existingElements.has(el.elementId)
-        );
-        return [...prev, ...uniqueElements];
-      });
-    }
-  }, [adData]);
+  // useEffect(() => {
+  //   if (adData?.images?.length > 0) {
+  //     setElements((prev) => {
+  //       const existingElements = new Set(prev.map((el) => el.elementId));
+  //       const uniqueElements = adData.images.filter(
+  //         (el) => !existingElements.has(el.elementId)
+  //       );
+  //       return [...prev, ...uniqueElements];
+  //     });
+  //     setHistory((prev) => {
+  //       const existingElements = new Set(prev.map((el) => el.elementId));
+  //       const uniqueElements = adData.images.filter(
+  //         (el) => !existingElements.has(el.elementId)
+  //       );
+  //       return [...prev, ...uniqueElements];
+  //     });
+  //   }
+  // }, [adData]);
 
   const addImage = (url) => {
     const newElement = {
@@ -504,6 +510,8 @@ const AdEditor = () => {
           downloadCanvas={downloadCanvas}
           publishTemplate={publishTemplate}
           updateTemplate={updateTemplate}
+          setAdData={setAdData}
+          adData={adData}
         />
       </div>
       <div className="flex w-full p-4 justify-between gap-4">

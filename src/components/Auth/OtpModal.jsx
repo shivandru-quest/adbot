@@ -9,6 +9,7 @@ import Loader from "../../ui/Loader";
 import {
   createLoginFlowUrl,
   createUrl,
+  getToken,
   getUserId,
 } from "../../Config/generalFunctions";
 import { importConfig } from "../../Config/importConfig";
@@ -105,15 +106,44 @@ const OtpModal = () => {
     try {
       const { url, headers } = createUrl(`api/users/${getUserId()}`);
       const res = await axios.get(url, { headers });
-      cookies.set("avatar", res.data.data.imageUrl);
-      cookies.set("UserName", res.data.data.name);
-      dispatch({ type: "user/UserName", payload: res.data.data.name });
-      dispatch({ type: "user/avatar", payload: res.data.data.imageUrl });
+      cookies.set("avatar", res.data.data?.imageUrl);
+      cookies.set("UserName", res.data.data?.name);
+      dispatch({ type: "user/UserName", payload: res.data.data?.name });
+      dispatch({ type: "user/avatar", payload: res.data.data?.imageUrl });
     } catch (error) {
       console.log("error", error.message);
     }
   };
-
+  const createEntity = async (userId, token) => {
+    try {
+      const { url, headers } = createUrl(
+        `api/entities?userId=${userId}`
+      );
+      const response = await axios.post(
+        url,
+        {
+          name: "Nexa",
+          chainSource: "OFF_CHAIN",
+        },
+        {
+          headers: {
+            ...headers,
+            userId,
+            token,
+          },
+        }
+      );
+      let data = response.data;
+      console.log("data of onBoarding", data);
+      if (data.success) {
+        let communitySelect = data?.entityDoc;
+        return communitySelect;
+      }
+      return false;
+    } catch (error) {
+      return null;
+    }
+  };
   const getEntityApiKey = async (entityId, userId, token) => {
     const { url, headers } = createLoginFlowUrl(
       `api/admin/new-api-key?userId=${userId}`
@@ -140,8 +170,16 @@ const OtpModal = () => {
 
       if (data.success) {
         const selectEntity = data.data?.at(0);
+        let communitySelect;
+        if (!selectEntity) {
+          communitySelect = await createEntity(userId, token);
+        }
         if (!selectEntity?.apiKey) {
-          let apiKey = await getEntityApiKey(selectEntity?.id, userId, token);
+          let apiKey = await getEntityApiKey(
+            communitySelect?.id,
+            userId,
+            token
+          );
           selectEntity.apiKey = apiKey;
           cookies.set("entityDetails", selectEntity);
           return selectEntity;

@@ -13,17 +13,17 @@ export const ReferralLink = () => {
       <div className="px-5 py-7 w-full h-auto">
         <div className="flex gap-5 items-start w-full">
           <div className="flex flex-col flex-1 shrink justify-center w-full basis-0 min-w-60">
-            <h2 className="text-xl font-semibold tracking-tight text-ellipsis text-zinc-800">
+            <h2 className="text-xl font-semibold tracking-tight text-ellipsis text-[#2C2C2C]">
               Your referral link
             </h2>
-            <p className="mt-2 text-xs font-medium leading-4 text-neutral-400">
+            <p className="mt-2 text-xs font-medium leading-4 text-[#939393]">
               Copy and share your referral link with friends or on social media
               using the icons below.
             </p>
           </div>
         </div>
         <div className="mt-5 w-full">
-          <label className="text-xs font-medium leading-none text-neutral-600">
+          <label className="text-xs font-medium text-[#4C4C4C]">
             Invitation Link
           </label>
           <div className="flex gap-2 px-4 py-2.5 mt-1.5 w-full text-sm leading-none whitespace-nowrap rounded-xl border border-gray-200 border-solid text-neutral-400">

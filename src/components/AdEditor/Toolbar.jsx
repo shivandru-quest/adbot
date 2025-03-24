@@ -119,7 +119,7 @@ const Toolbar = ({
           Elements
         </span>
       </div>
-      <div
+      {/* <div
         className={`w-full flex flex-col items-center justify-center cursor-pointer py-2 ${
           toolbarSelectedElement === "theme" ? "rounded-md bg-[#E2E2E2]" : ""
         }`}
@@ -143,7 +143,9 @@ const Toolbar = ({
         >
           Theme
         </span>
-      </div>
+      </div> */}
+
+      
       {/* <motion.button
         whileHover={{ scale: 1.1 }}
         whileTap={{ scale: 0.95 }}

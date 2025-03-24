@@ -77,7 +77,8 @@ export const createUrlBackend = (apiString = "") => {
 export const createLoginFlowUrl = (apiString) => {
   const url = mainConfig.QUEST_PRODUCTION_URL + apiString;
   const headers = {
-    apiKey: mainConfig.QUEST_API_KEY,
+    "Content-Type": "application/json",
+    apikey: mainConfig.QUEST_API_KEY,
   };
   return {
     url,
@@ -132,8 +133,7 @@ export const uploadImageToBackend = async (file) => {
     }
   }
 
-  const { url, headers: baseHeaders } =
-  createUrl(`api/upload-img`);
+  const { url, headers: baseHeaders } = createUrl(`api/upload-img`);
   const headers = {
     ...baseHeaders,
     "Content-Type": "form-data",

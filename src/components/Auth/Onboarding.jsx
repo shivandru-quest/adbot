@@ -1,8 +1,12 @@
 import { useContext, useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
-import { motion } from "framer-motion";
 import { OnBoarding } from "@questlabs/react-sdk";
-import { createUrl, getToken, getUserId } from "../../Config/generalFunctions";
+import {
+  createUrl,
+  getToken,
+  getUserId,
+  createLoginFlowUrl,
+} from "../../Config/generalFunctions";
 import { mainConfig } from "../../Config/mainConfig";
 import axios from "axios";
 import { AppContext } from "../../context/AppContext";
@@ -10,7 +14,6 @@ import Loader from "../../ui/Loader";
 import Cookies from "universal-cookie";
 import AllSvgs from "../../assets/AllSvgs";
 import { importConfig } from "../../Config/importConfig";
-import LoginSuccessModal from "./LoginSuccessModal";
 
 const OnboardingPage = () => {
   const navigate = useNavigate();
