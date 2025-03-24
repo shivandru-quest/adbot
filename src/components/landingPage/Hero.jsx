@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { importConfig } from "../../Config/importConfig";
 import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
+import { FaPlay } from "react-icons/fa";
 const floatAnimation1 = {
   y: [0, -8, 0],
   x: [0, 4, -4, 0],
@@ -182,11 +183,19 @@ const Hero = () => {
         }}
       >
         <motion.div
-          className="w-3/4 m-auto min-h-[calc(100vh-20rem)] rounded-t-2xl shadow-lg border border-[#535353] flex flex-col items-center justify-center bg-[#040115B2]"
+          className="w-3/4 m-auto min-h-[calc(100vh-20rem)] rounded-t-[26px] shadow-lg border border-[#ffffff19] flex flex-col items-center justify-center bg-[#040115B2]"
           initial={{ y: 100, opacity: 0 }}
           animate={showSlideUp ? { y: 0, opacity: 1 } : {}}
           transition={{ duration: 0.6, ease: "easeOut" }}
-        ></motion.div>
+          style={{
+            backdropFilter: "blur(5.17px)",
+            boxShadow: "rgba(255, 255, 255, 0.03) 0px 0px 0px 7.757px inset",
+          }}
+        >
+          <button className="w-16 h-16 flex items-center justify-center rounded-full bg-gradient-to-b from-[#1a1a1a] to-[#000000] bg-opacity-50 shadow-lg backdrop-blur-md">
+            <FaPlay className="text-gray-300 text-md" />
+          </button>
+        </motion.div>
       </div>
     </motion.div>
   );
