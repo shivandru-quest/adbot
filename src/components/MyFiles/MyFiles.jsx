@@ -40,7 +40,7 @@ const dateOptions = [
   { value: "all", label: "All" },
 ];
 const MyFiles = () => {
-  const [selectedItem, setSelectedItem] = useState("all");
+  const [selectedItem, setSelectedItem] = useState("myTemplates");
   const [selectedCategory, setSelectedCategory] = useState(null);
   const [selectedDate, setSelectedDate] = useState(null);
   const navigate = useNavigate();

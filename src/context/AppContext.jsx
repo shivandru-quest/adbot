@@ -10,6 +10,10 @@ const initialState = {
     (localStorage.getItem("isAuthenticated") && token && userId) || false,
   UserName: cookies.get("UserName") || "",
   avatar: cookies.get("avatar") || "",
+  canvasSize: {
+    width: "1300",
+    height: "600",
+  },
 };
 function appReducer(state, { type, payload }) {
   switch (type) {
@@ -19,6 +23,8 @@ function appReducer(state, { type, payload }) {
       return { ...state, UserName: payload };
     case "user/avatar":
       return { ...state, avatar: payload };
+    case "user/canvasSize":
+      return { ...state, canvasSize: { ...state.canvasSize, ...payload } };
     default:
       throw new Error(`Unknown action type: ${type}`);
   }

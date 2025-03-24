@@ -35,12 +35,11 @@ const SettingsDashboard = () => {
             } text-base flex items-center justify-start gap-2`}
             onClick={() => setSearchParams({ tab: "account" })}
           >
-            <AllSvgs
-              type={"humanIcon"}
-              fillColor={
-                searchParams.get("tab") === "account" ? "#181818" : "#696969"
-              }
-            />
+            {searchParams.get("tab") === "account" ? (
+              <AllSvgs type={"humanIcon"} fillColor="#181818" />
+            ) : (
+              <AllSvgs type={"hollowHumanIcon"} />
+            )}
             Account
           </button>
           <button
@@ -51,12 +50,11 @@ const SettingsDashboard = () => {
             } text-base flex items-center justify-start gap-2`}
             onClick={() => setSearchParams({ tab: "pricing" })}
           >
-            <AllSvgs
-              type={"cartIcon"}
-              fillColor={
-                searchParams.get("tab") === "pricing" ? "#181818" : "#696969"
-              }
-            />
+            {searchParams.get("tab") === "pricing" ? (
+              <AllSvgs type={"filledCartIcon"} fillColor={"#181818"} />
+            ) : (
+              <AllSvgs type={"cartIcon"} fillColor="#535353" />
+            )}
             Pricing & Payment
           </button>
           <button
@@ -67,12 +65,11 @@ const SettingsDashboard = () => {
             } text-base flex items-center justify-start gap-2`}
             onClick={() => setSearchParams({ tab: "refer" })}
           >
-            <AllSvgs
-              type={"friendsIcon"}
-              fillColor={
-                searchParams.get("tab") === "refer" ? "#181818" : "#696969"
-              }
-            />
+            {searchParams.get("tab") === "refer" ? (
+              <AllSvgs type={"filledEmojiIcon"} fillColor={"#181818"} />
+            ) : (
+              <AllSvgs type={"friendsIcon"} fillColor={"#535353"} />
+            )}
             Refer Friends
           </button>
           <button
@@ -83,12 +80,11 @@ const SettingsDashboard = () => {
             } text-base flex items-center justify-start gap-2`}
             onClick={() => setSearchParams({ tab: "login" })}
           >
-            <AllSvgs
-              type={"securityIcon"}
-              fillColor={
-                searchParams.get("tab") === "login" ? "#181818" : "#696969"
-              }
-            />
+            {searchParams.get("tab") === "login" ? (
+              <AllSvgs type={"filledSecurityIcon"} fillColor={"#181818"} />
+            ) : (
+              <AllSvgs type={"securityIcon"} fillColor={"#535353"} />
+            )}
             Login & Security
           </button>
         </div>

@@ -95,6 +95,10 @@ const AdEditorTopBar = ({
           <AllSvgs type={"downLoadIcon"} />
           <span className="text-[#535353] text-xs font-[500]">Download</span>
         </button>
+        <button className="flex items-center gap-1 px-[0.625rem] py-[0.375rem] border border-[#E2E2E2] rounded-md">
+          <AllSvgs type={"saveIcon"} />
+          <span className="text-[#535353] text-xs font-[500]">Save</span>
+        </button>
         <button
           className="flex items-center h-[1.75rem] w-[4.25rem] border border-[#E2E2E2] rounded-md"
           onClick={toggleShareMenu}

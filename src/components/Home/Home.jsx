@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { importConfig } from "../../Config/importConfig";
 import AllSvgs from "../../assets/AllSvgs";
 import { useNavigate } from "react-router-dom";
@@ -8,6 +8,7 @@ import { createUrlBackend } from "../../Config/generalFunctions";
 import axios from "axios";
 import TemplateCard from "../../ui/TemplateCard";
 import Loader from "../../ui/Loader";
+import { AppContext } from "../../context/AppContext";
 export const templates = [
   {
     imgFile: importConfig.dummyTemplate1,
@@ -35,6 +36,9 @@ const Home = () => {
   const [showModal, setShowModal] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [userTemplates, setUserTemplates] = useState([]);
+  const { state, dispatch } = useContext(AppContext);
+  const { canvasSize } = state;
+  console.log("canvasSize", canvasSize);
   function toggleModal() {
     setShowModal((prev) => !prev);
     localStorage.setItem("counter", "1");
@@ -94,39 +98,93 @@ const Home = () => {
         <AllSvgs type={"rightLightIcon"} />
       </div>
       <div className="w-full flex items-center justify-between gap-4 h-[4.5rem]">
-        <div className="w-[12.5rem] h-full p-4 flex items-center justify-start gap-5 border border-[#E2E2E2] rounded-xl cursor-pointer">
+        <div
+          className="w-[12.5rem] h-full p-4 flex items-center justify-start gap-5 border border-[#E2E2E2] rounded-xl cursor-pointer"
+          onClick={() => {
+            dispatch({
+              type: "user/canvasSize",
+              payload: { width: "1300", height: "600" },
+            });
+            navigate("/editor/new");
+          }}
+        >
           <AllSvgs type={"customIcon"} />
           <p className="text-[#181818] text-base font-[600]">Custom</p>
         </div>
-        <div className="w-[12.5rem] h-full p-4 flex items-center justify-start gap-5 border border-[#E2E2E2] rounded-xl cursor-pointer">
+        <div
+          className="w-[12.5rem] h-full p-4 flex items-center justify-start gap-5 border border-[#E2E2E2] rounded-xl cursor-pointer"
+          onClick={() => {
+            dispatch({
+              type: "user/canvasSize",
+              payload: { width: "1080", height: "1080" },
+            });
+            navigate("/editor/new");
+          }}
+        >
           <AllSvgs type={"postIcon"} />
           <div>
             <p className="text-[#181818] text-base font-[600]">Post</p>
             <p className="text-[#535353] text-xs font-[400]">(1080x1080)</p>
           </div>
         </div>
-        <div className="w-[12.5rem] h-full p-4 flex items-center justify-start gap-5 border border-[#E2E2E2] rounded-xl cursor-pointer">
+        <div
+          className="w-[12.5rem] h-full p-4 flex items-center justify-start gap-5 border border-[#E2E2E2] rounded-xl cursor-pointer"
+          onClick={() => {
+            dispatch({
+              type: "user/canvasSize",
+              payload: { width: "1200", height: "628" },
+            });
+            navigate("/editor/new");
+          }}
+        >
           <AllSvgs type={"landscapeIcon"} />
           <div>
             <p className="text-[#181818] text-base font-[600]">Landscape</p>
             <p className="text-[#535353] text-xs font-[400]">(1200x628)</p>
           </div>
         </div>
-        <div className="w-[12.5rem] h-full p-4 flex items-center justify-start gap-5 border border-[#E2E2E2] rounded-xl cursor-pointer">
+        <div
+          className="w-[12.5rem] h-full p-4 flex items-center justify-start gap-5 border border-[#E2E2E2] rounded-xl cursor-pointer"
+          onClick={() => {
+            dispatch({
+              type: "user/canvasSize",
+              payload: { width: "1080", height: "1920" },
+            });
+            navigate("/editor/new");
+          }}
+        >
           <AllSvgs type={"storyIcon"} />
           <div>
             <p className="text-[#181818] text-base font-[600]">Story</p>
             <p className="text-[#535353] text-xs font-[400]">(1080x1920)</p>
           </div>
         </div>
-        <div className="w-[12.5rem] h-full p-4 flex items-center justify-start gap-5 border border-[#E2E2E2] rounded-xl cursor-pointer">
+        <div
+          className="w-[12.5rem] h-full p-4 flex items-center justify-start gap-5 border border-[#E2E2E2] rounded-xl cursor-pointer"
+          onClick={() => {
+            dispatch({
+              type: "user/canvasSize",
+              payload: { width: "1080", height: "1350" },
+            });
+            navigate("/editor/new");
+          }}
+        >
           <AllSvgs type={"verticalIcon"} />
           <div>
             <p className="text-[#181818] text-base font-[600]">Vertical</p>
             <p className="text-[#535353] text-xs font-[400]">(1080x1350)</p>
           </div>
         </div>
-        <div className="w-[12.5rem] h-full p-4 flex items-center justify-start gap-5 border border-[#E2E2E2] rounded-xl cursor-pointer">
+        <div
+          className="w-[12.5rem] h-full p-4 flex items-center justify-start gap-5 border border-[#E2E2E2] rounded-xl cursor-pointer"
+          onClick={() => {
+            dispatch({
+              type: "user/canvasSize",
+              payload: { width: "1000", height: "1500" },
+            });
+            navigate("/editor/new");
+          }}
+        >
           <AllSvgs type={"pinIcon"} />
           <div>
             <p className="text-[#181818] text-base font-[600]">Pin</p>

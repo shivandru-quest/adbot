@@ -22,11 +22,13 @@ import Loader from "../../ui/Loader";
 import AdEditorTopBar from "../../ui/AdEditorTopBar";
 import { motion } from "framer-motion";
 import SidePanel from "../../ui/SidePanel";
+import { AppContext } from "../../context/AppContext";
 const MAX_IMAGE_SIZE = 0.5 * 1024 * 1024;
 
 const AdEditor = () => {
   const location = useLocation();
   const navigate = useNavigate();
+  const { state } = useContext(AppContext);
   const { templateId } = useParams();
   const { formData } = location?.state || {};
   const [elements, setElements] = useState([]);
@@ -43,25 +45,7 @@ const AdEditor = () => {
     category: "",
     images: [],
   });
-
-  // useEffect(() => {
-  //   if (adData?.images?.length > 0) {
-  //     setElements((prev) => {
-  //       const existingElements = new Set(prev.map((el) => el.elementId));
-  //       const uniqueElements = adData.images.filter(
-  //         (el) => !existingElements.has(el.elementId)
-  //       );
-  //       return [...prev, ...uniqueElements];
-  //     });
-  //     setHistory((prev) => {
-  //       const existingElements = new Set(prev.map((el) => el.elementId));
-  //       const uniqueElements = adData.images.filter(
-  //         (el) => !existingElements.has(el.elementId)
-  //       );
-  //       return [...prev, ...uniqueElements];
-  //     });
-  //   }
-  // }, [adData]);
+  const { canvasSize } = state;
 
   const addImage = (url) => {
     const newElement = {
@@ -346,7 +330,7 @@ const AdEditor = () => {
   const selectedElement = elements?.find(
     (elem) => elem.elementId === selectedId
   );
-  
+
   //--------------------------api calls------------------------------------//
 
   const removeImgBackground = async () => {
@@ -562,8 +546,8 @@ const AdEditor = () => {
                 selectedElement ||
                 (toolbarSelectedElement !== "text" &&
                   toolbarSelectedElement !== null)
-                  ? 1050
-                  : 1300,
+                  ? Number(canvasSize?.width) - 250
+                  : canvasSize?.width,
             }}
             transition={{ duration: 0.3, ease: "easeInOut" }}
           >
@@ -572,10 +556,10 @@ const AdEditor = () => {
                 selectedElement ||
                 (toolbarSelectedElement !== "text" &&
                   toolbarSelectedElement !== null)
-                  ? 1050
-                  : 1300
+                  ? Number(canvasSize?.width) - 250
+                  : canvasSize?.width
               }
-              height={600}
+              height={canvasSize?.height}
               ref={stageRef}
               onClick={(e) => {
                 if (e.target === e.target.getStage()) {
