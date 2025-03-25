@@ -10,12 +10,12 @@ const UseCases = () => {
   const cardInView = useInView(cardRef, { triggerOnce: true, threshold: 0.2 });
   return (
     <motion.section
-      className="flex flex-col py-[5rem] px-[7.5rem] items-center justify-center gap-[40px]"
+      className="flex flex-col py-[5rem] lg:px-[7.5rem] sm:px-[4rem] md:px-[6rem] items-center justify-center gap-[40px] w-full"
       ref={ref}
       initial={{ opacity: 0, y: 50 }}
       animate={isInView ? { opacity: 1, y: 0 } : {}}
       transition={{ duration: 0.6, ease: "easeOut" }}
-      id="useCases"
+      id="usecases"
     >
       <div className="flex flex-col items-center w-full gap-4">
         <h2 className="text-5xl font-medium tracking-tighter leading-none text-neutral-900 max-md:max-w-full max-md:text-4xl">
@@ -25,9 +25,13 @@ const UseCases = () => {
           Where Nexa Makes the Biggest Impact
         </p>
       </div>
-      <div className="grid grid-cols-2 gap-y-6 gap-x-8 justify-center items-center w-full max-md:max-w-full">
+      <div
+        // className="grid grid-cols-1 sm:grid-cols-2 gap-y-6 gap-x-8 justify-center items-center w-full max-md:max-w-full"
+        className="grid grid-cols-1 lg:grid-cols-2 gap-y-6 gap-x-4 sm:gap-x-8 justify-center items-center w-full"
+      >
         <motion.article
-          className="flex items-center justify-start gap-8 p-8 rounded-3xl border border-[#E2E2E2]"
+          // className="flex items-center justify-start gap-8 p-8 rounded-3xl border border-[#E2E2E2]"
+          className="flex flex-col sm:flex-row items-center justify-start gap-6 sm:gap-8 p-6 sm:p-8 rounded-3xl border border-[#E2E2E2] w-full"
           ref={cardRef}
           initial={{ opacity: 0, x: -100 }}
           animate={cardInView ? { opacity: 1, x: 0 } : {}}
@@ -53,7 +57,8 @@ const UseCases = () => {
           </div>
         </motion.article>
         <motion.article
-          className="flex items-center justify-start gap-8 p-8 rounded-3xl border border-[#E2E2E2]"
+          // className="flex items-center justify-start gap-8 p-8 rounded-3xl border border-[#E2E2E2]"
+          className="flex flex-col sm:flex-row items-center justify-start gap-6 sm:gap-8 p-6 sm:p-8 rounded-3xl border border-[#E2E2E2] w-full"
           ref={cardRef}
           initial={{ opacity: 0, x: 100 }}
           animate={cardInView ? { opacity: 1, x: 0 } : {}}
@@ -79,7 +84,8 @@ const UseCases = () => {
           </div>
         </motion.article>
         <motion.article
-          className="flex items-center justify-start gap-8 p-8 rounded-3xl border border-[#E2E2E2]"
+          // className="flex items-center justify-start gap-8 p-8 rounded-3xl border border-[#E2E2E2]"
+          className="flex flex-col sm:flex-row items-center justify-start gap-6 sm:gap-8 p-6 sm:p-8 rounded-3xl border border-[#E2E2E2] w-full"
           ref={cardRef}
           initial={{ opacity: 0, x: -100 }}
           animate={cardInView ? { opacity: 1, x: 0 } : {}}
@@ -105,7 +111,8 @@ const UseCases = () => {
           </div>
         </motion.article>
         <motion.article
-          className="flex items-center justify-start gap-8 p-8 rounded-3xl border border-[#E2E2E2]"
+          // className="flex items-center justify-start gap-8 p-8 rounded-3xl border border-[#E2E2E2]"
+          className="flex flex-col sm:flex-row items-center justify-start gap-6 sm:gap-8 p-6 sm:p-8 rounded-3xl border border-[#E2E2E2] w-full"
           ref={cardRef}
           initial={{ opacity: 0, x: 100 }}
           animate={cardInView ? { opacity: 1, x: 0 } : {}}

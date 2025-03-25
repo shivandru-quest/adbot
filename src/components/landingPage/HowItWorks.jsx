@@ -28,12 +28,15 @@ const steps = [
 ];
 const HowItWorks = () => {
   return (
-    <section className="px-[7.5rem] py-[5rem]" id="howItWorks">
+    <section
+      className="px-6 md:px-12 lg:px-[7.5rem] py-12 sm:py-[4rem]"
+      id="howitworks"
+    >
       <SectionHeader
         title="How it works"
         subtitle="Simple steps to create stunning ad creatives"
       />
-      <div className="grid gap-x-8 gap-y-5 my-0 grid-cols-[repeat(2,1fr)] w-full max-md:grid-cols-[repeat(2,1fr)] max-sm:grid-cols-[1fr]">
+      <div className="grid gap-x-8 gap-y-5 sm:grid-cols-1 w-full lg:grid-cols-2 md:grid-cols-1">
         {steps.map((step, index) => (
           <motion.article
             key={index}

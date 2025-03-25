@@ -5,7 +5,7 @@ const WhyChooseUs = () => {
   const sectionRef = useRef(null);
   const isInView = useInView(sectionRef, { triggerOnce: true, threshold: 0.2 });
   return (
-    <section className="flex flex-col px-[7.5rem] py-[5rem] items-center">
+    <section className="flex flex-col px-6 md:px-12 lg:px-[7.5rem] py-12 sm:py-[4rem] items-center">
       <div className="flex flex-col gap-4 items-center max-w-full text-center">
         <h2 className="text-[#181818] text-[3rem] leading-[3.75rem] tracking-[-0.06rem] font-[500]">
           Why Choose Nexa
@@ -15,7 +15,7 @@ const WhyChooseUs = () => {
         </p>
       </div>
       <motion.div
-        className="flex flex-wrap gap-8 justify-center items-center w-full mt-[40px]"
+        className="flex flex-col lg:flex-row gap-8 justify-center items-center w-full mt-[40px]"
         ref={sectionRef}
         initial={{ opacity: 0, y: 30 }}
         animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}

@@ -39,14 +39,14 @@ const Hero = () => {
   const [showSlideUp, setShowSlideUp] = useState(false);
   return (
     <motion.div
-      className="w-full min-h-screen flex flex-col pt-4 px-8"
+      className="w-full lg:min-h-screen flex flex-col pt-4 px-4 sm:px-6 md:px-8 lg:px-12"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 1, ease: "easeOut" }}
       onAnimationComplete={() => setShowSlideUp(true)}
     >
       <div
-        className="relative w-full h-[27rem] flex flex-col items-center justify-center gap-6 rounded-t-lg"
+        className="relative w-full h-[27rem] flex flex-col items-center justify-center gap-6 rounded-xl lg:rounded-none lg:rounded-t-lg"
         style={{
           backgroundImage: `url('${importConfig.bannerBg}')`,
           backgroundSize: "cover",
@@ -54,22 +54,30 @@ const Hero = () => {
         }}
       >
         <div className="w-full flex flex-col items-center justify-center">
-          <p className="text-[3rem] font-[700] leading-[3.5rem] tracking-[-0.06rem] text-[#FAFAFA] font-figtree text-center">
+          <p
+            // className="text-[3rem] font-[700] leading-[3.5rem] tracking-[-0.06rem] text-[#FAFAFA] font-figtree text-center"
+            className="text-xl sm:text-2xl md:text-3xl lg:text-[3rem] font-bold leading-snug tracking-tight text-[#FAFAFA] font-figtree lg:mb-4"
+          >
             Create high-performing ads on
           </p>
-          <p className="text-[3rem] font-[700] leading-[3.5rem] tracking-[-0.06rem] text-[#FAFAFA] font-figtree text-center">
+          <p
+            // className="text-[3rem] font-[700] leading-[3.5rem] tracking-[-0.06rem] text-[#FAFAFA] font-figtree text-center"
+            className="text-xl sm:text-2xl md:text-3xl lg:text-[3rem] font-bold leading-snug tracking-[-0.06rem] text-[#FAFAFA] font-figtree"
+          >
             autopilot
           </p>
         </div>
         <div className="w-full flex flex-col items-center justify-center">
           <p
-            className="text-[#B0B0B0] text-2xl tracking-[-0.03rem] font-[400]"
+            // className="text-[#B0B0B0] text-2xl tracking-[-0.03rem] font-[400]"
+            className="text-sm sm:text-base md:text-xl text-[#B0B0B0] mt-2 px-4 sm:px-0"
             style={{ textShadow: "0px 4px 4px rgba(0, 0, 0, 0.25)" }}
           >
             Create 100+ ads in minutes with templates, and launch on multiple
           </p>
           <p
-            className="text-[#B0B0B0] text-2xl tracking-[-0.03rem] font-[400]"
+            // className="text-[#B0B0B0] text-2xl tracking-[-0.03rem] font-[400]"
+            className="text-sm sm:text-base md:text-xl text-[#B0B0B0] mt-2 px-4 sm:px-0"
             style={{ textShadow: "0px 4px 4px rgba(0, 0, 0, 0.25)" }}
           >
             platforms in minutes.
@@ -82,9 +90,8 @@ const Hero = () => {
             Get started today
           </button>
         </div>
-        <div className="w-full flex flex-col items-center justify-center gap-4"></div>
         <motion.div
-          className="absolute top-[7rem] left-[17rem] w-9 h-9"
+          className="absolute top-[7rem] left-[17rem] w-9 h-9 hidden lg:block"
           animate={floatAnimation1}
         >
           <img
@@ -93,7 +100,7 @@ const Hero = () => {
           />
         </motion.div>
         <motion.div
-          className="absolute top-[3rem] left-[11rem] w-9 h-9"
+          className="absolute top-[3rem] left-[11rem] w-9 h-9 hidden lg:block"
           animate={floatAnimation2}
         >
           <img
@@ -102,7 +109,7 @@ const Hero = () => {
           />
         </motion.div>
         <motion.div
-          className="absolute top-[8rem] left-[6rem] w-9 h-9"
+          className="absolute top-[8rem] left-[6rem] w-9 h-9 hidden lg:block"
           animate={floatAnimation1}
         >
           <img
@@ -111,7 +118,7 @@ const Hero = () => {
           />
         </motion.div>
         <motion.div
-          className="absolute top-[14rem] left-[15rem] w-9 h-9"
+          className="absolute top-[14rem] left-[15rem] w-9 h-9 hidden lg:block"
           animate={floatAnimation3}
         >
           <img
@@ -120,7 +127,7 @@ const Hero = () => {
           />
         </motion.div>
         <motion.div
-          className="absolute top-[23rem] right-[15rem] w-9 h-9"
+          className="absolute top-[23rem] right-[15rem] w-9 h-9 hidden lg:block"
           animate={floatAnimation2}
         >
           <img
@@ -129,7 +136,7 @@ const Hero = () => {
           />
         </motion.div>
         <motion.div
-          className="absolute top-[1.5rem] right-[14rem] w-9 h-9"
+          className="absolute top-[1.5rem] right-[14rem] w-9 h-9 hidden lg:block"
           animate={floatAnimation3}
         >
           <img
@@ -138,7 +145,7 @@ const Hero = () => {
           />
         </motion.div>
         <motion.div
-          className="absolute top-[2rem] right-[25rem] w-9 h-9"
+          className="absolute top-[2rem] right-[25rem] w-9 h-9 hidden lg:block"
           animate={floatAnimation2}
         >
           <img
@@ -147,7 +154,7 @@ const Hero = () => {
           />
         </motion.div>
         <motion.div
-          className="absolute top-[6rem] right-[19rem] w-9 h-9"
+          className="absolute top-[6rem] right-[19rem] w-9 h-9 hidden lg:block"
           animate={floatAnimation1}
         >
           <img
@@ -156,7 +163,7 @@ const Hero = () => {
           />
         </motion.div>
         <motion.div
-          className="absolute top-[14rem] right-[11rem] w-9 h-9"
+          className="absolute top-[14rem] right-[11rem] w-9 h-9 hidden lg:block"
           animate={floatAnimation2}
         >
           <img
@@ -165,7 +172,7 @@ const Hero = () => {
           />
         </motion.div>
         <motion.div
-          className="absolute top-[22rem] left-[10rem] w-9 h-9"
+          className="absolute top-[22rem] left-[10rem] w-9 h-9 hidden lg:block"
           animate={floatAnimation3}
         >
           <img
@@ -175,7 +182,7 @@ const Hero = () => {
         </motion.div>
       </div>
       <div
-        className="w-full min-h-[calc(100vh-27rem)] rounded-b-lg"
+        className="hidden lg:block w-full min-h-[calc(100vh-27rem)] rounded-b-lg"
         style={{
           backgroundImage: `url('${importConfig.footerBg}')`,
           backgroundSize: "cover",

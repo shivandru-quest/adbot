@@ -13,13 +13,17 @@ const problems = [
 ];
 const ProblemAndSolution = () => {
   return (
-    <section className="px-[7.5rem] py-[5rem]" id="solutions">
+    <section
+      // className="px-[7.5rem] py-[5rem]" id="solutions"
+      className="px-4 sm:px-6 md:px-[7.5rem] py-[5rem]"
+      id="solutions"
+    >
       <SectionHeader
         title="Problem and Solution"
         subtitle="Maximize Engagement, Minimize Effort with Nexa"
       />
-      <div className="flex gap-6 items-center justify-center">
-        <div className="w-1/2 flex flex-col gap-6">
+      <div className="flex flex-col lg:flex-row gap-6 items-center justify-center">
+        <div className="w-full lg:w-1/2 flex flex-col gap-6">
           {problems?.map((problem, index) => (
             <motion.article
               key={index}
@@ -51,7 +55,7 @@ const ProblemAndSolution = () => {
           ))}
         </div>
         <motion.div
-          className="w-1/2 flex flex-col bg-[#FAFAFA] rounded-2xl"
+          className="w-full sm:w-1/2 flex flex-col bg-[#FAFAFA] rounded-2xl"
           initial={{ x: 100, opacity: 0 }}
           whileInView={{ x: 0, opacity: 1 }}
           transition={{ duration: 0.8, ease: "easeInOut" }}

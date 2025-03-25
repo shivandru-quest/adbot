@@ -40,15 +40,16 @@ const Pricing = () => {
   const isInView = useInView(ref, { once: true });
   const liView = useInView(liRef, { once: true });
   return (
-    <div ref={ref} className="relative">
+    <div ref={ref} className="relative h-auto w-full">
       <section
         id="pricing"
-        className="w-full min-h-[130vh] inset-0 flex flex-col items-center justify-center"
+        className="w-full min-h-screen sm:min-h-[200vh] md:min-h-[180vh] lg:min-h-[130vh] flex flex-col items-center justify-center relative"
         style={{
           backgroundImage: `url('${importConfig.footerBg}')`,
           backgroundSize: "cover",
           backgroundPosition: "center",
           transform: "scaleY(-1)",
+          backgroundRepeat: "no-repeat",
         }}
       ></section>
       <motion.div
@@ -134,7 +135,7 @@ const Pricing = () => {
             >
               What’s included
             </p>
-            <ul className="flex flex-col gap-3.5 mb-6">
+            <ul className="flex flex-col gap-3.5 mb-6 h-auto">
               {plan.features.map((feature, idx) => (
                 <motion.li
                   key={idx}
@@ -171,7 +172,7 @@ const Pricing = () => {
                 {plan.buttonText}
               </button>
             ) : (
-              <button className="absolute bottom-8 right-8 left-8">
+              <button className="absolute bottom-8 right-8 left-8 border-none">
                 <img
                   src={importConfig.getStartedPriceButton}
                   alt="getStartedPriceButton"

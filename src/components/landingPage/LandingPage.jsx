@@ -13,7 +13,7 @@ import Footer from "./Footer";
 
 const LandingPage = () => {
   return (
-    <div className="min-h-screen w-full flex flex-col">
+    <div className="min-h-screen w-full flex flex-col overflow-x-hidden">
       <Navbar />
       <Hero />
       <ProblemAndSolution />

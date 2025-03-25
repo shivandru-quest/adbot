@@ -24,7 +24,10 @@ const features = [
 ];
 const Features = () => {
   return (
-    <div className="px-[7.5rem] py-[4rem]" id="features">
+    <div
+      className="px-6 md:px-12 lg:px-[7.5rem] py-12 sm:py-[4rem]"
+      id="features"
+    >
       <section>
         <SectionHeader
           title="Features"
@@ -34,8 +37,8 @@ const Features = () => {
           {features?.map((feature, index) => (
             <motion.article
               key={index}
-              className={`flex items-center justify-start gap-6 ${
-                index % 2 === 0 ? "flex-row" : "flex-row-reverse"
+              className={`flex flex-col lg:flex-row items-center justify-start gap-6 ${
+                index % 2 === 0 ? "lg:flex-row" : "lg:flex-row-reverse"
               }`}
               initial={{ x: index % 2 === 0 ? -100 : 100, opacity: 0 }}
               whileInView={{ x: 0, opacity: 1 }}
@@ -51,7 +54,7 @@ const Features = () => {
                 alt={feature.title}
                 className="w-[36rem] h-auto"
               />
-              <div className="px-[4rem] py-[2.5rem] w-1/2 flex flex-col gap-4">
+              <div className="px-[4rem] py-[2.5rem] w-full lg:w-1/2 flex flex-col gap-4">
                 <h3 className="text-[#181818] text-[1.875rem] font-[500] leading-[2.5rem] tracking-[-0.01875rem]">
                   {feature.title}
                 </h3>
