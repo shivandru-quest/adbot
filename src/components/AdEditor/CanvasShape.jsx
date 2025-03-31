@@ -6,6 +6,8 @@ import {
   Transformer,
   Line,
   Circle as Point,
+  Star,
+  Ring,
 } from "react-konva";
 
 const CanvasShape = ({ shapeProps, isSelected, onSelect, onChange }) => {
@@ -19,22 +21,6 @@ const CanvasShape = ({ shapeProps, isSelected, onSelect, onChange }) => {
     }
   }, [isSelected]);
 
-  // const handlePointDrag = (index, e) => {
-  //   const newPoints = [...shapeProps.points];
-  //   newPoints[index * 2] = e.target.x();
-  //   newPoints[index * 2 + 1] = e.target.y();
-  //   onChange({ ...shapeProps, points: newPoints });
-  // };
-  const handlePointDrag = (index, e) => {
-    const newPoints = [...shapeProps.points];
-    const shapeX = shapeProps.x;
-    const shapeY = shapeProps.y;
-
-    newPoints[index * 2] = e.target.x() - shapeX; // Keep point relative to shape
-    newPoints[index * 2 + 1] = e.target.y() - shapeY;
-
-    onChange({ ...shapeProps, points: newPoints });
-  };
   const renderShape = () => {
     const commonProps = {
       ref: shapeRef,
@@ -42,21 +28,21 @@ const CanvasShape = ({ shapeProps, isSelected, onSelect, onChange }) => {
       onClick: onSelect,
       onTap: onSelect,
       draggable: true,
-      onDragMove: (e) => {
-        const dx = e.target.x() - shapeProps.x;
-        const dy = e.target.y() - shapeProps.y;
+      // onDragMove: (e) => {
+      //   const dx = e.target.x() - shapeProps.x;
+      //   const dy = e.target.y() - shapeProps.y;
 
-        const newPoints = shapeProps.points.map((p, i) =>
-          i % 2 === 0 ? p + dx : p + dy
-        );
+      //   const newPoints = shapeProps.points.map((p, i) =>
+      //     i % 2 === 0 ? p + dx : p + dy
+      //   );
 
-        onChange({
-          ...shapeProps,
-          x: e.target.x(),
-          y: e.target.y(),
-          points: newPoints,
-        });
-      },
+      //   onChange({
+      //     ...shapeProps,
+      //     x: e.target.x(),
+      //     y: e.target.y(),
+      //     points: newPoints,
+      //   });
+      // },
       onDragEnd: (e) => {
         onChange({
           x: e.target.x(),
@@ -88,7 +74,7 @@ const CanvasShape = ({ shapeProps, isSelected, onSelect, onChange }) => {
         return <Rect {...commonProps} />;
       case "circle":
         return <Circle {...commonProps} radius={shapeProps.width / 2} />;
-      case "hexagon":
+      case "pentagon":
         return (
           <RegularPolygon
             {...commonProps}
@@ -96,27 +82,28 @@ const CanvasShape = ({ shapeProps, isSelected, onSelect, onChange }) => {
             radius={shapeProps.width / 2}
           />
         );
-      case "line":
+      case "hexagon":
         return (
-          <>
-            <Line {...commonProps} tension={0.3} />
-            {shapeProps.points?.map((_, i) =>
-              i % 2 === 0 ? (
-                <Point
-                  key={i}
-                  x={shapeProps.x + shapeProps.points[i]}
-                  y={shapeProps.y + shapeProps.points[i + 1]}
-                  radius={5}
-                  fill="transparent"
-                  opacity={1}
-                  hitStrokeWidth={10}
-                  draggable
-                  onDragMove={(e) => handlePointDrag(i / 2, e)}
-                />
-              ) : null
-            )}
-          </>
+          <RegularPolygon
+            {...commonProps}
+            sides={6}
+            radius={shapeProps.width / 2}
+          />
         );
+      case "star":
+        return <Star {...commonProps} innerRadius={30} outerRadius={70} />;
+      case "ring":
+        return <Ring {...commonProps} innerRadius={50} outerRadius={100} />;
+      case "octagon":
+        return (
+          <RegularPolygon
+            {...commonProps}
+            sides={8}
+            radius={shapeProps.width / 2}
+          />
+        );
+      case "line":
+        return <Line {...commonProps} tension={0.5} closed strokeWidth={4} />;
       default:
         return <Rect {...commonProps} />;
     }

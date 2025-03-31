@@ -1,6 +1,28 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
+import { mainConfig } from "../../Config/mainConfig";
+import { getUserId, createUrl } from "../../Config/generalFunctions";
+import axios from "axios";
+import dayjs from "dayjs";
 
 export const InvitedFriendsTable = () => {
+  const [adminData, setAdminData] = useState([]);
+  async function fetchAdmins() {
+    try {
+      const { url, headers } = createUrl(
+        `api/entities/${
+          mainConfig.QUEST_ADDBOT_ENTITY_ID
+        }/admins?userId=${getUserId()}`
+      );
+      const res = await axios.get(url, { headers });
+      setAdminData(res.data.data);
+    } catch (error) {
+      console.log("error", error);
+    }
+  }
+  useEffect(() => {
+    fetchAdmins();
+  }, []);
+  console.log("adminData", adminData);
   return (
     <section className="mt-7 w-full max-md:max-w-full">
       <h2 className="text-[#2C2C2C] text-[1.125rem] leading-[1.75rem] tracking-[-0.01125rem] font-[600]">
@@ -10,68 +32,43 @@ export const InvitedFriendsTable = () => {
         <table className="w-full">
           <thead>
             <tr className="bg-[#FCFCFD] border-b border-[#EAECF0]">
-              <th className="px-6 py-[1.12rem] text-[#2C2C2C] text-base font-[500]">
+              <th className="px-6 py-[1.12rem] text-[#2C2C2C] text-base font-[500] text-left">
                 Sr
               </th>
-              <th className="px-6 py-[1.12rem] text-[#2C2C2C] text-base font-[500]">
+              <th className="px-6 py-[1.12rem] text-[#2C2C2C] text-base font-[500] text-left">
                 Name
               </th>
-              <th className="px-6 py-[1.12rem] text-[#2C2C2C] text-base font-[500]">
+              <th className="px-6 py-[1.12rem] text-[#2C2C2C] text-base font-[500] text-left">
                 Contact
               </th>
-              <th className="px-6 py-[1.12rem] text-[#2C2C2C] text-base font-[500]">
+              <th className="px-6 py-[1.12rem] text-[#2C2C2C] text-base font-[500] text-left">
                 Created at
               </th>
-              <th className="px-6 py-[1.12rem] text-[#2C2C2C] text-base font-[500]">
+              <th className="px-6 py-[1.12rem] text-[#2C2C2C] text-base font-[500] text-left">
                 Credits
               </th>
             </tr>
           </thead>
           <tbody>
-            <tr className="border-b border-[#F0F0F0]">
-              <td className="px-6 py-4 text-[#4C4C4C] text-base font-[400]">
-                1
-              </td>
-              <td className="px-6 py-4 text-[#2C2C2C] text-base font-[500]">
-                Rich Explorer
-              </td>
-              <td className="px-6 py-4 text-[#4C4C4C] text-base font-[400]">
-                captaintrunk@tartanhq.com
-              </td>
-              <td className="px-6 py-4 text-[#6E6E6E] text-base font-[400]">
-                15 March 2024
-              </td>
-              <td className="px-6 py-4 text-[#4C4C4C] text-base font-[400]">
-                --
-              </td>
-            </tr>
-            {/* <tr className="border-b border-[#F0F0F0]">
-              <td className="px-6 py-4">2</td>
-              <td className="px-6 py-4 font-medium text-zinc-800">
-                Black Marvin
-              </td>
-              <td className="px-6 py-4">blackmarvin@marvin.com</td>
-              <td className="px-6 py-4 text-neutral-500">10 March 2024</td>
-              <td className="px-6 py-4">100</td>
-            </tr>
-            <tr className="border-b border-[#F0F0F0]">
-              <td className="px-6 py-4">3</td>
-              <td className="px-6 py-4 font-medium text-zinc-800">
-                Mile Esther
-              </td>
-              <td className="px-6 py-4">mileesther26@gmail.com</td>
-              <td className="px-6 py-4 text-neutral-500">08 March 2024</td>
-              <td className="px-6 py-4">100</td>
-            </tr>
-            <tr className="border-b border-[#F0F0F0]">
-              <td className="px-6 py-4">4</td>
-              <td className="px-6 py-4 font-medium text-zinc-800">
-                Henry Arthur
-              </td>
-              <td className="px-6 py-4">henryauthur@gmail.com</td>
-              <td className="px-6 py-4 text-neutral-500">08 March 2024</td>
-              <td className="px-6 py-4">100</td>
-            </tr> */}
+            {adminData.map((item, index) => (
+              <tr className="border-b border-[#F0F0F0]" key={index}>
+                <td className="px-6 py-4 text-[#4C4C4C] text-base font-[400]">
+                  {index + 1}.
+                </td>
+                <td className="px-6 py-4 text-[#2C2C2C] text-base font-[500]">
+                  {item.name}
+                </td>
+                <td className="px-6 py-4 text-[#4C4C4C] text-base font-[400]">
+                  {item.emails?.at(-1)}
+                </td>
+                <td className="px-6 py-4 text-[#6E6E6E] text-base font-[400]">
+                  {dayjs(item.createdAt).format("DD MMMM YYYY")}
+                </td>
+                <td className="px-6 py-4 text-[#4C4C4C] text-base font-[400]">
+                  --
+                </td>
+              </tr>
+            ))}
           </tbody>
         </table>
       </div>

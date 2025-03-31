@@ -11,8 +11,13 @@ const initialState = {
   UserName: cookies.get("UserName") || "",
   avatar: cookies.get("avatar") || "",
   canvasSize: {
-    width: "1300",
-    height: "600",
+    width: "650",
+    height: "300",
+    name: "custom",
+  },
+  adData: {
+    title: "",
+    category: "",
   },
 };
 function appReducer(state, { type, payload }) {
@@ -25,6 +30,15 @@ function appReducer(state, { type, payload }) {
       return { ...state, avatar: payload };
     case "user/canvasSize":
       return { ...state, canvasSize: { ...state.canvasSize, ...payload } };
+    case "user/adData":
+      return {
+        ...state,
+        adData: {
+          ...state.adData,
+          ...payload,
+          category: payload.category ?? state.adData.category,
+        },
+      };
     default:
       throw new Error(`Unknown action type: ${type}`);
   }

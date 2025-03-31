@@ -37,7 +37,9 @@ const PropertyPanel = ({
   selectedId,
 }) => {
   const [showColorPicker, setShowColorPicker] = useState(false);
-  const [customColor, setCustomColor] = useState(selectedElement?.fill || "");
+  const [customColor, setCustomColor] = useState(
+    selectedElement?.fill || "#000"
+  );
   const [customOpacity, setCustomOpacity] = useState("1");
 
   useEffect(() => {
@@ -66,7 +68,7 @@ const PropertyPanel = ({
         );
       }
     }
-  }, [customColor, selectedElement]);
+  }, [customColor]);
 
   useEffect(() => {
     if (selectedElement && customOpacity) {
@@ -102,7 +104,7 @@ const PropertyPanel = ({
         );
       }
     }
-  }, [selectedElement, customOpacity]);
+  }, [customOpacity]);
 
   function handleColorPicker() {
     setShowColorPicker(!showColorPicker);
@@ -114,14 +116,14 @@ const PropertyPanel = ({
         <div className="flex justify-between items-center py-[1.125rem] px-[1rem] border-b border-[#E2E2E2]">
           <h3 className="font-semibold text-[#181818] text-base">Properties</h3>
           <div className="flex space-x-3 items-center">
-            <motion.button
+            {/* <motion.button
               whileHover={{ scale: 1.1 }}
               whileTap={{ scale: 0.95 }}
               onClick={onDuplicate}
               className=" w-3 h-3"
             >
               <AllSvgs type={"copyIcon"} />
-            </motion.button>
+            </motion.button> */}
             <motion.button
               whileHover={{ scale: 1.1 }}
               whileTap={{ scale: 0.95 }}
@@ -346,8 +348,7 @@ const PropertyPanel = ({
             <div
               className="w-full h-10 rounded cursor-pointer"
               style={{
-                backgroundColor:
-                  customColor || selectedElement?.fill || "#E2E2E2",
+                backgroundColor: customColor || selectedElement?.fill || "#000",
               }}
               onClick={handleColorPicker}
             />

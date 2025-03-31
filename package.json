@@ -12,6 +12,7 @@
   "dependencies": {
     "@questlabs/react-sdk": "^2.0.9",
     "axios": "^1.8.1",
+    "dayjs": "^1.11.13",
     "framer-motion": "^11.0.8",
     "konva": "^9.3.3",
     "react": "^18.2.0",

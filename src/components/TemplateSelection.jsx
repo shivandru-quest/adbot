@@ -1,7 +1,5 @@
 import { useState, useEffect } from "react";
-import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
-import { FaFacebook, FaInstagram, FaReddit } from "react-icons/fa";
 import SelectionModal from "../ui/SelectionModal";
 import axios from "axios";
 import { createUrlBackend } from "../Config/generalFunctions";
@@ -10,6 +8,7 @@ import NoDataYet from "../ui/NoDataYet";
 import TemplateBanner from "../ui/TemplateBanner";
 import TemplateCard from "../ui/TemplateCard";
 import { templates } from "./Home/Home";
+import AllSvgs from "../assets/AllSvgs";
 
 const TemplateSelection = () => {
   const navigate = useNavigate();
@@ -59,12 +58,103 @@ const TemplateSelection = () => {
         />
       </div>
       <div>
-        {!isLoading && userTemplates.length === 0 && (
-          <div className="w-full flex items-center justify-center">
-            <NoDataYet onAction={() => navigate("/templates")} />
+        
+        <div className="w-full flex items-center justify-between gap-4 h-[4.5rem]">
+          <div
+            className="w-[15rem] h-full p-4 flex items-center justify-start gap-5 border border-[#E2E2E2] rounded-xl cursor-pointer"
+            // onClick={() => {
+            //   dispatch({
+            //     type: "user/canvasSize",
+            //     payload: { width: "1300", height: "600" },
+            //   });
+            //   navigate("/editor/new");
+            // }}
+          >
+            <AllSvgs type={"customIcon"} />
+            <p className="text-[#181818] text-base font-[600]">Custom</p>
           </div>
-        )}
-        <div className="flex flex-wrap gap-6 mt-6">
+          <div
+            className="w-[15rem] h-full p-4 flex items-center justify-start gap-5 border border-[#E2E2E2] rounded-xl cursor-pointer"
+            // onClick={() => {
+            //   dispatch({
+            //     type: "user/canvasSize",
+            //     payload: { width: "1080", height: "1080" },
+            //   });
+            //   navigate("/editor/new");
+            // }}
+          >
+            <AllSvgs type={"postIcon"} />
+            <div>
+              <p className="text-[#181818] text-base font-[600]">Post</p>
+              <p className="text-[#535353] text-xs font-[400]">(1080x1080)</p>
+            </div>
+          </div>
+          <div
+            className="w-[15rem] h-full p-4 flex items-center justify-start gap-5 border border-[#E2E2E2] rounded-xl cursor-pointer"
+            // onClick={() => {
+            //   dispatch({
+            //     type: "user/canvasSize",
+            //     payload: { width: "1200", height: "628" },
+            //   });
+            //   navigate("/editor/new");
+            // }}
+          >
+            <AllSvgs type={"landscapeIcon"} />
+            <div>
+              <p className="text-[#181818] text-base font-[600]">Landscape</p>
+              <p className="text-[#535353] text-xs font-[400]">(1200x628)</p>
+            </div>
+          </div>
+          <div
+            className="w-[15rem] h-full p-4 flex items-center justify-start gap-5 border border-[#E2E2E2] rounded-xl cursor-pointer"
+            // onClick={() => {
+            //   dispatch({
+            //     type: "user/canvasSize",
+            //     payload: { width: "1080", height: "1920" },
+            //   });
+            //   navigate("/editor/new");
+            // }}
+          >
+            <AllSvgs type={"storyIcon"} />
+            <div>
+              <p className="text-[#181818] text-base font-[600]">Story</p>
+              <p className="text-[#535353] text-xs font-[400]">(1080x1920)</p>
+            </div>
+          </div>
+          <div
+            className="w-[15rem] h-full p-4 flex items-center justify-start gap-5 border border-[#E2E2E2] rounded-xl cursor-pointer"
+            // onClick={() => {
+            //   dispatch({
+            //     type: "user/canvasSize",
+            //     payload: { width: "1080", height: "1350" },
+            //   });
+            //   navigate("/editor/new");
+            // }}
+          >
+            <AllSvgs type={"verticalIcon"} />
+            <div>
+              <p className="text-[#181818] text-base font-[600]">Vertical</p>
+              <p className="text-[#535353] text-xs font-[400]">(1080x1350)</p>
+            </div>
+          </div>
+          <div
+            className="w-[15rem] h-full p-4 flex items-center justify-start gap-5 border border-[#E2E2E2] rounded-xl cursor-pointer"
+            // onClick={() => {
+            //   dispatch({
+            //     type: "user/canvasSize",
+            //     payload: { width: "1000", height: "1500" },
+            //   });
+            //   navigate("/editor/new");
+            // }}
+          >
+            <AllSvgs type={"pinIcon"} />
+            <div>
+              <p className="text-[#181818] text-base font-[600]">Pin</p>
+              <p className="text-[#535353] text-xs font-[400]">(1000x1500)</p>
+            </div>
+          </div>
+        </div>
+        {/* <div className="flex flex-wrap gap-6 mt-6">
           {isLoading && <Loader />}
           {!isLoading &&
             userTemplates?.length > 0 &&
@@ -85,11 +175,18 @@ const TemplateSelection = () => {
                 )
               );
             })}
-        </div>
+        </div> */}
+
+        
+        {/* {!isLoading && userTemplates.length === 0 && (
+          <div className="w-full flex items-center justify-center mt-6">
+            <NoDataYet onAction={() => navigate("/templates")} />
+          </div>
+        )} */}
         <div className="flex flex-wrap gap-6 mt-6">
           {isLoading && <Loader />}
           {!isLoading &&
-            userTemplates?.length > 0 &&
+            // userTemplates?.length > 0 &&
             templates?.map((el, i) => {
               return (
                 !el?.isDeleted && (

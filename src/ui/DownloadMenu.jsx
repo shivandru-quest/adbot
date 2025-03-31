@@ -25,14 +25,18 @@ const DownloadMenu = ({
   showDownLoadMenu,
   toggleDownloadMenu,
   downloadCanvas,
+  setDownLoadFormat,
+  downloadFormat,
 }) => {
   const [selectedSize, setSelectedSize] = useState(null);
   const [selecctedImgType, setSelectedImgType] = useState(null);
   function handleSizeChange(size) {
     setSelectedSize(size);
+    setDownLoadFormat((prev) => ({ ...prev, fileSize: size.value }));
   }
   function handleImgTypeChange(type) {
     setSelectedImgType(type);
+    setDownLoadFormat((prev) => ({ ...prev, fileType: type.value }));
   }
   return (
     showDownLoadMenu && (
@@ -56,7 +60,15 @@ const DownloadMenu = ({
                 el.icon && (
                   <button
                     key={i}
-                    className="flex items-center justify-center gap-2 py-2 px-3 text-xs font-[500] text-[#181818] border w-fit rounded-md border-[#B0B0B0]"
+                    className={`flex items-center justify-center gap-2 py-2 px-3 text-xs font-[500] text-[#181818] border w-fit rounded-md border-[#B0B0B0] ${
+                      downloadFormat.platform === el.id ? "bg-[#E2E2E2]" : ""
+                    }`}
+                    onClick={() =>
+                      setDownLoadFormat((prev) => ({
+                        ...prev,
+                        platform: el.id,
+                      }))
+                    }
                   >
                     {el.icon && (
                       <AllSvgs
@@ -71,7 +83,14 @@ const DownloadMenu = ({
         </div>
         <div className="flex flex-col gap-1">
           <p className="text-[#696969] text-xs font-[500]">Select size</p>
-          <div className="flex items-center gap-1 px-3 py-2 border border-[#B0B0B0] rounded-md">
+          <div
+            className={`flex items-center gap-1 px-3 py-2 border border-[#B0B0B0] rounded-md cursor-pointer ${
+              downloadFormat.fileLayout === "1080x1080" ? "bg-[#E2E2E2]" : ""
+            }`}
+            onClick={() =>
+              setDownLoadFormat((prev) => ({ ...prev, fileLayout: "1080x1080" }))
+            }
+          >
             <div className="w-4 h-4">
               <AllSvgs
                 type={"postIcon"}
@@ -84,7 +103,14 @@ const DownloadMenu = ({
               Post size(1080x1080)
             </span>
           </div>
-          <div className="flex items-center gap-1 px-3 py-2 border border-[#B0B0B0] rounded-md">
+          <div
+            className={`flex items-center gap-1 px-3 py-2 border border-[#B0B0B0] rounded-md cursor-pointer ${
+              downloadFormat.fileLayout === "1200x628" ? "bg-[#E2E2E2]" : ""
+            }`}
+            onClick={() =>
+              setDownLoadFormat((prev) => ({ ...prev, fileLayout: "1200x628" }))
+            }
+          >
             <div className="w-4 h-4">
               <AllSvgs
                 type={"landscapeIcon"}
@@ -97,7 +123,14 @@ const DownloadMenu = ({
               Landscape size(1200x628)
             </span>
           </div>
-          <div className="flex items-center gap-1 px-3 py-2 border border-[#B0B0B0] rounded-md">
+          <div
+            className={`flex items-center gap-1 px-3 py-2 border border-[#B0B0B0] rounded-md cursor-pointer ${
+              downloadFormat.fileLayout === "1080x1920" ? "bg-[#E2E2E2]" : ""
+            }`}
+            onClick={() =>
+              setDownLoadFormat((prev) => ({ ...prev, fileLayout: "1080x1920" }))
+            }
+          >
             <div className="w-4 h-4">
               <AllSvgs
                 type={"storyIcon"}
@@ -110,7 +143,14 @@ const DownloadMenu = ({
               Story size(1080x1920)
             </span>
           </div>
-          <div className="flex items-center gap-1 px-3 py-2 border border-[#B0B0B0] rounded-md">
+          <div
+            className={`flex items-center gap-1 px-3 py-2 border border-[#B0B0B0] rounded-md cursor-pointer ${
+              downloadFormat.fileLayout === "1080x1350" ? "bg-[#E2E2E2]" : ""
+            }`}
+            onClick={() =>
+              setDownLoadFormat((prev) => ({ ...prev, fileLayout: "1080x1350" }))
+            }
+          >
             <div className="w-4 h-4">
               <AllSvgs
                 type={"verticalIcon"}

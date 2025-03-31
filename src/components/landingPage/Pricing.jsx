@@ -40,20 +40,20 @@ const Pricing = () => {
   const isInView = useInView(ref, { once: true });
   const liView = useInView(liRef, { once: true });
   return (
-    <div ref={ref} className="relative h-auto w-full">
-      <section
-        id="pricing"
-        className="w-full min-h-screen sm:min-h-[200vh] md:min-h-[180vh] lg:min-h-[130vh] flex flex-col items-center justify-center relative"
-        style={{
-          backgroundImage: `url('${importConfig.footerBg}')`,
-          backgroundSize: "cover",
-          backgroundPosition: "center",
-          transform: "scaleY(-1)",
-          backgroundRepeat: "no-repeat",
-        }}
-      ></section>
+    <div
+      ref={ref}
+      className="w-full min-h-auto flex flex-col items-center justify-center py-[6.25rem]"
+      style={{
+        backgroundImage: `url('${importConfig.footerBg}')`,
+        backgroundSize: "cover",
+        backgroundPosition: "center",
+        backgroundRepeat: "no-repeat",
+        height: "auto",
+      }}
+      id="pricing"
+    >
       <motion.div
-        className="w-full absolute top-[6.25rem] flex flex-col items-center justify-center gap-4"
+        className="w-full flex flex-col items-center justify-center gap-4 mb-[40px]"
         initial={{ opacity: 0, y: 50 }}
         animate={isInView ? { opacity: 1, y: 0 } : {}}
         transition={{ duration: 0.8 }}
@@ -65,11 +65,11 @@ const Pricing = () => {
           Affordable Plans That Grow With You
         </p>
       </motion.div>
-      <div className="flex gap-10 justify-center w-full max-md:flex-col absolute top-[15rem] px-[5rem]">
+      <div className="flex gap-10 justify-center w-full max-md:flex-col px-[5rem]">
         {plans.map((plan, index) => (
           <motion.article
             key={index}
-            className={`relative flex-1 p-8 rounded-xl max-w-[32rem] h-auto ${
+            className={`relative flex-1 p-8 rounded-xl max-w-[32rem]  ${
               plan.name === "Pro"
                 ? "bg-white/10 border border-[#696969]"
                 : "bg-[#fff]"

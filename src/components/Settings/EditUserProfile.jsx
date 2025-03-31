@@ -1,20 +1,30 @@
 import React, { useState, useRef, useEffect, useContext } from "react";
 import { Toast, UserProfile } from "@questlabs/react-sdk";
 import { mainConfig } from "../../Config/mainConfig";
-import {
-  createUrl,
-  getToken,
-  getUserId,
-  uploadImageToBackend,
-} from "../../Config/generalFunctions";
+import { createUrl, getToken, getUserId } from "../../Config/generalFunctions";
 import axios from "axios";
 import Loader from "../../ui/Loader";
 import Cookies from "universal-cookie";
 import AllSvgs from "../../assets/AllSvgs";
 import { AppContext } from "../../context/AppContext";
 import imageCompression from "browser-image-compression";
+import { importConfig } from "../../Config/importConfig";
+import GeneralSelect from "../../ui/GeneralSelect";
+const roleOptions = [
+  { label: "CEO", value: "CEO" },
+  { label: "CTO", value: "CTO" },
+  { label: "Software Engineer", value: "Software Engineer" },
+  { label: "Designer", value: "Designer" },
+  { label: "QA Engineer", value: "QA Engineer" },
+  { label: "Marketer", value: "Marketer" },
+  { label: "Founder", value: "Founder" },
+];
+const mainGoalOptions = [
+  { label: "boost engagement", value: "boost engagement" },
+  { label: "creativity", value: "creativity" },
+];
 const EditUserProfile = () => {
-  const [answer, setAnswer] = useState([]);
+  const [answer, setAnswer] = useState({});
   const [imageUrl, setImageUrl] = useState("");
   const [customImage, setCustomImage] = useState("");
   const [selectedFile, setSelectedFile] = useState(null);
@@ -23,6 +33,8 @@ const EditUserProfile = () => {
   const primaryButtonRef = useRef(null);
   const cookies = new Cookies(null, { path: "/" });
   const { dispatch } = useContext(AppContext);
+  const [isDisabled, setIsDisabled] = useState(false);
+  const [oldAnswer, setOldAnswer] = useState({});
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -38,6 +50,7 @@ const EditUserProfile = () => {
     return () => clearInterval(interval);
   }, []);
   const handleEditClick = () => {
+    setIsDisabled(false);
     if (primaryButtonRef.current) {
       primaryButtonRef.current.click();
     } else {
@@ -50,10 +63,8 @@ const EditUserProfile = () => {
       const res = await axios.get(url, { headers });
       setImageUrl(res.data.data.imageUrl);
       cookies.set("avatar", res.data.data?.imageUrl);
-      cookies.set("UserName", res.data.data?.name);
       dispatch({ type: "user/UserName", payload: res.data.data?.name });
       dispatch({ type: "user/avatar", payload: res.data.data?.imageUrl });
-      console.log("userData", res.data.data);
     } catch (error) {
       console.log("error", error.message);
     }
@@ -125,6 +136,10 @@ const EditUserProfile = () => {
       Toast.success({
         text: "Profile updated successfully",
       });
+      cookies.set(
+        "UserName",
+        answer["ca-43fbd040-68f5-4384-a572-58ae3e61c317"] || ""
+      );
     } catch (error) {
       setIsLoading(false);
       Toast.error({
@@ -133,11 +148,92 @@ const EditUserProfile = () => {
       console.log("error", error.message);
     }
   }
-  cookies.set(
-    "UserName",
-    answer["ca-43fbd040-68f5-4384-a572-58ae3e61c317"] || ""
-  );
+  async function fetchAnswers() {
+    try {
+      const { url, headers } = createUrl(
+        `api/v2/entities/${mainConfig.QUEST_ADDBOT_ENTITY_ID}/campaigns/${mainConfig.QUEST_ONBOARDING_CAMPAIGN_ID}?platform=REACT`
+      );
+      const res = await axios.get(url, { headers });
+      console.log("res.data.actions", res.data.data.actions);
+      if (res.data.data.actions.length > 0) {
+        const transformedData = res.data.data.actions?.reduce((acc, crr) => {
+          acc[crr.actionId] = crr?.answers[0];
+          return acc;
+        }, {});
 
+        setAnswer(transformedData);
+        setOldAnswer(transformedData);
+      }
+    } catch (error) {
+      console.log("error", error);
+    }
+  }
+  async function verifySubmission() {
+    const payload = {
+      actions: [
+        {
+          actionId: "ca-43fbd040-68f5-4384-a572-58ae3e61c317",
+          answers: [answer["ca-43fbd040-68f5-4384-a572-58ae3e61c317"]],
+        },
+        {
+          actionId: "ca-28acc157-493e-4e84-8136-acaf096c8415",
+          answers: [answer["ca-28acc157-493e-4e84-8136-acaf096c8415"]],
+        },
+        {
+          actionId: "ca-cb42439e-0f90-46a9-9864-671259041b01",
+          answers: [answer["ca-cb42439e-0f90-46a9-9864-671259041b01"]],
+        },
+        {
+          actionId: "ca-1e90263f-5dea-41c3-9376-2e8def433e0f",
+          answers: [answer["ca-1e90263f-5dea-41c3-9376-2e8def433e0f"]],
+        },
+      ],
+      campaignVariationId: "cv-c08aa181-f30c-4598-8fc0-ace04d7602d7",
+    };
+    try {
+      const { url, headers } = createUrl(
+        `api/v2/entities/${mainConfig.QUEST_ADDBOT_ENTITY_ID}/campaigns/${mainConfig.QUEST_ONBOARDING_CAMPAIGN_ID}/verify?editSubmissionCriteria=true`
+      );
+      const res = await axios.post(url, payload, { headers });
+    } catch (error) {
+      console.log("error", error);
+    }
+  }
+  useEffect(() => {
+    fetchAnswers();
+  }, []);
+  async function handleupdate() {
+    try {
+      await updateProfile();
+      await verifySubmission();
+      setIsDisabled((prev) => !prev);
+    } catch (error) {
+      console.log("error", error);
+    }
+  }
+  // cookies.set(
+  //   "UserName",
+  //   answer["ca-43fbd040-68f5-4384-a572-58ae3e61c317"] || ""
+  // );
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setAnswer((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
+  function handleRoleSelectChange(selectedOption) {
+    setAnswer((prev) => ({
+      ...prev,
+      "ca-cb42439e-0f90-46a9-9864-671259041b01": selectedOption.value,
+    }));
+  }
+  function handlePurposeSelectChange(selectedOption) {
+    setAnswer((prev) => ({
+      ...prev,
+      "ca-1e90263f-5dea-41c3-9376-2e8def433e0f": selectedOption.value,
+    }));
+  }
   return (
     <div>
       {isLoading && <Loader />}
@@ -189,17 +285,19 @@ const EditUserProfile = () => {
               {answer["ca-28acc157-493e-4e84-8136-acaf096c8415"]}
             </p>
           </div>
-          <div className="absolute right-0">
-            <button
-              className="flex items-center justify-center gap-2 px-3 py-2 border border-[#E2E2E2] rounded-md w-24"
-              onClick={handleEditClick}
-            >
-              <AllSvgs type={"penIcon"} />{" "}
-              <span className="text-[#181818] text-xs font-[600]">Edit</span>
-            </button>
-          </div>
+          {!isDisabled && (
+            <div className="absolute right-0">
+              <button
+                className="flex items-center justify-center gap-2 px-3 py-2 border border-[#E2E2E2] rounded-md w-24"
+                onClick={() => setIsDisabled((prev) => !prev)}
+              >
+                <AllSvgs type={"penIcon"} />{" "}
+                <span className="text-[#181818] text-xs font-[600]">Edit</span>
+              </button>
+            </div>
+          )}
         </div>
-        <UserProfile
+        {/* <UserProfile
           questId={mainConfig.QUEST_ONBOARDING_CAMPAIGN_ID}
           userId={getUserId()}
           token={getToken()}
@@ -260,8 +358,127 @@ const EditUserProfile = () => {
               display: "none",
             },
           }}
-        />
+        /> */}
+
+        <div className="w-full grid grid-cols-2 gap-x-[2.12rem] gap-y-[1.75rem]">
+          <div className="flex flex-col gap-1">
+            <label
+              htmlFor="ca-43fbd040-68f5-4384-a572-58ae3e61c317"
+              className="text-[#535353] textsm font-[500]"
+            >
+              Full name
+            </label>
+            <input
+              type="text"
+              name="ca-43fbd040-68f5-4384-a572-58ae3e61c317"
+              id="ca-43fbd040-68f5-4384-a572-58ae3e61c317"
+              value={answer["ca-43fbd040-68f5-4384-a572-58ae3e61c317"] || ""}
+              className={`border border-[#E2E2E2] w-full h-10 rounded-md  py-2 px-3 text-base font-[500] outline-none ${
+                !isDisabled
+                  ? "cursor-not-allowed text-[#696969] bg-[#FAFAFA]"
+                  : "cursor-pointer text-[#181818] bg-white"
+              }`}
+              onChange={handleChange}
+              disabled={!isDisabled}
+            />
+          </div>
+          <div className="flex flex-col gap-1">
+            <label
+              htmlFor="ca-28acc157-493e-4e84-8136-acaf096c8415"
+              className="text-[#535353] textsm font-[500]"
+            >
+              Email
+            </label>
+            <input
+              type="email"
+              name="ca-28acc157-493e-4e84-8136-acaf096c8415"
+              value={answer["ca-28acc157-493e-4e84-8136-acaf096c8415"]}
+              id="ca-28acc157-493e-4e84-8136-acaf096c8415"
+              className={`border border-[#E2E2E2] w-full h-10 rounded-md  py-2 px-3 text-base font-[500] outline-none ${
+                !isDisabled
+                  ? "cursor-not-allowed text-[#696969] bg-[#FAFAFA]"
+                  : "cursor-pointer text-[#181818] bg-white"
+              }`}
+              onChange={handleChange}
+              disabled={!isDisabled}
+            />
+          </div>
+          <div
+            className={`flex flex-col gap-1 ${
+              !isDisabled ? "cursor-not-allowed" : "cursor-pointer"
+            }`}
+          >
+            <label
+              htmlFor="ca-cb42439e-0f90-46a9-9864-671259041b01"
+              className="text-[#535353] textsm font-[500]"
+            >
+              Role
+            </label>
+            <GeneralSelect
+              value={answer["ca-cb42439e-0f90-46a9-9864-671259041b01"]}
+              Placeholder={answer["ca-cb42439e-0f90-46a9-9864-671259041b01"]}
+              options={roleOptions}
+              onChange={handleRoleSelectChange}
+              placeholeTextSize="1rem"
+              selectHeight="2.5rem"
+              placeholderLineHeight="1.25rem"
+              isDisabled={!isDisabled}
+              placeHolderColor={isDisabled ? "#181818" : "#696969"}
+              optionTextSize="1rem"
+              optionLineHeight="1.5rem"
+            />
+          </div>
+          <div
+            className={`flex flex-col gap-1 ${
+              !isDisabled ? "cursor-not-allowed" : "cursor-pointer"
+            }`}
+          >
+            <label
+              htmlFor="ca-1e90263f-5dea-41c3-9376-2e8def433e0f"
+              className="text-[#535353] textsm font-[500]"
+            >
+              Purpose
+            </label>
+            <GeneralSelect
+              value={answer["ca-1e90263f-5dea-41c3-9376-2e8def433e0f"]}
+              Placeholder={answer["ca-1e90263f-5dea-41c3-9376-2e8def433e0f"]}
+              options={mainGoalOptions}
+              onChange={handlePurposeSelectChange}
+              placeholeTextSize="1rem"
+              selectHeight="2.5rem"
+              placeholderLineHeight="1.25rem"
+              isDisabled={!isDisabled}
+              placeHolderColor={isDisabled ? "#181818" : "#696969"}
+              optionTextSize="1rem"
+              optionLineHeight="1.5rem"
+            />
+          </div>
+        </div>
       </div>
+      {isDisabled && (
+        <div className="w-full flex justify-end gap-9 mt-8 pr-8">
+          <button
+            className="flex items-center justify-center gap-2 px-3 py-2 border border-[#E2E2E2] rounded-md w-24 text-[#181818] text-xs font-[600]"
+            onClick={() => {
+              setIsDisabled((prev) => !prev);
+              setAnswer(oldAnswer);
+            }}
+          >
+            Cancel
+          </button>
+          <button
+            className="w-[7rem]"
+            onClick={handleupdate}
+            // onClick={handleEditClick}
+          >
+            <img
+              src={importConfig.saveButton}
+              alt=""
+              className="w-full object-contain"
+            />
+          </button>
+        </div>
+      )}
     </div>
   );
 };

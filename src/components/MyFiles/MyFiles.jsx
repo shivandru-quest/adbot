@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { importConfig } from "../../Config/importConfig";
+import dayjs from "dayjs";
 import GeneralSelect from "../../ui/GeneralSelect";
 import AllSvgs from "../../assets/AllSvgs";
 import NoDataYet from "../../ui/NoDataYet";
@@ -41,14 +42,22 @@ const dateOptions = [
 ];
 const MyFiles = () => {
   const [selectedItem, setSelectedItem] = useState("myTemplates");
-  const [selectedCategory, setSelectedCategory] = useState(null);
-  const [selectedDate, setSelectedDate] = useState(null);
+  const [selectedCategory, setSelectedCategory] = useState({
+    value: "all",
+    label: "All",
+  });
+  const [selectedDate, setSelectedDate] = useState({
+    value: "all",
+    label: "All",
+  });
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
   const [userTemplates, setUserTemplates] = useState([]);
   const [filteredData, setFilteredData] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedTemplateId, setSelectedTemplateId] = useState([]);
+  console.log("selectedCategory", selectedCategory);
+  console.log("selectedDate", selectedDate);
   function handleCategoryChange(selectedOption) {
     setSelectedCategory(selectedOption);
   }
@@ -71,14 +80,37 @@ const MyFiles = () => {
     fetchTemplates();
   }, []);
   useEffect(() => {
+    const now = dayjs();
     const filtered = userTemplates?.filter((template) => {
-      return template?.title
+      const createdAt = dayjs(template.createdAt);
+      const matchesSearch = template?.title
         ?.toLowerCase()
         .includes(searchQuery?.toLowerCase());
+      const matchesCategory =
+        selectedCategory?.value === "all" ||
+        template.category?.toLowerCase() ===
+          selectedCategory?.value.toLowerCase() ||
+        template.canvasSize?.toLowerCase() ===
+          selectedCategory?.value.toLowerCase() ||
+        template.platform?.toLowerCase() ===
+          selectedCategory?.value.toLowerCase();
+      let matchesDate = true;
+      if (selectedDate?.value === "today") {
+        matchesDate = createdAt.isSame(now, "day");
+      } else if (selectedDate?.value === "thisWeek") {
+        matchesDate = createdAt.isSame(now, "week");
+      } else if (selectedDate?.value === "thisMonth") {
+        matchesDate = createdAt.isSame(now, "month");
+      } else if (selectedDate?.value === "thisYear") {
+        matchesDate = createdAt.isSame(now, "year");
+      } else if (selectedDate?.value === "all") {
+        matchesDate = true;
+      }
+      return matchesSearch && matchesDate && matchesCategory;
     });
     setFilteredData(filtered);
-  }, [searchQuery, userTemplates]);
-  console.log("userTemplates", userTemplates);
+  }, [searchQuery, userTemplates, selectedDate, selectedCategory]);
+
   function handleClick(templateId) {
     if (selectedTemplateId.includes(templateId)) {
       setSelectedTemplateId((prev) => prev.filter((id) => id !== templateId));
@@ -86,7 +118,7 @@ const MyFiles = () => {
       setSelectedTemplateId((prev) => [...prev, templateId]);
     }
   }
-  console.log("templateId", selectedTemplateId);
+
   return (
     <div className="w-full flex flex-col gap-6 mt-6 mb-4 relative">
       <div
@@ -185,9 +217,6 @@ const MyFiles = () => {
         {selectedItem === "favourite" ? (
           <>
             {filteredData?.map((ele, i) => {
-              const tempImage = ele.elements?.find(
-                (ele) => ele.type === "image"
-              );
               return (
                 <div
                   className="relative"
@@ -195,8 +224,8 @@ const MyFiles = () => {
                   onClick={() => handleClick(ele?.templateId)}
                 >
                   <TemplateCard
-                    idx={i}
-                    imgFile={tempImage?.src}
+                    idx={ele.templateId}
+                    imgFile={ele?.templatePoster}
                     platform={ele?.platform}
                     title={ele?.title}
                   />

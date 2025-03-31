@@ -18,7 +18,7 @@ const UserAccountMenu = ({ userMenu, setUserMenu, setShowLogoutModal }) => {
           onClick={() => navigate("/settings?tab=account")}
         >
           <AllSvgs
-            type={"humanIcon"}
+            type={"hollowHumanIcon"}
             fillColor={hoveredItem === "account" ? "#181818" : "#535353"}
           />
           <span className="text-sm">Account</span>

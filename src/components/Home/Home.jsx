@@ -99,11 +99,11 @@ const Home = () => {
       </div>
       <div className="w-full flex items-center justify-between gap-4 h-[4.5rem]">
         <div
-          className="w-[12.5rem] h-full p-4 flex items-center justify-start gap-5 border border-[#E2E2E2] rounded-xl cursor-pointer"
+          className="w-[15rem] h-full p-4 flex items-center justify-start gap-5 border border-[#E2E2E2] rounded-xl cursor-pointer"
           onClick={() => {
             dispatch({
               type: "user/canvasSize",
-              payload: { width: "1300", height: "600" },
+              payload: { width: "650", height: "300", name: "custom" },
             });
             navigate("/editor/new");
           }}
@@ -112,11 +112,11 @@ const Home = () => {
           <p className="text-[#181818] text-base font-[600]">Custom</p>
         </div>
         <div
-          className="w-[12.5rem] h-full p-4 flex items-center justify-start gap-5 border border-[#E2E2E2] rounded-xl cursor-pointer"
+          className="w-[15rem] h-full p-4 flex items-center justify-start gap-5 border border-[#E2E2E2] rounded-xl cursor-pointer"
           onClick={() => {
             dispatch({
               type: "user/canvasSize",
-              payload: { width: "1080", height: "1080" },
+              payload: { width: "540", height: "540", name: "post" },
             });
             navigate("/editor/new");
           }}
@@ -128,11 +128,11 @@ const Home = () => {
           </div>
         </div>
         <div
-          className="w-[12.5rem] h-full p-4 flex items-center justify-start gap-5 border border-[#E2E2E2] rounded-xl cursor-pointer"
+          className="w-[15rem] h-full p-4 flex items-center justify-start gap-5 border border-[#E2E2E2] rounded-xl cursor-pointer"
           onClick={() => {
             dispatch({
               type: "user/canvasSize",
-              payload: { width: "1200", height: "628" },
+              payload: { width: "650", height: "340", name: "landscape" },
             });
             navigate("/editor/new");
           }}
@@ -144,11 +144,11 @@ const Home = () => {
           </div>
         </div>
         <div
-          className="w-[12.5rem] h-full p-4 flex items-center justify-start gap-5 border border-[#E2E2E2] rounded-xl cursor-pointer"
+          className="w-[15rem] h-full p-4 flex items-center justify-start gap-5 border border-[#E2E2E2] rounded-xl cursor-pointer"
           onClick={() => {
             dispatch({
               type: "user/canvasSize",
-              payload: { width: "1080", height: "1920" },
+              payload: { width: "400", height: "710", name: "story" },
             });
             navigate("/editor/new");
           }}
@@ -160,11 +160,11 @@ const Home = () => {
           </div>
         </div>
         <div
-          className="w-[12.5rem] h-full p-4 flex items-center justify-start gap-5 border border-[#E2E2E2] rounded-xl cursor-pointer"
+          className="w-[15rem] h-full p-4 flex items-center justify-start gap-5 border border-[#E2E2E2] rounded-xl cursor-pointer"
           onClick={() => {
             dispatch({
               type: "user/canvasSize",
-              payload: { width: "1080", height: "1350" },
+              payload: { width: "500", height: "625", name: "vertical" },
             });
             navigate("/editor/new");
           }}
@@ -176,11 +176,11 @@ const Home = () => {
           </div>
         </div>
         <div
-          className="w-[12.5rem] h-full p-4 flex items-center justify-start gap-5 border border-[#E2E2E2] rounded-xl cursor-pointer"
+          className="w-[15rem] h-full p-4 flex items-center justify-start gap-5 border border-[#E2E2E2] rounded-xl cursor-pointer"
           onClick={() => {
             dispatch({
               type: "user/canvasSize",
-              payload: { width: "1000", height: "1500" },
+              payload: { width: "433", height: "650", name: "pin" },
             });
             navigate("/editor/new");
           }}
@@ -234,6 +234,7 @@ const Home = () => {
           {templates?.map((el, i) => (
             <div key={i}>
               <TemplateCard
+                idx={i}
                 imgFile={el.imgFile}
                 title={el.title}
                 platform={el.platform}

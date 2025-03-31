@@ -7,6 +7,12 @@ const GeneralSelect = ({
   isMulti = false,
   Placeholder = "select a value...",
   selectHeight = "2.25rem",
+  placeholeTextSize = "0.75rem",
+  placeholderLineHeight = "1.25rem",
+  isDisabled = false,
+  placeHolderColor = "#535353",
+  optionTextSize = "0.75rem",
+  optionLineHeight = "1rem"
 }) => {
   return (
     <Select
@@ -15,6 +21,7 @@ const GeneralSelect = ({
       onChange={onChange}
       isMulti={isMulti}
       placeholder={Placeholder}
+      isDisabled={isDisabled}
       styles={{
         control: (provided) => ({
           ...provided,
@@ -33,10 +40,10 @@ const GeneralSelect = ({
         }),
         placeholder: (provided) => ({
           ...provided,
-          color: "#535353",
-          fontSize: "0.75rem",
+          color: placeHolderColor || "#535353",
+          fontSize: placeholeTextSize || "0.75rem",
           fontWeight: "500",
-          lineHeight: "1.25rem",
+          lineHeight: placeholderLineHeight || "1.25rem",
           display: "flex",
           alignItems: "center",
         }),
@@ -62,9 +69,9 @@ const GeneralSelect = ({
           color: state.isFocused ? "#181818" : "#181818",
           padding: "10px",
           cursor: "pointer",
-          fontSize: "0.75rem",
+          fontSize: optionTextSize || "0.75rem",
           fontWeight: "500",
-          lineHeight: "1rem",
+          lineHeight: optionLineHeight || "1rem",
         }),
       }}
     />

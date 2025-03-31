@@ -13,8 +13,6 @@ const SettingsDashboard = () => {
       <div className="flex items-center gap-1 pt-[30px] w-56 ml-16">
         <AllSvgs type={"homeIcon"} />
         <AllSvgs type={"rightPointerIcon"} />
-        <p className="text-[#474747] text-sm font-[500]">Profile</p>
-        <AllSvgs type={"rightPointerIcon"} />
         <p className="text-[#474747] text-sm font-[500]">
           {searchParams.get("tab") === "account"
             ? "Account"

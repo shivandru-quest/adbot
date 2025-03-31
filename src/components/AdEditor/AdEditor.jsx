@@ -13,17 +13,17 @@ import {
   createUrl,
   base64ToFile,
   blobUrlToFile,
-  getUserId,
-  getToken,
   createUrlBackend,
+  getUserCredentials,
+  loadImageAsBase64,
+  dataURLtoBlob,
 } from "../../Config/generalFunctions";
-import { mainConfig } from "../../Config/mainConfig";
 import Loader from "../../ui/Loader";
 import AdEditorTopBar from "../../ui/AdEditorTopBar";
 import { motion } from "framer-motion";
 import SidePanel from "../../ui/SidePanel";
 import { AppContext } from "../../context/AppContext";
-const MAX_IMAGE_SIZE = 0.5 * 1024 * 1024;
+import imageCompression from "browser-image-compression";
 
 const AdEditor = () => {
   const location = useLocation();
@@ -39,13 +39,21 @@ const AdEditor = () => {
   const [toolbarSelectedElement, setToolbarSelectedElement] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const stageRef = useRef(null);
-  const [adData, setAdData] = useState({
-    title: "",
+  const { canvasSize, adData } = state;
+  const [downloadFormat, setDownLoadFormat] = useState({
     platform: "",
-    category: "",
-    images: [],
+    fileSize: "",
+    fileLayout: "",
+    fileName: "",
+    fileType: "",
   });
-  const { canvasSize } = state;
+  const [socialMediaPlatForm, setSocialMediaPlatform] = useState("");
+  useEffect(() => {
+    setDownLoadFormat((prev) => ({
+      ...prev,
+      fileName: adData?.title || formData?.title || "canvas",
+    }));
+  }, [adData]);
 
   const addImage = (url) => {
     const newElement = {
@@ -84,7 +92,7 @@ const AdEditor = () => {
     };
     addElement(newElement);
   };
-
+  console.log("elements", elements);
   const addShape = (shapeType) => {
     const newElement = {
       elementId: `ele-${uuidv4()}`,
@@ -94,7 +102,7 @@ const AdEditor = () => {
       y: 100,
       width: 200,
       height: 200,
-      points: [0, 0, 100, 0, 100, 100],
+      // points: [0, 0, 100, 0, 100, 100],
       fill: "#e3e3e3",
       stroke: "#000000",
       strokeWidth: 2,
@@ -104,6 +112,13 @@ const AdEditor = () => {
       cornerRadius: 0,
       opacity: 1,
     };
+    // if (shapeType === "star") {
+    //   newElement.innerRadius = 30;
+    //   newElement.outerRadius = 70;
+    // } else if (shapeType === "ring") {
+    //   newElement.innerRadius = 50;
+    //   newElement.outerRadius = 100;
+    // }
     addElement(newElement);
   };
 
@@ -179,60 +194,7 @@ const AdEditor = () => {
       reader.readAsDataURL(file);
     }
   };
-  async function getImageBlobFromImgTag(imgElement) {
-    return new Promise((resolve, reject) => {
-      const canvas = document.createElement("canvas");
-      const ctx = canvas.getContext("2d");
 
-      imgElement.onload = () => {
-        canvas.width = imgElement.naturalWidth;
-        canvas.height = imgElement.naturalHeight;
-        ctx.drawImage(imgElement, 0, 0);
-
-        // Convert to Blob
-        canvas.toBlob((blob) => {
-          if (blob) {
-            resolve(blob);
-          } else {
-            reject(new Error("Canvas toBlob failed"));
-          }
-        }, "image/png"); // Change format if needed
-      };
-
-      imgElement.onerror = () => reject(new Error("Image failed to load"));
-    });
-  }
-  const loadImageAsBase64 = async (imageUrl) => {
-    try {
-      // const response = await axios.get(
-      //   imageUrl
-      //   //    {
-      //   //   mode: "cors",
-      //   //   credentials: "include",
-      //   //   referrer: "",
-      //   // }
-      // );
-
-      // if (!response.ok) throw new Error("Failed to fetch image");
-
-      // const blob = await response.blob();
-
-      // return new Promise((resolve, reject) => {
-      //   const reader = new FileReader();
-      //   reader.onloadend = () => resolve(reader.result);
-      //   reader.onerror = reject;
-      //   reader.readAsDataURL(blob);
-      // });
-      const newImg = document.createElement("img");
-      newImg.src = imageUrl;
-      const blob = await getImageBlobFromImgTag(newImg);
-      console.log("blob", blob);
-      return blob;
-    } catch (error) {
-      console.error("Failed to fetch image:", error);
-      return null;
-    }
-  };
   const downloadCanvas = async () => {
     const stage = stageRef.current;
     if (!stage) {
@@ -249,74 +211,37 @@ const AdEditor = () => {
     );
     const loadImagesSafely = async () => {
       for (const node of imageNodes) {
-        console.log("node", node);
         const img = node.getImage();
-        console.log("img", img);
-        // let ans = await node.toBlob();
-        // console.log("ans", ans);
         if (!img) continue;
 
-        // const base64 = await loadImageAsBase64(img.src);
-        // if (!base64) continue;
-        // const newImg = document.createElement("img");
-        // const newImg = new window.Image();
-        // newImg.crossOrigin = "anonymous";
-        // console.log("img.src", img.src);
-        // newImg.src = node.attrs.url;
-
-        // await new Promise((resolve, reject) => {
-        //   newImg.onload = resolve;
-        // });
-        // newImg.onerror = (e) => {
-        //   console.error("Image load error:", e);
-        //   reject(e);
-        // };
-        node.image(node.attrs.url);
+        const base64 = await loadImageAsBase64(img.src);
+        if (!base64) continue;
+        const newImg = document.createElement("img");
+        newImg.src = base64;
+        node.image(newImg);
       }
     };
 
     try {
-      // await loadImagesSafely();
-      const boundingBox = elements.reduce(
-        (box, node) => {
-          const { x, y, width, height } = node.getClientRect();
-          return {
-            minX: Math.min(box.minX, x),
-            minY: Math.min(box.minY, y),
-            maxX: Math.max(box.maxX, x + width),
-            maxY: Math.max(box.maxY, y + height),
-          };
-        },
-        { minX: Infinity, minY: Infinity, maxX: -Infinity, maxY: -Infinity }
-      );
-
-      const croppedWidth = boundingBox.maxX - boundingBox.minX;
-      const croppedHeight = boundingBox.maxY - boundingBox.minY;
-      if (croppedWidth <= 0 || croppedHeight <= 0) {
-        console.error("Invalid width/height for export", {
-          croppedWidth,
-          croppedHeight,
-        });
-        Toast.error({ text: "Canvas is empty or has invalid dimensions" });
-        return;
-      }
+      await loadImagesSafely();
+      const [width, height] = downloadFormat?.fileLayout.split("x").map(Number);
+      const mimeType =
+        downloadFormat?.fileType === "jpg"
+          ? "image/jpeg"
+          : `image/${downloadFormat.fileType}`;
       const uri = stage.toDataURL({
-        x: boundingBox.minX,
-        y: boundingBox.minY,
-        width: croppedWidth,
-        height: croppedHeight,
-        mimeType: "image/png",
-        // quality: 1.0,
+        width,
+        height,
+        mimeType,
       });
-      console.log("uri", uri);
       if (!uri) {
         Toast.error({
-          text: "uri issue",
+          text: "An error occured while processing the image.",
         });
         return;
       }
       const link = document.createElement("a");
-      link.download = "canvas.png";
+      link.download = `${downloadFormat.fileName}.${downloadFormat.fileType}`;
       link.href = uri;
       document.body.appendChild(link);
       link.click();
@@ -331,14 +256,34 @@ const AdEditor = () => {
     (elem) => elem.elementId === selectedId
   );
 
+  async function handleTemplatePoster() {
+    const options = {
+      maxSizeMB: 0.05,
+      maxWidthOrHeight: 500,
+      useWebWorker: true,
+    };
+    try {
+      if (stageRef.current) {
+        const dataURL = stageRef.current.toDataURL();
+        let file = base64ToFile(dataURL, "templatePoster");
+        const compressedFile = await imageCompression(file, options);
+        console.log("compressedFile", compressedFile.size);
+        const formImgData = new FormData();
+        formImgData.append("uploaded_file", compressedFile);
+        const { url, headers } = createUrl("api/upload-img");
+        const res = await axios.post(url, formImgData, { headers });
+        console.log("resData", res.data.imageUrl);
+        return res.data.imageUrl;
+      }
+    } catch (error) {
+      console.log("error", error);
+    }
+  }
   //--------------------------api calls------------------------------------//
-
-  const removeImgBackground = async () => {
-    Toast.info({ text: "Feature Included In Paid Plan Only...!" });
-  };
 
   async function publishTemplate() {
     setIsLoading(true);
+    let tempPoster = await handleTemplatePoster();
     try {
       const imageData = elements?.filter(
         (el) =>
@@ -352,13 +297,6 @@ const AdEditor = () => {
             file = base64ToFile(el.src, el.name);
           } else if (el.url?.startsWith("blob:")) {
             file = await blobUrlToFile(el.url, el.name);
-          }
-          if (file.size > MAX_IMAGE_SIZE) {
-            setIsLoading(false);
-            Toast.error({
-              text: "Image size should be less than 500 KB",
-            });
-            return;
           }
           const formImgData = new FormData();
           formImgData.append("uploaded_file", file);
@@ -377,7 +315,10 @@ const AdEditor = () => {
       const payload = {
         ...adData,
         images: undefined,
+        isPublic: getUserCredentials()?.includes("questlabs") ? true : false,
+        templatePoster: tempPoster,
         elements: updatedElements,
+        canvasSize: state?.canvasSize?.name,
       };
       const reqData = createUrlBackend();
       const res = await axios.post(
@@ -390,7 +331,7 @@ const AdEditor = () => {
         Toast.success({
           text: "Ad created successfully",
         });
-        navigate("/myFiles");
+        // navigate("/myFiles");
       }
     } catch (error) {
       setIsLoading(false);
@@ -438,13 +379,6 @@ const AdEditor = () => {
           } else if (el.url?.startsWith("blob:")) {
             file = await blobUrlToFile(el.url, el.name);
           }
-          if (file.size > MAX_IMAGE_SIZE) {
-            setIsLoading(false);
-            Toast.error({
-              text: "Image size should be less than 500 KB",
-            });
-            return;
-          }
           const formImgData = new FormData();
           formImgData.append("uploaded_file", file);
           const { url, headers } = createUrl("api/upload-img");
@@ -484,7 +418,51 @@ const AdEditor = () => {
       console.log("error", error.message);
     }
   }
+  function shareToSocialMedia() {
+    const dataURL = stageRef.current.toDataURL();
+    const blob = dataURLtoBlob(dataURL);
+    const file = new File([blob], "canvas.png", { type: "image/png" });
 
+    const imageUrl = URL.createObjectURL(file);
+    console.log("imgUrl", imageUrl);
+    shareToSocial(imageUrl);
+  }
+  const shareToSocial = (imageUrl) => {
+    let shareUrl = "";
+    switch (socialMediaPlatForm) {
+      case "facebook":
+        shareUrl = `https://www.facebook.com/sharer/sharer.php?u=${window.location.href}`;
+        // shareUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(
+        //   imageUrl
+        // )}`;
+        break;
+      case "reddit":
+        shareUrl = `https://www.reddit.com/submit?url=${encodeURIComponent(
+          imageUrl
+        )}`;
+        break;
+      case "linkedin":
+        shareUrl = `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(
+          imageUrl
+        )}`;
+        break;
+      case "instagram":
+        alert(
+          "Instagram does not support direct web sharing. Download the image and upload manually."
+        );
+        const link = document.createElement("a");
+        link.href = imageUrl;
+        link.download = "canvas.png";
+        link.click();
+        return;
+      default:
+        break;
+    }
+
+    if (shareUrl) {
+      window.open(shareUrl, "_blank");
+    }
+  };
   return (
     <div className="h-auto w-full flex flex-col justify-center items-center">
       {isLoading && <Loader />}
@@ -497,83 +475,104 @@ const AdEditor = () => {
           downloadCanvas={downloadCanvas}
           publishTemplate={publishTemplate}
           updateTemplate={updateTemplate}
-          setAdData={setAdData}
-          adData={adData}
+          setDownLoadFormat={setDownLoadFormat}
+          downloadFormat={downloadFormat}
+          setSocialMediaPlatform={setSocialMediaPlatform}
+          socialMediaPlatForm={socialMediaPlatForm}
+          shareToSocialMedia={shareToSocialMedia}
         />
       </div>
-      <div className="flex w-full p-4 justify-between gap-4">
-        <div className="w-[6.5rem] min-w-[6.5rem] p-3 bg-[#FAFAFA] flex items-center justify-center rounded-[0.25rem]">
-          <Toolbar
-            onAddImage={() => document.getElementById("imageUpload").click()}
-            onAddText={addText}
-            onAddShape={addShape}
-            onUndo={undo}
-            onRedo={redo}
-            canUndo={historyStep > 0}
-            canRedo={historyStep < history?.length - 1}
-            removeBackground={removeImgBackground}
-            downloadCanvas={downloadCanvas}
-            setSelectedId={setSelectedId}
-            setToolbarSelectedElement={setToolbarSelectedElement}
-            toolbarSelectedElement={toolbarSelectedElement}
+      <div className="w-full flex justify-between">
+        <div className="flex w-[calc(100%-25rem)] p-4 justify-between gap-4">
+          <div className="w-full max-w-[6.5rem] min-w-[6.5rem] p-3 bg-[#FAFAFA] flex items-center justify-center rounded-[0.25rem] h-full">
+            <Toolbar
+              onAddText={addText}
+              setToolbarSelectedElement={setToolbarSelectedElement}
+              toolbarSelectedElement={toolbarSelectedElement}
+            />
+          </div>
+          {(toolbarSelectedElement === "media" ||
+            toolbarSelectedElement === "elements" ||
+            toolbarSelectedElement === "theme") && (
+            <div className="w-80 flex items-center justify-center">
+              <SidePanel
+                toolbarSelectedElement={toolbarSelectedElement}
+                setElements={setElements}
+                setHistory={setHistory}
+                onAddShape={addShape}
+                selectedElement={selectedElement}
+              />
+            </div>
+          )}
+          <input
+            type="file"
+            id="imageUpload"
+            className="hidden"
+            accept="image/*"
+            onChange={handleImageUpload}
           />
-        </div>
-        {(toolbarSelectedElement === "media" ||
-          toolbarSelectedElement === "elements" ||
-          toolbarSelectedElement === "theme") && (
-          <SidePanel
-            toolbarSelectedElement={toolbarSelectedElement}
-            setElements={setElements}
-            setHistory={setHistory}
-            onAddShape={addShape}
-            selectedElement={selectedElement}
-          />
-        )}
-        <input
-          type="file"
-          id="imageUpload"
-          className="hidden"
-          accept="image/*"
-          onChange={handleImageUpload}
-        />
 
-        {/* Canvas Area */}
-        <div className="flex flex-1">
-          <motion.div
-            className={`bg-[#FAFAFA] rounded-lg`}
-            animate={{
-              width:
-                selectedElement ||
-                (toolbarSelectedElement !== "text" &&
-                  toolbarSelectedElement !== null)
-                  ? Number(canvasSize?.width) - 250
-                  : canvasSize?.width,
+          {/* Canvas Area */}
+          <div
+            className="flex"
+            style={{
+              width: `${Number(canvasSize?.width)}px`,
+              height: `${Number(canvasSize?.height)}px`,
             }}
-            transition={{ duration: 0.3, ease: "easeInOut" }}
           >
-            <Stage
-              width={
-                selectedElement ||
-                (toolbarSelectedElement !== "text" &&
-                  toolbarSelectedElement !== null)
-                  ? Number(canvasSize?.width) - 250
-                  : canvasSize?.width
-              }
-              height={canvasSize?.height}
-              ref={stageRef}
-              onClick={(e) => {
-                if (e.target === e.target.getStage()) {
-                  setSelectedId(null);
-                }
+            <motion.div
+              className={`bg-[#FAFAFA] rounded-lg`}
+              animate={{
+                width: canvasSize?.width,
+              }}
+              transition={{ duration: 0.3, ease: "easeInOut" }}
+              style={{
+                width: `${Number(canvasSize?.width)}px`,
+                height: `${Number(canvasSize?.height)}px`,
               }}
             >
-              <Layer>
-                {elements?.map((elem, i) => {
-                  if (elem.type === "image") {
+              <Stage
+                width={canvasSize?.width}
+                height={canvasSize?.height}
+                ref={stageRef}
+                onClick={(e) => {
+                  if (e.target === e.target.getStage()) {
+                    setSelectedId(null);
+                  }
+                }}
+              >
+                <Layer>
+                  {elements?.map((elem, i) => {
+                    if (elem.type === "image") {
+                      return (
+                        <CanvasImage
+                          key={elem.elementId}
+                          imageProps={elem}
+                          isSelected={elem.elementId === selectedId}
+                          onSelect={() => setSelectedId(elem.elementId)}
+                          onChange={(newProps) =>
+                            handleElementChange(elem.elementId, newProps)
+                          }
+                        />
+                      );
+                    }
+                    if (elem.type === "text") {
+                      return (
+                        <CanvasText
+                          key={elem.elementId}
+                          textProps={elem}
+                          isSelected={elem.elementId === selectedId}
+                          onSelect={() => setSelectedId(elem.elementId)}
+                          onChange={(newProps) =>
+                            handleElementChange(elem.elementId, newProps)
+                          }
+                        />
+                      );
+                    }
                     return (
-                      <CanvasImage
-                        key={i}
-                        imageProps={elem}
+                      <CanvasShape
+                        key={elem.elementId}
+                        shapeProps={elem}
                         isSelected={elem.elementId === selectedId}
                         onSelect={() => setSelectedId(elem.elementId)}
                         onChange={(newProps) =>
@@ -581,46 +580,14 @@ const AdEditor = () => {
                         }
                       />
                     );
-                  }
-                  if (elem.type === "text") {
-                    return (
-                      <CanvasText
-                        key={elem.id}
-                        textProps={elem}
-                        isSelected={elem.elementId === selectedId}
-                        onSelect={() => setSelectedId(elem.elementId)}
-                        onChange={(newProps) =>
-                          handleElementChange(elem.elementId, newProps)
-                        }
-                      />
-                    );
-                  }
-                  return (
-                    <CanvasShape
-                      key={elem.id}
-                      shapeProps={elem}
-                      isSelected={elem.elementId === selectedId}
-                      onSelect={() => setSelectedId(elem.elementId)}
-                      onChange={(newProps) =>
-                        handleElementChange(elem.elementId, newProps)
-                      }
-                    />
-                  );
-                })}
-              </Layer>
-            </Stage>
-          </motion.div>
-          {/* <div className="w-full flex justify-center">
-            <button
-              className="w-full mt-4 py-3 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 font-medium"
-              onClick={templateId ? updateTemplate : publishTemplate}
-            >
-              {templateId ? "Edit Template" : "Publish Template"}
-            </button>
-          </div> */}
-        </div>
+                  })}
+                </Layer>
+              </Stage>
+            </motion.div>
+          </div>
 
-        {/* Right Property Panel */}
+          {/* Right Property Panel */}
+        </div>
         <PropertyPanel
           selectedElement={selectedElement}
           onChange={(newProps) => handleElementChange(selectedId, newProps)}

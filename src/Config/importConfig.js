@@ -41,6 +41,8 @@ import dummyTemplate1 from "../assets/dummyTemplate1.png";
 import dummyTemplate2 from "../assets/dummyTemplate2.png";
 import dummyTemplate3 from "../assets/dummyTemplate3.png";
 import dummyTemplate4 from "../assets/dummyTemplate4.png";
+import priceSectionBg from "../assets/priceSectionBg.svg";
+import saveButton from "../assets/saveButton.png";
 
 export const importConfig = {
   templateBannerBgImage,
@@ -86,4 +88,6 @@ export const importConfig = {
   dummyTemplate2,
   dummyTemplate3,
   dummyTemplate4,
+  priceSectionBg,
+  saveButton,
 };
