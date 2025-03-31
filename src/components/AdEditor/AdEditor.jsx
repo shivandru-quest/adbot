@@ -48,14 +48,15 @@ const AdEditor = () => {
     fileType: "",
   });
   const [socialMediaPlatForm, setSocialMediaPlatform] = useState("");
+
   useEffect(() => {
     setDownLoadFormat((prev) => ({
       ...prev,
       fileName: adData?.title || formData?.title || "canvas",
     }));
-  }, [adData]);
+  }, [adData, formData]);
 
-  const addImage = (url) => {
+  function addImage(url) {
     const newElement = {
       elementId: `ele-${uuidv4()}`,
       type: "image",
@@ -70,9 +71,9 @@ const AdEditor = () => {
       opacity: 1,
     };
     addElement(newElement);
-  };
+  }
 
-  const addText = () => {
+  function addText() {
     const newElement = {
       elementId: `ele-${uuidv4()}`,
       type: "text",
@@ -91,9 +92,9 @@ const AdEditor = () => {
       opacity: 1,
     };
     addElement(newElement);
-  };
+  }
   console.log("elements", elements);
-  const addShape = (shapeType) => {
+  function addShape(shapeType) {
     const newElement = {
       elementId: `ele-${uuidv4()}`,
       type: "shape",
@@ -102,7 +103,6 @@ const AdEditor = () => {
       y: 100,
       width: 200,
       height: 200,
-      // points: [0, 0, 100, 0, 100, 100],
       fill: "#e3e3e3",
       stroke: "#000000",
       strokeWidth: 2,
@@ -112,21 +112,21 @@ const AdEditor = () => {
       cornerRadius: 0,
       opacity: 1,
     };
-    // if (shapeType === "star") {
-    //   newElement.innerRadius = 30;
-    //   newElement.outerRadius = 70;
-    // } else if (shapeType === "ring") {
-    //   newElement.innerRadius = 50;
-    //   newElement.outerRadius = 100;
-    // }
+    if (shapeType === "star") {
+      newElement.innerRadius = 30;
+      newElement.outerRadius = 70;
+    } else if (shapeType === "ring") {
+      newElement.innerRadius = 50;
+      newElement.outerRadius = 100;
+    }
     addElement(newElement);
-  };
+  }
 
-  const addElement = (element) => {
+  function addElement(element) {
     const newElements = [...elements, element];
     setElements(newElements);
     addToHistory(newElements);
-  };
+  }
 
   const handleElementChange = (id, newProps) => {
     const newElements = elements.map((elem) =>
@@ -542,7 +542,7 @@ const AdEditor = () => {
                 }}
               >
                 <Layer>
-                  {elements?.map((elem, i) => {
+                  {elements?.map((elem) => {
                     if (elem.type === "image") {
                       return (
                         <CanvasImage

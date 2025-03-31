@@ -50,22 +50,69 @@ const CanvasShape = ({ shapeProps, isSelected, onSelect, onChange }) => {
         });
       },
 
+      // onTransformEnd: () => {
+      //   const node = shapeRef.current;
+      //   const scaleX = node.scaleX();
+      //   const scaleY = node.scaleY();
+      //   const rotation = node.rotation();
+
+      //   node.scaleX(1);
+      //   node.scaleY(1);
+
+      //   onChange({
+      //     x: node.x(),
+      //     y: node.y(),
+      //     width: Math.max(5, node.width() * scaleX),
+      //     height: Math.max(5, node.height() * scaleY),
+      //     rotation: rotation,
+      //   });
+      // },
       onTransformEnd: () => {
         const node = shapeRef.current;
         const scaleX = node.scaleX();
         const scaleY = node.scaleY();
         const rotation = node.rotation();
 
+        // Reset scale to avoid cumulative scaling issues
         node.scaleX(1);
         node.scaleY(1);
 
-        onChange({
+        const updatedShape = {
           x: node.x(),
           y: node.y(),
-          width: Math.max(5, node.width() * scaleX),
-          height: Math.max(5, node.height() * scaleY),
-          rotation: rotation,
-        });
+          rotation,
+        };
+
+        if (shapeProps.shapeType === "rectangle" && shapeProps.cornerRadius) {
+          // Apply the average scale to maintain proportions
+          const scale = (scaleX + scaleY) / 2;
+          updatedShape.width = Math.max(5, node.width() * scaleX);
+          updatedShape.height = Math.max(5, node.height() * scaleY);
+          updatedShape.cornerRadius = Math.max(
+            2,
+            shapeProps.cornerRadius * scale
+          );
+        } else if (
+          shapeProps.shapeType === "star" ||
+          shapeProps.shapeType === "ring"
+        ) {
+          // Scale inner and outer radius properly
+          const scale = (scaleX + scaleY) / 2;
+
+          updatedShape.innerRadius = Math.max(
+            5,
+            shapeProps.innerRadius * scale
+          );
+          updatedShape.outerRadius = Math.max(
+            10,
+            shapeProps.outerRadius * scale
+          );
+        } else {
+          updatedShape.width = Math.max(5, node.width() * scaleX);
+          updatedShape.height = Math.max(5, node.height() * scaleY);
+        }
+
+        onChange(updatedShape);
       },
     };
 
@@ -91,9 +138,21 @@ const CanvasShape = ({ shapeProps, isSelected, onSelect, onChange }) => {
           />
         );
       case "star":
-        return <Star {...commonProps} innerRadius={30} outerRadius={70} />;
+        return (
+          <Star
+            {...commonProps}
+            innerRadius={shapeProps.innerRadius}
+            outerRadius={shapeProps.outerRadius}
+          />
+        );
       case "ring":
-        return <Ring {...commonProps} innerRadius={50} outerRadius={100} />;
+        return (
+          <Ring
+            {...commonProps}
+            innerRadius={shapeProps.innerRadius}
+            outerRadius={shapeProps.outerRadius}
+          />
+        );
       case "octagon":
         return (
           <RegularPolygon
