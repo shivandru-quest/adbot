@@ -38,6 +38,12 @@ const DownloadMenu = ({
     setSelectedImgType(type);
     setDownLoadFormat((prev) => ({ ...prev, fileType: type.value }));
   }
+  const isDownloadDisabled = !(
+    downloadFormat.platform &&
+    downloadFormat.fileLayout &&
+    selectedSize &&
+    selecctedImgType
+  );
   return (
     showDownLoadMenu && (
       <div className="absolute z-10 top-14 right-9 bg-white shadow-lg w-[17rem] h-auto rounded-xl p-5 border flex flex-col gap-4">
@@ -88,7 +94,10 @@ const DownloadMenu = ({
               downloadFormat.fileLayout === "1080x1080" ? "bg-[#E2E2E2]" : ""
             }`}
             onClick={() =>
-              setDownLoadFormat((prev) => ({ ...prev, fileLayout: "1080x1080" }))
+              setDownLoadFormat((prev) => ({
+                ...prev,
+                fileLayout: "1080x1080",
+              }))
             }
           >
             <div className="w-4 h-4">
@@ -128,7 +137,10 @@ const DownloadMenu = ({
               downloadFormat.fileLayout === "1080x1920" ? "bg-[#E2E2E2]" : ""
             }`}
             onClick={() =>
-              setDownLoadFormat((prev) => ({ ...prev, fileLayout: "1080x1920" }))
+              setDownLoadFormat((prev) => ({
+                ...prev,
+                fileLayout: "1080x1920",
+              }))
             }
           >
             <div className="w-4 h-4">
@@ -148,7 +160,10 @@ const DownloadMenu = ({
               downloadFormat.fileLayout === "1080x1350" ? "bg-[#E2E2E2]" : ""
             }`}
             onClick={() =>
-              setDownLoadFormat((prev) => ({ ...prev, fileLayout: "1080x1350" }))
+              setDownLoadFormat((prev) => ({
+                ...prev,
+                fileLayout: "1080x1350",
+              }))
             }
           >
             <div className="w-4 h-4">
@@ -202,7 +217,13 @@ const DownloadMenu = ({
           </label>
         </div>
         <div className="w-full flex items-center justify-center">
-          <button className="w-full" onClick={downloadCanvas}>
+          <button
+            className={`w-full ${
+              isDownloadDisabled ? "opacity-50 cursor-not-allowed" : ""
+            }`}
+            onClick={downloadCanvas}
+            disabled={isDownloadDisabled}
+          >
             <img src={importConfig.downloadButton} alt="downloadButton" />
           </button>
         </div>
