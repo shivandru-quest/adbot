@@ -196,6 +196,7 @@ const AdEditor = () => {
   };
 
   const downloadCanvas = async () => {
+    setSelectedId(null);
     const stage = stageRef.current;
     if (!stage) {
       console.error("Stage reference is missing");
@@ -257,6 +258,7 @@ const AdEditor = () => {
   );
 
   async function handleTemplatePoster() {
+    setSelectedId(null);
     const options = {
       maxSizeMB: 0.05,
       maxWidthOrHeight: 500,
@@ -331,7 +333,7 @@ const AdEditor = () => {
         Toast.success({
           text: "Ad created successfully",
         });
-        // navigate("/myFiles");
+        navigate("/myFiles");
       }
     } catch (error) {
       setIsLoading(false);
@@ -365,6 +367,7 @@ const AdEditor = () => {
 
   async function updateTemplate() {
     setIsLoading(true);
+    let tempPoster = await handleTemplatePoster();
     try {
       const imageData = elements?.filter(
         (el) =>
@@ -394,6 +397,7 @@ const AdEditor = () => {
       });
       const payload = {
         ...formData,
+        templatePoster: tempPoster,
         elements: updatedElements,
       };
       const reqData = createUrlBackend(`${templateId}`);

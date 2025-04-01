@@ -207,14 +207,14 @@ const Home = () => {
         )}
         <div className="w-full flex flex-wrap gap-4">
           {userTemplates?.map((el) => {
-            const tempImage = el.elements?.find((ele) => ele.type === "image");
+            // const tempImage = el.elements?.find((ele) => ele.type === "image");
             return (
               <TemplateCard
-                imgFile={tempImage?.src}
+                imgFile={el?.templatePoster}
                 title={el.title}
                 platform={el.platform}
-                idx={el.id}
-                key={el.id}
+                idx={el.templateId}
+                key={el.templateId}
               />
             );
           })}
