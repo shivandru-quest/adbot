@@ -68,23 +68,23 @@ const SidePanel = ({
               >
                 <AllSvgs type={"uploadIcon"} />
               </div>
-              <p className="text-[#2C2C2C] font-[500] text-sm">add Images</p>
+              <p className="text-[#2C2C2C] font-[500] text-sm">Add Images</p>
             </div>
             <div className="w-full grid grid-cols-3 gap-x-2 gap-y-4">
               {selectedImages?.map((el, i) => (
-                <div key={i} className="relative rounded-md w-20 h-20 p-2">
+                <div key={i} className="relative rounded-md w-20 h-20">
                   <img
                     src={el.url}
                     alt={`Upload ${i + 1}`}
                     className="w-full object-cover rounded-md"
                   />
-                  {/* <button
+                  <button
                   type="button"
                   onClick={() => removeImage(i)}
-                  className="absolute top-2 right-2 p-1 bg-red-500 text-white rounded-full hover:bg-red-600"
+                  className="absolute top-0 right-0 p-1 text-white rounded-full text-[0.5rem] bg-gray-400"
                 >
                   ❌
-                </button> */}
+                </button>
                 </div>
               ))}
             </div>

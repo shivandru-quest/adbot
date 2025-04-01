@@ -132,7 +132,7 @@ const Sidebar = ({ children }) => {
         <div className="py-4 px-6 border-b border-[#C9C9C9] w-full h-[4.7rem] flex items-center justify-between">
           <div
             className="w-fit h-full flex items-center cursor-pointer"
-            onClick={() => navigate("/")}
+            onClick={() => navigate("/home")}
           >
             <AllSvgs type={"nexaLogoTopBar"} />
           </div>
@@ -215,7 +215,10 @@ const Sidebar = ({ children }) => {
                     <AllSvgs type={"humanIcon"} fillColor={"#181818"} />
                   )}
                 </div>
-                <span className="text-[#2C2C2C] font-[600] text-xs">
+                <span
+                  className="text-[#2C2C2C] font-[600] text-xs"
+                  onMouseEnter={() => setUserMenu(true)}
+                >
                   {state?.UserName}
                 </span>
               </div>

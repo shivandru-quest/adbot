@@ -45,7 +45,7 @@ const OtpModal = () => {
       });
     }, 1000);
     return () => clearInterval(interval);
-  }, []);
+  }, [canResend]);
   const formatTime = (seconds) => {
     const minutes = Math.floor(seconds / 60);
     const secs = seconds % 60;
@@ -302,7 +302,7 @@ const OtpModal = () => {
   return (
     <div className="flex items-center justify-between w-full min-h-screen h-screen overflow-hidden">
       {isLoading && <Loader />}
-      <div className="bg-[#fff] w-full lg:w-1/2 h-full flex flex-col justify-start items-center p-16">
+      <div className="bg-[#fff] w-full lg:w-1/2 h-full flex flex-col justify-start items-center p-16 z-10">
         <div className="flex w-full justify-between items-center mb-[2.75rem]">
           <AllSvgs type={"nexaLogo"} />
         </div>
@@ -320,7 +320,7 @@ const OtpModal = () => {
             </p>
           </div>
           <div>
-            <div className="flex w-full max-w-[700px] justify-between items-center gap-2">
+            <div className="flex w-full max-w-[700px] justify-between items-center gap-2 pr-4">
               {otp?.map((digit, index) => (
                 <input
                   key={index}
@@ -348,7 +348,7 @@ const OtpModal = () => {
                   className="text-xs font-[600] font-figtree  text-[#2C2C2C]"
                   onClick={handleResendOtp}
                 >
-                  Resend Otp
+                  Resend OTP
                 </button>
               ) : (
                 <>

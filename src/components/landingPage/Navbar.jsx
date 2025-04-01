@@ -67,7 +67,7 @@ const Navbar = () => {
       </nav>
       <div className="flex gap-2 items-center self-stretch my-auto text-xs leading-none">
         <button
-          className="text-[#181818] text-xs font-[600] px-3 py-2 flex items-center justify-center border border-[#E2E2E2] rounded-md"
+          className="text-[#181818] text-xs font-[600] px-3 py-2 flex items-center h-8 justify-center border border-[#E2E2E2] rounded-md"
           onClick={() => navigate("/login")}
         >
           Sign In
@@ -82,7 +82,7 @@ const Navbar = () => {
           />
         </button>
         <button
-          className="lg:hidden text-[#181818] text-xs font-[600] px-3 py-2 md:flex items-center justify-center border border-[#E2E2E2] rounded-md"
+          className="lg:hidden text-[#181818] text-xs font-[600] px-3 py-2 md:flex items-center h-8 justify-center border border-[#E2E2E2] rounded-md"
           onClick={toggleMenu}
         >
           <RxHamburgerMenu />

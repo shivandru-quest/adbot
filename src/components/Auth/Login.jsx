@@ -1,9 +1,8 @@
-import { useState, useRef, useEffect } from "react";
+import { useState, useEffect } from "react";
 import Cookies from "universal-cookie";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { FiMail } from "react-icons/fi";
-import OtpModal from "./OtpModal";
 import { mainConfig } from "../../Config/mainConfig";
 import axios from "axios";
 import GoogleOAuth from "./GoogleOAuth";
@@ -13,7 +12,6 @@ import { useForm } from "react-hook-form";
 import { createLoginFlowUrl } from "../../Config/generalFunctions";
 import AllSvgs from "../../assets/AllSvgs";
 import { importConfig } from "../../Config/importConfig";
-import { nav } from "framer-motion/client";
 
 const Login = () => {
   const {
@@ -80,7 +78,7 @@ const Login = () => {
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="w-full max-w-lg flex flex-col  justify-center gap-11"
+          className="w-full max-w-lg flex flex-col justify-center gap-11 h-full relative"
         >
           <AllSvgs type={"nexaLogo"} />
           <h2 className="text-[2.25rem]  font-[600] leading-[2.75rem] tracking-[-0.045rem] text-[#0D0D0D] text-ellipsis overflow-hidden whitespace-nowrap">
@@ -141,6 +139,23 @@ const Login = () => {
                 </motion.button>
               </form>
             </div>
+          </div>
+          <div className="absolute bottom-0">
+            <a
+              href="https://fantasy-straw-747.notion.site/Terms-and-Conditions-8c70d24a63a6419781475ca8325f2c60"
+              target="_blank"
+            >
+              <span className="text-[#535353] text-xs font-[500]">
+                By registering you agree to our
+              </span>{" "}
+              <span className="text-[#535353] text-xs font-[700] underline">
+                Terms of use
+              </span>{" "}
+              <span className="text-[#535353] text-xs font-[500]">and</span>{" "}
+              <span className="text-[#535353] text-xs font-[700] underline">
+                Privacy Policy
+              </span>
+            </a>
           </div>
         </motion.div>
       </div>

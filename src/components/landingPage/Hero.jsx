@@ -67,23 +67,36 @@ const Hero = () => {
             autopilot
           </p>
         </div>
-        <div className="w-full flex flex-col items-center justify-center">
-          <p
-            // className="text-[#B0B0B0] text-2xl tracking-[-0.03rem] font-[400]"
+        <div className="hidden w-full lg:flex flex-col items-center justify-center">
+          <span
             className="text-sm sm:text-base md:text-xl text-[#B0B0B0] mt-2 px-4 sm:px-0"
             style={{ textShadow: "0px 4px 4px rgba(0, 0, 0, 0.25)" }}
           >
             Create 100+ ads in minutes with templates, and launch on multiple
-          </p>
-          <p
-            // className="text-[#B0B0B0] text-2xl tracking-[-0.03rem] font-[400]"
+          </span>
+          <span
             className="text-sm sm:text-base md:text-xl text-[#B0B0B0] mt-2 px-4 sm:px-0"
             style={{ textShadow: "0px 4px 4px rgba(0, 0, 0, 0.25)" }}
           >
             platforms in minutes.
-          </p>
+          </span>
           <button
             className="text-[#181818] text-sm font-[600] p-3 rounded-lg border border-[#E2E2E2] bg-[#fff] mt-4"
+            style={{ backdropFilter: "blur(2.5px)" }}
+            onClick={() => navigate("/get-started")}
+          >
+            Get started today
+          </button>
+        </div>
+        <div className="lg:hidden w-full flex flex-col items-center justify-center">
+          <p
+            className="text-sm sm:text-base md:text-xl text-[#B0B0B0] mt-2 px-4 sm:px-0"
+            style={{ textShadow: "0px 4px 4px rgba(0, 0, 0, 0.25)" }}
+          >
+            Create 100+ ads in minutes with templates, and launch on multiple platforms in minutes.
+          </p>
+          <button
+            className="text-[#181818] text-sm font-[600] p-3 rounded-lg border border-[#E2E2E2] bg-[#fff] mt-4 m-auto"
             style={{ backdropFilter: "blur(2.5px)" }}
             onClick={() => navigate("/get-started")}
           >

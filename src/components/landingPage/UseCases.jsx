@@ -14,7 +14,7 @@ const UseCases = () => {
       ref={ref}
       initial={{ opacity: 0, y: 50 }}
       animate={isInView ? { opacity: 1, y: 0 } : {}}
-      transition={{ duration: 0.6, ease: "easeOut" }}
+      transition={{ duration: 0.3, ease: "easeOut" }}
       id="usecases"
     >
       <div className="flex flex-col items-center w-full gap-4">
@@ -25,17 +25,13 @@ const UseCases = () => {
           Where Nexa Makes the Biggest Impact
         </p>
       </div>
-      <div
-        // className="grid grid-cols-1 sm:grid-cols-2 gap-y-6 gap-x-8 justify-center items-center w-full max-md:max-w-full"
-        className="grid grid-cols-1 lg:grid-cols-2 gap-y-6 gap-x-4 sm:gap-x-8 justify-center items-center w-full"
-      >
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-y-6 gap-x-4 sm:gap-x-8 justify-center items-center w-full">
         <motion.article
-          // className="flex items-center justify-start gap-8 p-8 rounded-3xl border border-[#E2E2E2]"
           className="flex flex-col sm:flex-row items-center justify-start gap-6 sm:gap-8 p-6 sm:p-8 rounded-3xl border border-[#E2E2E2] w-full"
           ref={cardRef}
           initial={{ opacity: 0, x: -100 }}
           animate={cardInView ? { opacity: 1, x: 0 } : {}}
-          transition={{ duration: 0.7, delay: 0.3, ease: "easeInOut" }}
+          transition={{ duration: 0.4, delay: 0.1, ease: "easeInOut" }}
         >
           <div
             className="w-[3.62rem] h-[3.62rem] p-4 rounded-lg flex items-center justify-center"
@@ -57,12 +53,11 @@ const UseCases = () => {
           </div>
         </motion.article>
         <motion.article
-          // className="flex items-center justify-start gap-8 p-8 rounded-3xl border border-[#E2E2E2]"
           className="flex flex-col sm:flex-row items-center justify-start gap-6 sm:gap-8 p-6 sm:p-8 rounded-3xl border border-[#E2E2E2] w-full"
           ref={cardRef}
           initial={{ opacity: 0, x: 100 }}
           animate={cardInView ? { opacity: 1, x: 0 } : {}}
-          transition={{ duration: 0.7, delay: 0.3, ease: "easeInOut" }}
+          transition={{ duration: 0.7, delay: 0.1, ease: "easeInOut" }}
         >
           <div
             className="w-[3.62rem] h-[3.62rem] p-4 rounded-lg flex items-center justify-center"
@@ -84,12 +79,11 @@ const UseCases = () => {
           </div>
         </motion.article>
         <motion.article
-          // className="flex items-center justify-start gap-8 p-8 rounded-3xl border border-[#E2E2E2]"
           className="flex flex-col sm:flex-row items-center justify-start gap-6 sm:gap-8 p-6 sm:p-8 rounded-3xl border border-[#E2E2E2] w-full"
           ref={cardRef}
           initial={{ opacity: 0, x: -100 }}
           animate={cardInView ? { opacity: 1, x: 0 } : {}}
-          transition={{ duration: 0.7, delay: 0.3, ease: "easeInOut" }}
+          transition={{ duration: 0.7, delay: 0.1, ease: "easeInOut" }}
         >
           <div
             className="w-[3.62rem] h-[3.62rem] p-4 rounded-lg flex items-center justify-center"
@@ -111,12 +105,11 @@ const UseCases = () => {
           </div>
         </motion.article>
         <motion.article
-          // className="flex items-center justify-start gap-8 p-8 rounded-3xl border border-[#E2E2E2]"
           className="flex flex-col sm:flex-row items-center justify-start gap-6 sm:gap-8 p-6 sm:p-8 rounded-3xl border border-[#E2E2E2] w-full"
           ref={cardRef}
           initial={{ opacity: 0, x: 100 }}
           animate={cardInView ? { opacity: 1, x: 0 } : {}}
-          transition={{ duration: 0.7, delay: 0.3, ease: "easeInOut" }}
+          transition={{ duration: 0.7, delay: 0.1, ease: "easeInOut" }}
         >
           <div
             className="w-[3.62rem] h-[3.62rem] p-4 rounded-lg flex items-center justify-center"

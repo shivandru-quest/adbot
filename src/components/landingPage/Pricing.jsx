@@ -2,6 +2,7 @@ import React, { useRef } from "react";
 import { motion, useInView } from "framer-motion";
 import { importConfig } from "../../Config/importConfig";
 import AllSvgs from "../../assets/AllSvgs";
+import { useNavigate } from "react-router-dom";
 
 const plans = [
   {
@@ -35,6 +36,7 @@ const plans = [
   },
 ];
 const Pricing = () => {
+  const navigate = useNavigate();
   const ref = useRef(null);
   const liRef = useRef(null);
   const isInView = useInView(ref, { once: true });
@@ -65,7 +67,7 @@ const Pricing = () => {
           Affordable Plans That Grow With You
         </p>
       </motion.div>
-      <div className="flex gap-10 justify-center w-full max-md:flex-col px-[5rem]">
+      <div className="flex gap-10 justify-center w-full max-md:flex-col lg:px-[5rem] px-5">
         {plans.map((plan, index) => (
           <motion.article
             key={index}
@@ -163,19 +165,24 @@ const Pricing = () => {
             </ul>
             {plan.name === "Pro" ? (
               <button
-                className={`p-3 w-full text-white rounded-[0.75rem] border border-white border-solid cursor-pointer`}
+                className={`p-3 w-full text-white rounded-[0.75rem] border border-white border-solid cursor-pointer h-11 flex justify-center items-center`}
                 style={{
                   background:
                     plan.name === "Pro" && "rgba(255, 255, 255, 0.08)",
                 }}
+                onClick={() => navigate("/settings?tab=pricing")}
               >
                 {plan.buttonText}
               </button>
             ) : (
-              <button className="absolute bottom-8 right-8 left-8 border-none">
+              <button
+                className="absolute bottom-8 right-8 left-8 border-none h-11"
+                onClick={() => navigate("/settings?tab=pricing")}
+              >
                 <img
                   src={importConfig.getStartedPriceButton}
                   alt="getStartedPriceButton"
+                  className="w-full h-full object-contain"
                 />
               </button>
             )}
