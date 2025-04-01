@@ -532,8 +532,8 @@ const AdEditor = () => {
               }}
             >
               <Stage
-                width={canvasSize?.width}
-                height={canvasSize?.height}
+                width={Number(canvasSize?.width)}
+                height={Number(canvasSize?.height)}
                 ref={stageRef}
                 onClick={(e) => {
                   if (e.target === e.target.getStage()) {

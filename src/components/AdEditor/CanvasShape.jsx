@@ -84,7 +84,6 @@ const CanvasShape = ({ shapeProps, isSelected, onSelect, onChange }) => {
         };
 
         if (shapeProps.shapeType === "rectangle" && shapeProps.cornerRadius) {
-          // Apply the average scale to maintain proportions
           const scale = (scaleX + scaleY) / 2;
           updatedShape.width = Math.max(5, node.width() * scaleX);
           updatedShape.height = Math.max(5, node.height() * scaleY);
@@ -96,7 +95,6 @@ const CanvasShape = ({ shapeProps, isSelected, onSelect, onChange }) => {
           shapeProps.shapeType === "star" ||
           shapeProps.shapeType === "ring"
         ) {
-          // Scale inner and outer radius properly
           const scale = (scaleX + scaleY) / 2;
 
           updatedShape.innerRadius = Math.max(
