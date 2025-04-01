@@ -38,6 +38,28 @@ const CanvasImage = ({ imageProps, isSelected, onSelect, onChange }) => {
         draggable
         onClick={onSelect}
         onTap={onSelect}
+        onDragMove={(e) => {
+          const node = e.target;
+          const stage = node.getStage();
+
+          const stageWidth = stage.width();
+          const stageHeight = stage.height();
+
+          const imageWidth = node.width() * node.scaleX();
+          const imageHeight = node.height() * node.scaleY();
+
+          let newX = node.x();
+          let newY = node.y();
+
+          if (newX < 0) newX = 0;
+          if (newY < 0) newY = 0;
+          if (newX + imageWidth > stageWidth) newX = stageWidth - imageWidth;
+          if (newY + imageHeight > stageHeight)
+            newY = stageHeight - imageHeight;
+
+          node.x(newX);
+          node.y(newY);
+        }}
         onDragEnd={(e) => {
           onChange({
             x: e.target.x(),

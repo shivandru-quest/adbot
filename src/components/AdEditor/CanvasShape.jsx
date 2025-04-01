@@ -28,21 +28,7 @@ const CanvasShape = ({ shapeProps, isSelected, onSelect, onChange }) => {
       onClick: onSelect,
       onTap: onSelect,
       draggable: true,
-      // onDragMove: (e) => {
-      //   const dx = e.target.x() - shapeProps.x;
-      //   const dy = e.target.y() - shapeProps.y;
-
-      //   const newPoints = shapeProps.points.map((p, i) =>
-      //     i % 2 === 0 ? p + dx : p + dy
-      //   );
-
-      //   onChange({
-      //     ...shapeProps,
-      //     x: e.target.x(),
-      //     y: e.target.y(),
-      //     points: newPoints,
-      //   });
-      // },
+      
       onDragEnd: (e) => {
         onChange({
           x: e.target.x(),
@@ -50,23 +36,6 @@ const CanvasShape = ({ shapeProps, isSelected, onSelect, onChange }) => {
         });
       },
 
-      // onTransformEnd: () => {
-      //   const node = shapeRef.current;
-      //   const scaleX = node.scaleX();
-      //   const scaleY = node.scaleY();
-      //   const rotation = node.rotation();
-
-      //   node.scaleX(1);
-      //   node.scaleY(1);
-
-      //   onChange({
-      //     x: node.x(),
-      //     y: node.y(),
-      //     width: Math.max(5, node.width() * scaleX),
-      //     height: Math.max(5, node.height() * scaleY),
-      //     rotation: rotation,
-      //   });
-      // },
       onTransformEnd: () => {
         const node = shapeRef.current;
         const scaleX = node.scaleX();

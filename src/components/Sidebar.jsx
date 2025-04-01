@@ -30,7 +30,6 @@ const Sidebar = ({ children }) => {
 
   useEffect(() => {
     const path = location.pathname;
-    console.log("path", path);
     if (path.includes("home")) {
       setSelectedItem("home");
     } else if (path.includes("templates")) {
@@ -111,11 +110,15 @@ const Sidebar = ({ children }) => {
           >
             <div className="flex items-end gap-2">
               <div className="rounded-full bg-[#D9D9D9] w-8 h-8">
-                <img
-                  src={state?.avatar}
-                  alt="user_avatar"
-                  className="rounded-full w-full object-cover"
-                />
+                {state?.avatar ? (
+                  <img
+                    src={state?.avatar}
+                    alt="user_avatar"
+                    className="rounded-full w-full object-cover"
+                  />
+                ) : (
+                  <AllSvgs type={"humanIcon"} />
+                )}
               </div>
               <span>{state?.UserName}</span>
             </div>
@@ -202,7 +205,7 @@ const Sidebar = ({ children }) => {
             >
               <div className="flex items-center gap-3">
                 <div className="rounded-full bg-[#D9D9D9] w-[1.75rem] h-[1.75rem] mb-1 flex items-center justify-center">
-                  {state?.avatar ? (
+                  {state?.avatar?.trim().length > 0 ? (
                     <img
                       src={state?.avatar}
                       alt="user_avatar"
