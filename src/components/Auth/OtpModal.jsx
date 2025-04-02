@@ -107,13 +107,36 @@ const OtpModal = () => {
       const { url, headers } = createUrl(`api/users/${getUserId()}`);
       const res = await axios.get(url, { headers });
       cookies.set("avatar", res.data.data?.imageUrl || "");
-      cookies.set("UserName", res.data.data?.name || "");
-      dispatch({ type: "user/UserName", payload: res.data.data?.name || "" });
       dispatch({ type: "user/avatar", payload: res.data.data?.imageUrl || "" });
     } catch (error) {
       console.log("error", error.message);
     }
   };
+  async function fetchAnswers() {
+    try {
+      const { url, headers } = createUrl(
+        `api/v2/entities/${mainConfig.QUEST_ADDBOT_ENTITY_ID}/campaigns/${mainConfig.QUEST_ONBOARDING_CAMPAIGN_ID}?platform=REACT`
+      );
+      const res = await axios.get(url, { headers });
+      if (res.data.data.actions.length > 0) {
+        const transformedData = res.data.data.actions?.reduce((acc, crr) => {
+          acc[crr.actionId] = crr?.answers[0];
+          return acc;
+        }, {});
+        cookies.set(
+          "UserName",
+          transformedData["ca-43fbd040-68f5-4384-a572-58ae3e61c317"] || ""
+        );
+        dispatch({
+          type: "user/UserName",
+          payload:
+            transformedData["ca-43fbd040-68f5-4384-a572-58ae3e61c317"] || "",
+        });
+      }
+    } catch (error) {
+      console.log("error", error);
+    }
+  }
   const createEntity = async (userId, token) => {
     try {
       const { url, headers } = createLoginFlowUrl(
@@ -228,11 +251,12 @@ const OtpModal = () => {
       const otpResponse = await verifyOtp(payload);
       if (otpResponse.success) {
         const { token, userId } = otpResponse;
-        cookies.set("token", token);
-        cookies.set("userId", userId);
+        cookies.set("token", token || "");
+        cookies.set("userId", userId || "");
         let entityDetails = await getEntityDetails({ userId, token });
         let onboardingDetails = await getOnboardingDetails({ userId, token });
         await getUser();
+        await fetchAnswers();
         if (entityDetails) {
           if (onboardingDetails) {
             dispatch({ type: "user/isAuthenticated", payload: true });

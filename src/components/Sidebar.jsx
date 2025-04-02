@@ -27,7 +27,7 @@ const Sidebar = ({ children }) => {
   const [userMenu, setUserMenu] = useState(false);
   const { dispatch, state } = useContext(AppContext);
   const [selectedItem, setSelectedItem] = useState(null);
-  console.log("state?.avatar", state?.avatar);
+
   useEffect(() => {
     const path = location.pathname;
     if (path.includes("home")) {
