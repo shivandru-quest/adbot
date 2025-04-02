@@ -27,7 +27,7 @@ const Sidebar = ({ children }) => {
   const [userMenu, setUserMenu] = useState(false);
   const { dispatch, state } = useContext(AppContext);
   const [selectedItem, setSelectedItem] = useState(null);
-
+  console.log("state?.avatar", state?.avatar);
   useEffect(() => {
     const path = location.pathname;
     if (path.includes("home")) {
@@ -205,14 +205,14 @@ const Sidebar = ({ children }) => {
             >
               <div className="flex items-center gap-3">
                 <div className="rounded-full bg-[#D9D9D9] w-[1.75rem] h-[1.75rem] mb-1 flex items-center justify-center">
-                  {state?.avatar?.trim().length > 0 ? (
+                  {!state?.avatar || state.avatar == undefined ? (
+                    <AllSvgs type={"humanIcon"} fillColor={"#181818"} />
+                  ) : (
                     <img
                       src={state?.avatar}
                       alt="user_avatar"
                       className="rounded-full w-full object-cover"
                     />
-                  ) : (
-                    <AllSvgs type={"humanIcon"} fillColor={"#181818"} />
                   )}
                 </div>
                 <span

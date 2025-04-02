@@ -150,16 +150,14 @@ const OnboardingPage = () => {
           </button>
         </div>
       </div>
-      <div className="w-1/2 h-auto overflow-hidden">
-        <div className="hidden lg:block w-full h-full">
-          <div className="bg-black opacity-10" />
-          <div className="flex flex-col justify-center items-center w-full">
-            <img
-              src={importConfig.authFlowBgCover}
-              alt="authFlowBgCover"
-              className="w-full object-contain"
-            />
-          </div>
+      <div className="hidden lg:flex lg:w-1/2 bg-gradient-to-br from-black to-white">
+        <div className="inset-0 bg-black opacity-10" />
+        <div className="flex flex-col justify-center items-center h-screen">
+          <img
+            src={importConfig.authFlowBgCover}
+            alt="authFlowBgCover"
+            className="w-full object-contain"
+          />
         </div>
       </div>
     </div>

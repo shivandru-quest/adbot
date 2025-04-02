@@ -22,10 +22,10 @@ const GoogleOAuth = ({ setIsLoading }) => {
     try {
       const { url, headers } = createUrl(`api/users/${getUserId()}`);
       const res = await axios.get(url, { headers });
-      cookies.set("avatar", res.data.data.imageUrl);
-      cookies.set("UserName", res.data.data.name);
-      dispatch({ type: "user/UserName", payload: res.data.data.name });
-      dispatch({ type: "user/avatar", payload: res.data.data.imageUrl });
+      cookies.set("avatar", res.data.data.imageUrl || "");
+      cookies.set("UserName", res.data.data.name || "");
+      dispatch({ type: "user/UserName", payload: res.data.data.name || "" });
+      dispatch({ type: "user/avatar", payload: res.data.data.imageUrl || "" });
     } catch (error) {
       console.log("error", error.message);
     }

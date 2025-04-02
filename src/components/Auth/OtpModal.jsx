@@ -106,10 +106,10 @@ const OtpModal = () => {
     try {
       const { url, headers } = createUrl(`api/users/${getUserId()}`);
       const res = await axios.get(url, { headers });
-      cookies.set("avatar", res.data.data?.imageUrl);
-      cookies.set("UserName", res.data.data?.name);
-      dispatch({ type: "user/UserName", payload: res.data.data?.name });
-      dispatch({ type: "user/avatar", payload: res.data.data?.imageUrl });
+      cookies.set("avatar", res.data.data?.imageUrl || "");
+      cookies.set("UserName", res.data.data?.name || "");
+      dispatch({ type: "user/UserName", payload: res.data.data?.name || "" });
+      dispatch({ type: "user/avatar", payload: res.data.data?.imageUrl || "" });
     } catch (error) {
       console.log("error", error.message);
     }
@@ -375,16 +375,14 @@ const OtpModal = () => {
           </div>
         </div>
       </div>
-      <div className="w-1/2 h-auto overflow-hidden">
-        <div className="hidden lg:flex w-full h-full">
-          <div className="bg-black opacity-10" />
-          <div className="flex flex-col justify-center items-center w-full">
-            <img
-              src={importConfig.authFlowBgCover}
-              alt="authFlowBgCover"
-              className="w-full object-contain"
-            />
-          </div>
+      <div className="hidden lg:flex lg:w-1/2 bg-gradient-to-br from-black to-white">
+        <div className="inset-0 bg-black opacity-10" />
+        <div className="flex flex-col justify-center items-center h-screen">
+          <img
+            src={importConfig.authFlowBgCover}
+            alt="authFlowBgCover"
+            className="w-full object-contain"
+          />
         </div>
       </div>
     </div>
