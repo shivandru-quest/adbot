@@ -90,7 +90,7 @@ const Hero = () => {
         </div>
         <div className="lg:hidden w-full flex flex-col items-center justify-center">
           <p
-            className="text-sm sm:text-base md:text-xl text-[#B0B0B0] mt-2 px-4 sm:px-0"
+            className="text-sm sm:text-base md:text-xl text-[#B0B0B0] mt-2 px-4 sm:px-0 text-center"
             style={{ textShadow: "0px 4px 4px rgba(0, 0, 0, 0.25)" }}
           >
             Create 100+ ads in minutes with templates, and launch on multiple platforms in minutes.
