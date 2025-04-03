@@ -63,7 +63,6 @@ const EditUserProfile = () => {
       const res = await axios.get(url, { headers });
       setImageUrl(res.data.data.imageUrl || "");
       cookies.set("avatar", res.data.data?.imageUrl || "");
-
       dispatch({ type: "user/avatar", payload: res.data.data?.imageUrl || "" });
     } catch (error) {
       console.log("error", error.message);
@@ -160,7 +159,6 @@ const EditUserProfile = () => {
           acc[crr.actionId] = crr?.answers[0];
           return acc;
         }, {});
-        console.log("transformedData", transformedData);
         cookies.set(
           "UserName",
           transformedData["ca-43fbd040-68f5-4384-a572-58ae3e61c317"] || ""
@@ -215,6 +213,7 @@ const EditUserProfile = () => {
     try {
       await updateProfile();
       await verifySubmission();
+      await fetchAnswers();
       setIsDisabled((prev) => !prev);
     } catch (error) {
       console.log("error", error);
