@@ -11,43 +11,49 @@ import { templates } from "./Home/Home";
 import AllSvgs from "../assets/AllSvgs";
 
 const TemplateSelection = () => {
-  const navigate = useNavigate();
   const [selectedCategory, setSelectedCategory] = useState("All");
-  const [selectedPlatform, setSelectedPlatform] = useState("all");
   const [showModal, setShowModal] = useState(false);
-  const [selectedTemplateId, setSelectedTemplateId] = useState(null);
   const [userTemplates, setUserTemplates] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [selectedImage, setSelectedImage] = useState("");
+  const [searchQuery, setSearchQuery] = useState("");
+  const [filteredTemplates, setFilteredTemplates] = useState([]);
 
-  const filteredTemplates = userTemplates?.filter((template) => {
-    const categoryMatch =
-      selectedCategory === "All" || template.category === selectedCategory;
-    const platformMatch =
-      selectedPlatform === "all" || template.platform === selectedPlatform;
-    return categoryMatch && platformMatch;
-  });
+  // const filteredTemplates = userTemplates?.filter((template) => {
+  //   const categoryMatch =
+  //     selectedCategory === "All" || template.category === selectedCategory;
+  //   const platformMatch =
+  //     selectedPlatform === "all" || template.platform === selectedPlatform;
+  //   return categoryMatch && platformMatch;
+  // });
 
-  async function fetchTemplates() {
-    setIsLoading(true);
-    try {
-      const { url, headers } = createUrlBackend();
-      const res = await axios.get(url, { headers });
-      setUserTemplates(res.data.data);
-      setIsLoading(false);
-    } catch (error) {
-      setIsLoading(false);
-      console.log("error", error.message);
-    }
-  }
+  // async function fetchTemplates() {
+  //   setIsLoading(true);
+  //   try {
+  //     const { url, headers } = createUrlBackend();
+  //     const res = await axios.get(url, { headers });
+  //     setUserTemplates(res.data.data);
+  //     setIsLoading(false);
+  //   } catch (error) {
+  //     setIsLoading(false);
+  //     console.log("error", error.message);
+  //   }
+  // }
+
+  // useEffect(() => {
+  //   fetchTemplates();
+  // }, []);
+
+  // function toggleModal() {
+  //   setShowModal((prev) => !prev);
+  // }
 
   useEffect(() => {
-    fetchTemplates();
-  }, []);
-
-  function toggleModal() {
-    setShowModal((prev) => !prev);
-  }
+    const filtered = templates.filter((el) =>
+      el.title?.toLowerCase().includes(searchQuery?.toLowerCase())
+    );
+    setFilteredTemplates(filtered);
+  }, [searchQuery]);
 
   return (
     <div className="p-4">
@@ -55,10 +61,11 @@ const TemplateSelection = () => {
         <TemplateBanner
           setSelectedCategory={setSelectedCategory}
           selectedCategory={selectedCategory}
+          setSearchQuery={setSearchQuery}
+          searchQuery={searchQuery}
         />
       </div>
       <div>
-        
         <div className="w-full flex items-center justify-between gap-4 h-[4.5rem]">
           <div
             className="w-[15rem] h-full p-4 flex items-center justify-start gap-5 border border-[#E2E2E2] rounded-xl cursor-pointer"
@@ -154,40 +161,11 @@ const TemplateSelection = () => {
             </div>
           </div>
         </div>
-        {/* <div className="flex flex-wrap gap-6 mt-6">
-          {isLoading && <Loader />}
-          {!isLoading &&
-            userTemplates?.length > 0 &&
-            filteredTemplates?.map((el, i) => {
-              const tempImage = el.elements?.find(
-                (ele) => ele.type === "image"
-              );
-              return (
-                !el?.isDeleted && (
-                  <div key={i}>
-                    <TemplateCard
-                      imgFile={tempImage?.src}
-                      title={el.title}
-                      platform={el.platform}
-                      idx={i}
-                    />
-                  </div>
-                )
-              );
-            })}
-        </div> */}
 
-        
-        {/* {!isLoading && userTemplates.length === 0 && (
-          <div className="w-full flex items-center justify-center mt-6">
-            <NoDataYet onAction={() => navigate("/templates")} />
-          </div>
-        )} */}
         <div className="flex flex-wrap gap-6 mt-6">
           {isLoading && <Loader />}
           {!isLoading &&
-            // userTemplates?.length > 0 &&
-            templates?.map((el, i) => {
+            filteredTemplates?.map((el, i) => {
               return (
                 !el?.isDeleted && (
                   <div key={i}>
@@ -203,14 +181,14 @@ const TemplateSelection = () => {
             })}
         </div>
       </div>
-      <SelectionModal
+      {/* <SelectionModal
         isOpen={showModal}
         onClose={toggleModal}
         selectedTemplateId={selectedTemplateId}
         userTemplates={userTemplates}
         selectedImage={selectedImage}
         fetchTemplates={fetchTemplates}
-      />
+      /> */}
     </div>
   );
 };

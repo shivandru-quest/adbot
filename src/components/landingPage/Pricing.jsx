@@ -55,15 +55,15 @@ const Pricing = () => {
       id="pricing"
     >
       <motion.div
-        className="w-full flex flex-col items-center justify-center gap-4 mb-[40px]"
+        className="flex flex-col items-center w-full gap-4 mb-10"
         initial={{ opacity: 0, y: 50 }}
         animate={isInView ? { opacity: 1, y: 0 } : {}}
         transition={{ duration: 0.8 }}
       >
-        <p className="text-[#fff] text-[3rem] leading-[3.5rem] font-[500] tracking-[-0.06rem]">
+        <h2 className="text-5xl font-medium tracking-tighter leading-none text-[#fff] max-md:max-w-full max-md:text-4xl">
           Simple and Flexible Pricing
-        </p>
-        <p className="text-[#B0B0B0] text-[1.1875rem] leading-[1.875rem] font-[400]">
+        </h2>
+        <p className="text-lg tracking-[-0.01125rem] text-[#B0B0B0] max-md:max-w-full text-center">
           Affordable Plans That Grow With You
         </p>
       </motion.div>
@@ -137,7 +137,7 @@ const Pricing = () => {
             >
               What’s included
             </p>
-            <ul className="flex flex-col gap-3.5 mb-6 h-auto">
+            <ul className="flex flex-col gap-3.5 mb-6 h-auto min-h-72">
               {plan.features.map((feature, idx) => (
                 <motion.li
                   key={idx}

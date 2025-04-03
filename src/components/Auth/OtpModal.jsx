@@ -344,7 +344,7 @@ const OtpModal = () => {
             </p>
           </div>
           <div>
-            <div className="flex w-full max-w-[700px] justify-between items-center gap-2 pr-4">
+            <div className="flex w-full max-w-[100%] justify-between items-center gap-2 pr-4">
               {otp?.map((digit, index) => (
                 <input
                   key={index}
@@ -362,7 +362,7 @@ const OtpModal = () => {
                   }}
                   onPaste={handlePaste}
                   ref={(el) => (inputRef.current[index] = el)}
-                  className="flex items-center justify-center text-center py-2 px-3 text-[#696969] border border-[#E2E2E2] rounded-md font-[500] text-sm font-figtree h-10 w-[5.6rem] focus:outline-none"
+                  className="flex items-center justify-center text-center py-2 px-3 text-[#696969] border border-[#E2E2E2] rounded-md font-[500] text-sm font-figtree h-10 w-[15%] focus:outline-none"
                 />
               ))}
             </div>

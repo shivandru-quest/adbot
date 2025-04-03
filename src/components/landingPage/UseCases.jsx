@@ -10,7 +10,7 @@ const UseCases = () => {
   const cardInView = useInView(cardRef, { triggerOnce: true, threshold: 0.2 });
   return (
     <motion.section
-      className="flex flex-col py-[5rem] lg:px-[7.5rem] sm:px-[4rem] md:px-[6rem] items-center justify-center gap-[40px] w-full"
+      className="flex flex-col px-6 md:px-12 lg:px-[7.5rem] gap-[40px] py-12 sm:py-[4rem] items-center"
       ref={ref}
       initial={{ opacity: 0, y: 50 }}
       animate={isInView ? { opacity: 1, y: 0 } : {}}
@@ -18,10 +18,10 @@ const UseCases = () => {
       id="usecases"
     >
       <div className="flex flex-col items-center w-full gap-4">
-        <h2 className="text-5xl font-medium tracking-tighter leading-none text-neutral-900 max-md:max-w-full max-md:text-4xl">
+        <h2 className="text-5xl font-medium tracking-tighter leading-none text-[#181818] max-md:max-w-full max-md:text-4xl">
           Use Cases
         </h2>
-        <p className="text-lg tracking-normal leading-loose text-stone-500 max-md:max-w-full">
+        <p className="text-lg tracking-[-0.01125rem] text-[#696969] max-md:max-w-full">
           Where Nexa Makes the Biggest Impact
         </p>
       </div>

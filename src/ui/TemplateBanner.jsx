@@ -46,7 +46,12 @@ const floatAnimation3 = {
     ease: "easeInOut",
   },
 };
-const TemplateBanner = ({ setSelectedCategory, selectedCategory }) => {
+const TemplateBanner = ({
+  setSelectedCategory,
+  selectedCategory,
+  setSearchQuery,
+  searchQuery,
+}) => {
   return (
     <div
       className="relative w-full h-[22rem] rounded-lg flex flex-col items-center justify-center gap-6"
@@ -71,8 +76,9 @@ const TemplateBanner = ({ setSelectedCategory, selectedCategory }) => {
           </div>
           <input
             type="text"
-            name=""
-            id=""
+            name="searchQuery"
+            id="searchQuery"
+            onChange={(e) => setSearchQuery(e.target.value)}
             placeholder="Search for template like “Product”"
             className="py-2 pl-10 pr-3 bg-transparent border border-[#535353] rounded-lg outline-none w-full placeholder:text-[#808080] text-sm font-figtree font-[500] text-ellipsis overflow-hidden whitespace-nowrap text-[#AFAFAF] h-12"
           />

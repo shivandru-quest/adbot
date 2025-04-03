@@ -32,10 +32,14 @@ const HowItWorks = () => {
       className="px-6 md:px-12 lg:px-[7.5rem] py-12 sm:py-[4rem]"
       id="howitworks"
     >
-      <SectionHeader
-        title="How it works"
-        subtitle="Simple steps to create stunning ad creatives"
-      />
+      <div className="flex flex-col items-center w-full gap-4 mb-10">
+        <h2 className="text-5xl font-medium tracking-tighter leading-none text-[#181818] max-md:max-w-full max-md:text-4xl">
+        How it works
+        </h2>
+        <p className="text-lg tracking-[-0.01125rem] text-[#696969] max-md:max-w-full text-center">
+        Simple steps to create stunning ad creatives
+        </p>
+      </div>
       <div className="grid gap-x-8 gap-y-5 sm:grid-cols-1 w-full lg:grid-cols-2 md:grid-cols-1">
         {steps.map((step, index) => (
           <motion.article

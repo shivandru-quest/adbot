@@ -13,15 +13,15 @@ const problems = [
 ];
 const ProblemAndSolution = () => {
   return (
-    <section
-      // className="px-[7.5rem] py-[5rem]" id="solutions"
-      className="px-4 sm:px-6 md:px-[7.5rem] py-[5rem]"
-      id="solutions"
-    >
-      <SectionHeader
-        title="Problem and Solution"
-        subtitle="Maximize Engagement, Minimize Effort with Nexa"
-      />
+    <section className="px-4 sm:px-6 md:px-[7.5rem] py-[5rem]" id="solutions">
+      <div className="flex flex-col items-center w-full gap-4 mb-10">
+        <h2 className="text-5xl font-medium tracking-tighter leading-none text-[#181818] max-md:max-w-full max-md:text-4xl">
+        Problem and Solution
+        </h2>
+        <p className="text-lg tracking-[-0.01125rem] text-[#696969] max-md:max-w-full text-center">
+        Maximize Engagement, Minimize Effort with Nexa
+        </p>
+      </div>
       <div className="flex flex-col lg:flex-row gap-6 items-center justify-center">
         <div className="w-full lg:w-1/2 flex flex-col gap-6">
           {problems?.map((problem, index) => (
