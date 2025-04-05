@@ -127,6 +127,7 @@ export async function blobUrlToFile(blobUrl, fileName) {
     const response = await fetch(blobUrl, {
       mode: "cors",
       credentials: "omit",
+      headers: { "Access-Control-Allow-Origin": "*" },
     });
     const blob = await response.blob();
     return new File([blob], fileName, { type: blob.type });
@@ -197,27 +198,52 @@ export async function compressImage(file) {
 }
 
 export async function compressFileForTemplatePoster(file) {
+  if (!file) return;
+
   try {
-    const options = {
-      maxSizeMB: 0.5,
-      maxWidthOrHeight: MAX_WIDTH_OR_HEIGHT,
-      useWebWorker: true,
-    };
-
-    let compressedBlob = await imageCompression(file, options);
-
-    if (compressedBlob.size / 1024 > MAX_COMPRESSED_SIZE_KB) {
-      console.warn("Further compression needed...");
-      options.maxSizeMB = 0.5;
-      compressedBlob = await imageCompression(file, options);
+    let blob;
+    if (file instanceof File || file instanceof Blob) {
+      blob = file;
+    }
+    else if (typeof file === "string" && file.startsWith("data:image")) {
+      blob = base64ToBlob(file);
+    }
+    else if (typeof file === "string") {
+      const res = await fetch(file);
+      blob = await res.blob();
+    } else {
+      console.warn("Unsupported file input:", file);
+      return;
     }
 
-    console.log("Compressed file size:", compressedBlob.size / 1024, "KB");
+    const fileSizeMB = blob.size / (1024 * 1024);
+    if (fileSizeMB > MAX_FILE_SIZE_MB) {
+      console.warn("Image is too large! Max allowed size is 5MB.");
+      return;
+    }
 
-    // Convert Blob to File
-    return new File([compressedBlob], file.name, { type: file.type });
+    let compressedBlob;
+    let quality = 1.0;
+
+    do {
+      compressedBlob = await imageCompression(blob, {
+        maxSizeMB: quality,
+        maxWidthOrHeight: MAX_WIDTH_OR_HEIGHT,
+        useWebWorker: true,
+      });
+
+      const compressedSizeKB = compressedBlob.size / 1024;
+      if (compressedSizeKB <= MAX_COMPRESSED_SIZE_KB) break;
+      quality *= 0.8;
+    } while (quality > 0.1);
+
+    if (compressedBlob.size / 1024 > MAX_COMPRESSED_SIZE_KB) {
+      console.warn("Compression failed to meet 500KB limit.");
+      return;
+    }
+
+    return await compressedBlob.arrayBuffer();
   } catch (error) {
     console.error("Error compressing image:", error);
-    return file; // Return original file if compression fails
   }
 }

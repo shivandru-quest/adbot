@@ -1,7 +1,10 @@
 import { useEffect, useRef, useState } from "react";
 import { Image, Transformer } from "react-konva";
 import useImage from "use-image";
-import { compressImage } from "../../Config/generalFunctions";
+import {
+  compressImage,
+  loadImageAsBase64,
+} from "../../Config/generalFunctions";
 const CanvasImage = ({ imageProps, isSelected, onSelect, onChange }) => {
   const imageRef = useRef();
   const trRef = useRef();
@@ -11,16 +14,18 @@ const CanvasImage = ({ imageProps, isSelected, onSelect, onChange }) => {
   useEffect(() => {
     async function compress() {
       if (!imageProps.src) return;
-      console.log("imageProps.src", imageProps.src);
+      let img;
+      console.log("imageProps.src", imageProps);
       if (imageProps.src.includes("https://quest-media-storage-bucket.s3.us")) {
-        setCompressedImage(imageProps.src);
+        img = await loadImageAsBase64(imageProps.src);
+        setCompressedImage(img);
         return;
       }
-      const img = await compressImage(imageProps.src);
+      img = await compressImage(imageProps.src);
       setCompressedImage(img);
     }
     compress();
-  }, [imageProps.src]);
+  }, [imageProps]);
 
   useEffect(() => {
     if (isSelected) {

@@ -10,10 +10,10 @@ const Refer = () => {
         Refer Friends
       </p>
       <div className="flex flex-col md:flex-row items-center justify-between gap-4 md:h-[22rem]">
-        <div className="rounded-xl border border-[#EAECF0] h-full md:w-[60%] w-full">
+        <div className="rounded-xl border border-[#EAECF0] h-full md:w-[67%] w-full">
           <ReferralSteps />
         </div>
-        <div className="w-full md:w-[35%]">
+        <div className="w-full md:w-[33%]">
           <ReferralLink />
         </div>
       </div>

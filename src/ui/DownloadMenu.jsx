@@ -187,7 +187,7 @@ const DownloadMenu = ({
                 onChange={handleSizeChange}
                 options={sizeOptions}
                 value={selectedSize}
-                Placeholder="01x"
+                Placeholder="scale"
                 selectHeight="2rem"
               />
             </div>
@@ -196,13 +196,13 @@ const DownloadMenu = ({
                 onChange={handleImgTypeChange}
                 options={imgType}
                 value={selecctedImgType}
-                Placeholder="PNG"
+                Placeholder="type"
                 selectHeight="2rem"
               />
             </div>
           </div>
         </div>
-        <div className="w-full flex items-center gap-2">
+        {/* <div className="w-full flex items-center gap-2">
           <input
             type="checkbox"
             name="saveDownload"
@@ -215,7 +215,7 @@ const DownloadMenu = ({
           >
             Save download settings
           </label>
-        </div>
+        </div> */}
         <div className="w-full flex items-center justify-center">
           <button
             className={`w-full ${

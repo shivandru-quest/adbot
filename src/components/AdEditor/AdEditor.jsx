@@ -17,6 +17,8 @@ import {
   getUserCredentials,
   loadImageAsBase64,
   dataURLtoBlob,
+  compressImage,
+  compressFileForTemplatePoster,
 } from "../../Config/generalFunctions";
 import Loader from "../../ui/Loader";
 import AdEditorTopBar from "../../ui/AdEditorTopBar";
@@ -61,6 +63,7 @@ const AdEditor = () => {
       elementId: `ele-${uuidv4()}`,
       type: "image",
       src: url,
+      url,
       x: 100,
       y: 100,
       width: 200,
@@ -94,6 +97,7 @@ const AdEditor = () => {
     addElement(newElement);
   }
   console.log("elements", elements);
+  console.log("downloadFormat", downloadFormat);
   function addShape(shapeType) {
     const newElement = {
       elementId: `ele-${uuidv4()}`,
@@ -214,7 +218,7 @@ const AdEditor = () => {
       for (const node of imageNodes) {
         const img = node.getImage();
         if (!img) continue;
-
+        console.log("imgSrc from download", img.src);
         const base64 = await loadImageAsBase64(img.src);
         if (!base64) continue;
         const newImg = document.createElement("img");
@@ -222,17 +226,19 @@ const AdEditor = () => {
         node.image(newImg);
       }
     };
-
+    const scaleFactor = Number(downloadFormat?.fileSize) || 1;
+    const stageWidth = stage.width();
+    const stageHeight = stage.height();
     try {
       await loadImagesSafely();
-      const [width, height] = downloadFormat?.fileLayout.split("x").map(Number);
       const mimeType =
         downloadFormat?.fileType === "jpg"
           ? "image/jpeg"
           : `image/${downloadFormat.fileType}`;
       const uri = stage.toDataURL({
-        width,
-        height,
+        pixelRatio: scaleFactor,
+        width: stageWidth,
+        height: stageHeight,
         mimeType,
       });
       if (!uri) {
@@ -259,22 +265,21 @@ const AdEditor = () => {
 
   async function handleTemplatePoster() {
     setSelectedId(null);
-    const options = {
-      maxSizeMB: 0.05,
-      maxWidthOrHeight: 500,
-      useWebWorker: true,
-    };
     try {
       if (stageRef.current) {
         const dataURL = stageRef.current.toDataURL();
-        let file = base64ToFile(dataURL, "templatePoster");
-        const compressedFile = await imageCompression(file, options);
-        console.log("compressedFile", compressedFile.size);
+        console.log("dataUrl", dataURL);
+        const compressedArrayBuffer = await compressFileForTemplatePoster(
+          dataURL
+        );
+        const compressedFile = new Blob([compressedArrayBuffer], {
+          type: "image/png",
+        });
+        console.log("compressedFile", compressedFile);
         const formImgData = new FormData();
         formImgData.append("uploaded_file", compressedFile);
         const { url, headers } = createUrl("api/upload-img");
         const res = await axios.post(url, formImgData, { headers });
-        console.log("resData", res.data.imageUrl);
         return res.data.imageUrl;
       }
     } catch (error) {
@@ -300,10 +305,18 @@ const AdEditor = () => {
           } else if (el.url?.startsWith("blob:")) {
             file = await blobUrlToFile(el.url, el.name);
           }
+          const compressedArrayBuffer = await compressFileForTemplatePoster(
+            file
+          );
+          const compressedFile = new Blob([compressedArrayBuffer], {
+            type: "image/png",
+          });
           const formImgData = new FormData();
-          formImgData.append("uploaded_file", file);
-          const { url, headers } = createUrl("api/upload-img");
-          const res = await axios.post(url, formImgData, { headers });
+          formImgData.append("uploaded_file", compressedFile);
+          const req = createUrl("api/upload-img");
+          const res = await axios.post(req.url, formImgData, {
+            headers: req.headers,
+          });
           return { id: el.elementId, newSrc: res.data.imageUrl };
         })
       );
@@ -382,10 +395,18 @@ const AdEditor = () => {
           } else if (el.url?.startsWith("blob:")) {
             file = await blobUrlToFile(el.url, el.name);
           }
+          const compressedArrayBuffer = await compressFileForTemplatePoster(
+            file
+          );
+          const compressedFile = new Blob([compressedArrayBuffer], {
+            type: "image/png",
+          });
           const formImgData = new FormData();
-          formImgData.append("uploaded_file", file);
-          const { url, headers } = createUrl("api/upload-img");
-          const res = await axios.post(url, formImgData, { headers });
+          formImgData.append("uploaded_file", compressedFile);
+          const req = createUrl("api/upload-img");
+          const res = await axios.post(req.url, formImgData, {
+            headers: req.headers,
+          });
           return { id: el.elementId, newSrc: res.data.imageUrl };
         })
       );
@@ -486,6 +507,7 @@ const AdEditor = () => {
           shareToSocialMedia={shareToSocialMedia}
         />
       </div>
+
       <div className="w-full flex justify-between">
         <div className="flex w-[calc(100%-25rem)] p-4 justify-between gap-4">
           <div className="w-full max-w-[6.5rem] min-w-[6.5rem] p-3 bg-[#FAFAFA] flex items-center justify-center rounded-[0.25rem] h-full">
@@ -589,7 +611,6 @@ const AdEditor = () => {
               </Stage>
             </motion.div>
           </div>
-
           {/* Right Property Panel */}
         </div>
         <PropertyPanel
