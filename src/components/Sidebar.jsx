@@ -30,16 +30,18 @@ const Sidebar = ({ children }) => {
 
   useEffect(() => {
     const path = location.pathname;
-    if (path.includes("home")) {
+    if (path?.includes("home")) {
       setSelectedItem("home");
-    } else if (path.includes("templates")) {
+    } else if (path?.includes("templates")) {
       setSelectedItem("templates");
-    } else if (path.includes("myfiles")) {
-      setSelectedItem("myfiles");
-    } else if (path.includes("get-started")) {
+    } else if (path?.includes("myfiles")) {
+      setSelectedItem("myfiles?tab=myTemplates");
+    } else if (path?.includes("get-started")) {
       setSelectedItem("get-started");
-    } else if (path.includes("settings?tab=pricing")) {
+    } else if (path?.includes("settings?tab=pricing")) {
       setSelectedItem("settings?tab=pricing");
+    } else {
+      setSelectedItem(null);
     }
   }, [location.pathname]);
 
@@ -163,12 +165,12 @@ const Sidebar = ({ children }) => {
             </button>
             <button
               className={` text-sm p-[0.375rem] ${
-                selectedItem === "myfiles"
+                selectedItem?.includes("myfiles")
                   ? "text-[#181818] font-[600]"
                   : "text-[#696969] font-[500]"
               }`}
               onClick={() => {
-                navigate("/myfiles");
+                navigate("/myfiles?tab=myTemplates");
               }}
             >
               My Files

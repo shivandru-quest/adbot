@@ -1,16 +1,15 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import { useNavigate } from "react-router-dom";
-import SelectionModal from "../ui/SelectionModal";
-import axios from "axios";
-import { createUrlBackend } from "../Config/generalFunctions";
 import Loader from "../ui/Loader";
 import NoDataYet from "../ui/NoDataYet";
 import TemplateBanner from "../ui/TemplateBanner";
 import TemplateCard from "../ui/TemplateCard";
 import { templates } from "./Home/Home";
 import AllSvgs from "../assets/AllSvgs";
+import { AppContext } from "../context/AppContext";
 
 const TemplateSelection = () => {
+  const navigate = useNavigate();
   const [selectedCategory, setSelectedCategory] = useState("All");
   const [showModal, setShowModal] = useState(false);
   const [userTemplates, setUserTemplates] = useState([]);
@@ -18,6 +17,7 @@ const TemplateSelection = () => {
   const [selectedImage, setSelectedImage] = useState("");
   const [searchQuery, setSearchQuery] = useState("");
   const [filteredTemplates, setFilteredTemplates] = useState([]);
+  const { dispatch } = useContext(AppContext);
 
   // const filteredTemplates = userTemplates?.filter((template) => {
   //   const categoryMatch =
@@ -69,26 +69,26 @@ const TemplateSelection = () => {
         <div className="w-full flex items-center justify-between gap-4 h-[4.5rem]">
           <div
             className="w-[15rem] h-full p-4 flex items-center justify-start gap-5 border border-[#E2E2E2] rounded-xl cursor-pointer"
-            // onClick={() => {
-            //   dispatch({
-            //     type: "user/canvasSize",
-            //     payload: { width: "1300", height: "600" },
-            //   });
-            //   navigate("/editor/new");
-            // }}
+            onClick={() => {
+              dispatch({
+                type: "user/canvasSize",
+                payload: { width: "650", height: "300", name: "custom" },
+              });
+              navigate("/editor/new");
+            }}
           >
             <AllSvgs type={"customIcon"} />
             <p className="text-[#181818] text-base font-[600]">Custom</p>
           </div>
           <div
             className="w-[15rem] h-full p-4 flex items-center justify-start gap-5 border border-[#E2E2E2] rounded-xl cursor-pointer"
-            // onClick={() => {
-            //   dispatch({
-            //     type: "user/canvasSize",
-            //     payload: { width: "1080", height: "1080" },
-            //   });
-            //   navigate("/editor/new");
-            // }}
+            onClick={() => {
+              dispatch({
+                type: "user/canvasSize",
+                payload: { width: "540", height: "540", name: "post" },
+              });
+              navigate("/editor/new");
+            }}
           >
             <AllSvgs type={"postIcon"} />
             <div>
@@ -98,13 +98,13 @@ const TemplateSelection = () => {
           </div>
           <div
             className="w-[15rem] h-full p-4 flex items-center justify-start gap-5 border border-[#E2E2E2] rounded-xl cursor-pointer"
-            // onClick={() => {
-            //   dispatch({
-            //     type: "user/canvasSize",
-            //     payload: { width: "1200", height: "628" },
-            //   });
-            //   navigate("/editor/new");
-            // }}
+            onClick={() => {
+              dispatch({
+                type: "user/canvasSize",
+                payload: { width: "650", height: "340", name: "landscape" },
+              });
+              navigate("/editor/new");
+            }}
           >
             <AllSvgs type={"landscapeIcon"} />
             <div>
@@ -114,13 +114,13 @@ const TemplateSelection = () => {
           </div>
           <div
             className="w-[15rem] h-full p-4 flex items-center justify-start gap-5 border border-[#E2E2E2] rounded-xl cursor-pointer"
-            // onClick={() => {
-            //   dispatch({
-            //     type: "user/canvasSize",
-            //     payload: { width: "1080", height: "1920" },
-            //   });
-            //   navigate("/editor/new");
-            // }}
+            onClick={() => {
+              dispatch({
+                type: "user/canvasSize",
+                payload: { width: "400", height: "710", name: "story" },
+              });
+              navigate("/editor/new");
+            }}
           >
             <AllSvgs type={"storyIcon"} />
             <div>
@@ -130,13 +130,13 @@ const TemplateSelection = () => {
           </div>
           <div
             className="w-[15rem] h-full p-4 flex items-center justify-start gap-5 border border-[#E2E2E2] rounded-xl cursor-pointer"
-            // onClick={() => {
-            //   dispatch({
-            //     type: "user/canvasSize",
-            //     payload: { width: "1080", height: "1350" },
-            //   });
-            //   navigate("/editor/new");
-            // }}
+            onClick={() => {
+              dispatch({
+                type: "user/canvasSize",
+                payload: { width: "500", height: "625", name: "vertical" },
+              });
+              navigate("/editor/new");
+            }}
           >
             <AllSvgs type={"verticalIcon"} />
             <div>
@@ -146,13 +146,13 @@ const TemplateSelection = () => {
           </div>
           <div
             className="w-[15rem] h-full p-4 flex items-center justify-start gap-5 border border-[#E2E2E2] rounded-xl cursor-pointer"
-            // onClick={() => {
-            //   dispatch({
-            //     type: "user/canvasSize",
-            //     payload: { width: "1000", height: "1500" },
-            //   });
-            //   navigate("/editor/new");
-            // }}
+            onClick={() => {
+              dispatch({
+                type: "user/canvasSize",
+                payload: { width: "433", height: "650", name: "pin" },
+              });
+              navigate("/editor/new");
+            }}
           >
             <AllSvgs type={"pinIcon"} />
             <div>

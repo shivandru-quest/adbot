@@ -4,12 +4,11 @@ import dayjs from "dayjs";
 import GeneralSelect from "../../ui/GeneralSelect";
 import AllSvgs from "../../assets/AllSvgs";
 import NoDataYet from "../../ui/NoDataYet";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { createUrlBackend } from "../../Config/generalFunctions";
 import axios from "axios";
 import Loader from "../../ui/Loader";
 import TemplateCard from "../../ui/TemplateCard";
-import SelectionCardHandle from "../../ui/SelectionCardHandle";
 import { templates } from "../Home/Home";
 
 const categoryOptions = [
@@ -41,7 +40,7 @@ const dateOptions = [
   { value: "all", label: "All" },
 ];
 const MyFiles = () => {
-  const [selectedItem, setSelectedItem] = useState("myTemplates");
+  const [searchParams, setSearchParams] = useSearchParams();
   const [selectedCategory, setSelectedCategory] = useState({
     value: "all",
     label: "All",
@@ -56,8 +55,14 @@ const MyFiles = () => {
   const [filteredData, setFilteredData] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedTemplateId, setSelectedTemplateId] = useState([]);
-  console.log("selectedCategory", selectedCategory);
-  console.log("selectedDate", selectedDate);
+
+  useEffect(() => {
+    if (!searchParams.get("tab")) {
+      setSearchParams({ tab: "myTemplates" });
+    }
+  }, [searchParams, setSearchParams]);
+  
+
   function handleCategoryChange(selectedOption) {
     setSelectedCategory(selectedOption);
   }
@@ -79,6 +84,7 @@ const MyFiles = () => {
   useEffect(() => {
     fetchTemplates();
   }, []);
+
   useEffect(() => {
     const now = dayjs();
     const filtered = userTemplates?.filter((template) => {
@@ -151,31 +157,34 @@ const MyFiles = () => {
         <div className="w-1/2 flex items-center justify-start">
           <button
             className={`px-6 py-4 text-sm ${
-              selectedItem === "all"
+              searchParams.get("tab") === "all"
                 ? "text-[#181818] font-[500] border-b border-[#808080]"
                 : "text-[#979797] font-[400]"
             }`}
-            onClick={() => setSelectedItem("all")}
+            onClick={() => setSearchParams({ tab: "all" })}
+            // onClick={() => setSelectedItem("all")}
           >
             All
           </button>
           <button
             className={`px-6 py-4 text-sm ${
-              selectedItem === "myTemplates"
+              searchParams.get("tab") === "myTemplates"
                 ? "text-[#181818] font-[500] border-b border-[#808080]"
                 : "text-[#979797] font-[400]"
             }`}
-            onClick={() => setSelectedItem("myTemplates")}
+            onClick={() => setSearchParams({ tab: "myTemplates" })}
+            // onClick={() => setSelectedItem("myTemplates")}
           >
             My Templates
           </button>
           <button
             className={`px-6 py-4 text-sm ${
-              selectedItem === "favourite"
+              searchParams.get("tab") === "favourite"
                 ? "text-[#181818] font-[500] border-b border-[#808080]"
                 : "text-[#979797] font-[400]"
             }`}
-            onClick={() => setSelectedItem("favourite")}
+            onClick={() => setSearchParams({ tab: "favourite" })}
+            // onClick={() => setSelectedItem("favourite")}
           >
             Favourite
           </button>
@@ -214,7 +223,7 @@ const MyFiles = () => {
       </div>
       {isLoading && <Loader />}
       <div className="py-4 px-6 grid grid-cols-4 gap-x-4 gap-y-4 rounded-[1rem] h-auto w-full">
-        {selectedItem === "favourite" ? (
+        {searchParams.get("tab") === "favourite" ? (
           <>
             {filteredData?.map((ele, i) => {
               return (
@@ -229,17 +238,17 @@ const MyFiles = () => {
                     platform={ele?.platform}
                     title={ele?.title}
                   />
-                  {selectedTemplateId?.includes(ele?.templateId) && (
+                  {/* {selectedTemplateId?.includes(ele?.templateId) && (
                     <button className="absolute top-6 left-6">
                       <AllSvgs type={"priceTickIcon"} />
                     </button>
-                  )}
+                  )} */}
                 </div>
               );
             })}
           </>
         ) : (
-          selectedItem === "myTemplates" &&
+          searchParams.get("tab") === "myTemplates" &&
           templates?.map((ele, i) => (
             <div key={i}>
               <TemplateCard
@@ -264,7 +273,7 @@ const MyFiles = () => {
           </p>
         </div>
       )}
-      {selectedTemplateId?.length > 0 && (
+      {/* {selectedTemplateId?.length > 0 && (
         <div className="absolute z-10 bottom-4 left-1/4">
           <SelectionCardHandle
             setSelectedTemplateId={setSelectedTemplateId}
@@ -273,7 +282,7 @@ const MyFiles = () => {
             fetchTemplates={fetchTemplates}
           />
         </div>
-      )}
+      )} */}
     </div>
   );
 };

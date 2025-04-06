@@ -95,7 +95,10 @@ const AdEditorTopBar = ({
         >
           <AllSvgs type={"rightCurveIcon"} />
         </button>
-        <button className="flex items-center gap-1 px-[0.625rem] py-[0.375rem] border border-[#E2E2E2] rounded-md">
+        <button
+          className="flex items-center gap-1 px-[0.625rem] py-[0.375rem] border border-[#E2E2E2] rounded-md"
+          onClick={() => navigate("/settings?tab=pricing")}
+        >
           <AllSvgs type={"crownIcon"} />
           <span className="text-[#535353] text-xs font-[500]">Upgrade now</span>
         </button>

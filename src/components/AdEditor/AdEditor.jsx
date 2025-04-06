@@ -346,7 +346,7 @@ const AdEditor = () => {
         Toast.success({
           text: "Ad created successfully",
         });
-        navigate("/myFiles");
+        navigate("/myfiles?tab=favourite");
       }
     } catch (error) {
       setIsLoading(false);
@@ -430,7 +430,7 @@ const AdEditor = () => {
       if (res.data.success) {
         await getTemplateData();
         setIsLoading(false);
-        navigate("/myFiles");
+        navigate("/myfiles?tab=favourite");
         Toast.success({
           text: "Ad updated successfully",
         });

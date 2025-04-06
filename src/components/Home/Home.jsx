@@ -198,7 +198,7 @@ const Home = () => {
           <p className="text-[#0D0D0D] text-[1.125rem] font-[600] leading-[1.75rem] tracking-[-0.01125rem] text-ellipsis overflow-hidden whitespace-nowrap">
             Recent files
           </p>
-          <button onClick={() => navigate("/myFiles")}>
+          <button onClick={() => navigate("/myfiles?tab=favourite")}>
             <AllSvgs type={"rightLightIcon"} />
           </button>
         </div>
@@ -207,7 +207,6 @@ const Home = () => {
         )}
         <div className="w-full flex flex-wrap gap-4">
           {userTemplates?.map((el) => {
-            // const tempImage = el.elements?.find((ele) => ele.type === "image");
             return (
               <TemplateCard
                 imgFile={el?.templatePoster}
