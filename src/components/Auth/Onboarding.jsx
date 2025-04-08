@@ -14,6 +14,7 @@ import Loader from "../../ui/Loader";
 import Cookies from "universal-cookie";
 import AllSvgs from "../../assets/AllSvgs";
 import { importConfig } from "../../Config/importConfig";
+import { motion } from "framer-motion";
 
 const OnboardingPage = () => {
   const navigate = useNavigate();
@@ -72,7 +73,13 @@ const OnboardingPage = () => {
   return (
     <div className="min-h-screen flex h-screen overflow-hidden">
       {isLoading && <Loader />}
-      <div className="w-full lg:w-1/2 flex flex-col items-center justify-center p-8">
+      <motion.div
+        className="w-full lg:w-1/2 flex flex-col items-center justify-center p-8"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
+        transition={{ duration: 0.5, ease: "easeOut" }}
+      >
         <div className="w-full flex items-center justify-start pl-[8rem]">
           <AllSvgs type={"nexaLogo"} />
         </div>
@@ -149,7 +156,7 @@ const OnboardingPage = () => {
             />
           </button>
         </div>
-      </div>
+      </motion.div>
       <div className="hidden lg:flex lg:w-1/2 bg-gradient-to-br from-black to-white">
         <div className="inset-0 bg-black opacity-10" />
         <div className="flex flex-col justify-center items-center h-screen">

@@ -13,7 +13,7 @@ const Navbar = () => {
   }
   return (
     <motion.header
-      className={`flex justify-between gap-6 items-center px-6 py-4 w-full font-semibold text-center bg-white min-h-[4.7rem] max-md:px-5 max-md:max-w-full sticky top-0 z-10`}
+      className={`flex justify-between gap-6 items-center px-6 py-4 w-full font-semibold text-center bg-white min-h-[4.7rem] max-md:px-5 max-md:max-w-full fixed top-0 z-10`}
       initial={{ opacity: 0, y: -20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.6, ease: "easeOut" }}

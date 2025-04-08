@@ -178,11 +178,9 @@ const GoogleOAuth = ({ setIsLoading }) => {
       className="w-full flex items-center justify-center rounded-[0.625rem] bg-[#E2E2E2]"
       href={`https://accounts.google.com/o/oauth2/auth?client_id=${mainConfig.GOOGLE_CLIENT_ID}&redirect_uri=${mainConfig.APP_URL}login&scope=profile%20email&response_type=code`}
     >
-      <motion.div
-        whileHover={{ scale: 1.05 }}
-        whileTap={{ scale: 0.95 }}
+      <div
         type="button"
-        className="w-full flex items-center gap-3 justify-between px-4 py-3 border border-gray-300 rounded-lg hover:bg-gray-50"
+        className="w-full flex items-center gap-3 justify-between px-4 py-3 rounded-lg"
       >
         <div className="flex flex-col gap-1">
           <p className="text-[#181818] text-sm font-[500]">
@@ -195,7 +193,7 @@ const GoogleOAuth = ({ setIsLoading }) => {
         <div>
           <AllSvgs type={"googleOAuthArrowIcon"} />
         </div>
-      </motion.div>
+      </div>
     </a>
   );
 };

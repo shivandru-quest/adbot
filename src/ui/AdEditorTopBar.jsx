@@ -22,12 +22,10 @@ const AdEditorTopBar = ({
   shareToSocialMedia,
 }) => {
   const navigate = useNavigate();
-  const location = useLocation();
   const { templateId } = useParams();
   const [showDownLoadMenu, setShowDownloadMenu] = useState(false);
   const [showShareMenu, setShowShareMenu] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
-  const { formData } = location?.state || {};
   const { state, dispatch } = useContext(AppContext);
 
   function toggleDownloadMenu() {
@@ -44,11 +42,8 @@ const AdEditorTopBar = ({
       type: `user/adData`,
       payload: { ...state.adData, [name]: value },
     });
-    // setAdData((prev) => ({
-    //   ...prev,
-    //   [name]: value,
-    // }));
   }
+
   return (
     <div className="relative flex items-center justify-between h-[3.75rem] w-full py-4 px-4 border-b border-[#E2E2E2]">
       <div className="flex items-center justify-center gap-2">
@@ -57,16 +52,14 @@ const AdEditorTopBar = ({
         </button>
         {!isEditing ? (
           <span className="text-[#3E3E3E] text-sm font-[500]">
-            {formData?.title ||
-              state.adData?.title ||
-              "Enter your canvas title"}
+            {state.adData?.title || "Enter your canvas title"}
           </span>
         ) : (
           <input
             type="title"
             name="title"
             id="title"
-            value={formData?.title || state?.adData?.title || ""}
+            value={state?.adData?.title}
             placeholder="Enter your canvas title"
             className="text-[#3E3E3E] text-sm font-[500] placeholder:text-sm placeholder:font-[400] outline-none w-32 text-ellipsis overflow-hidden whitespace-nowrap"
             onChange={handleChange}

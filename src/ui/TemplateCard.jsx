@@ -8,8 +8,17 @@ import {
 } from "../Config/generalFunctions";
 import axios from "axios";
 import { Toast } from "@questlabs/react-sdk";
+import { useNavigate } from "react-router-dom";
 
-const TemplateCard = ({ imgFile, title, platform, idx, onClick }) => {
+const TemplateCard = ({
+  imgFile,
+  title,
+  platform,
+  idx,
+  onClick,
+  fetchTemplates,
+}) => {
+  const navigate = useNavigate();
   const [showButton, setShowButton] = useState(false);
   const [editMenu, setEditMenu] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
@@ -29,6 +38,7 @@ const TemplateCard = ({ imgFile, title, platform, idx, onClick }) => {
       const { url, headers } = createUrlBackend(`delete/${idx}`);
       const res = await axios.patch(url, { payload }, { headers });
       setIsLoading(false);
+      await fetchTemplates();
       Toast.success({
         text: "Ad deleted successfully",
       });
@@ -58,6 +68,9 @@ const TemplateCard = ({ imgFile, title, platform, idx, onClick }) => {
     } catch (error) {
       console.error("Error downloading the image:", error);
     }
+  }
+  function handleEdit() {
+    navigate(`/editor/${idx}`);
   }
 
   return (
@@ -95,16 +108,17 @@ const TemplateCard = ({ imgFile, title, platform, idx, onClick }) => {
         <EditMenu
           editMenu={editMenu}
           setEditMenu={setEditMenu}
-          onEdit={toggleSelectionModal}
+          onEdit={handleEdit}
+          // onEdit={toggleSelectionModal}
           onDelete={handleDelete}
           onDownload={handleDownloadImage}
         />
       </div>
-      <SelectionModal
+      {/* <SelectionModal
         isOpen={isOpen}
         onClose={toggleSelectionModal}
         selectedTemplateId={idx}
-      />
+      /> */}
     </div>
   );
 };

@@ -9,6 +9,7 @@ import axios from "axios";
 import TemplateCard from "../../ui/TemplateCard";
 import Loader from "../../ui/Loader";
 import { AppContext } from "../../context/AppContext";
+import { motion } from "framer-motion";
 export const templates = [
   {
     imgFile: importConfig.dummyTemplate1,
@@ -38,7 +39,7 @@ const Home = () => {
   const [userTemplates, setUserTemplates] = useState([]);
   const { state, dispatch } = useContext(AppContext);
   const { canvasSize } = state;
-  console.log("canvasSize", canvasSize);
+
   function toggleModal() {
     setShowModal((prev) => !prev);
     localStorage.setItem("counter", "1");
@@ -67,7 +68,13 @@ const Home = () => {
   }, []);
 
   return (
-    <div className="w-full flex flex-col gap-6 mt-6">
+    <motion.div
+      className="w-full flex flex-col gap-6 mt-6"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      transition={{ duration: 0.5, ease: "easeOut" }}
+    >
       <div
         className="h-[21rem] w-full rounded-lg flex items-center justify-start pl-20"
         style={{
@@ -206,7 +213,7 @@ const Home = () => {
           <NoDataYet onAction={() => navigate("/templates")} />
         )}
         <div className="w-full flex flex-wrap gap-4">
-          {userTemplates?.map((el) => {
+          {userTemplates?.slice(0, 4).map((el) => {
             return (
               <TemplateCard
                 imgFile={el?.templatePoster}
@@ -214,6 +221,7 @@ const Home = () => {
                 platform={el.platform}
                 idx={el.templateId}
                 key={el.templateId}
+                fetchTemplates={fetchTemplates}
               />
             );
           })}
@@ -230,7 +238,7 @@ const Home = () => {
         </div>
         {/* <NoDataYet onAction={() => navigate("/templates")} /> */}
         <div className="w-full flex flex-wrap gap-4">
-          {templates?.map((el, i) => (
+          {templates?.slice(0, 4).map((el, i) => (
             <div key={i}>
               <TemplateCard
                 idx={i}
@@ -243,7 +251,7 @@ const Home = () => {
         </div>
       </div>
       <LoginSuccessModal isOpen={showModal} onClick={toggleModal} />
-    </div>
+    </motion.div>
   );
 };
 

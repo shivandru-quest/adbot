@@ -10,12 +10,14 @@ import WhyChooseUs from "./WhyChooseUs";
 import UseCases from "./UseCases";
 import SubFooter from "./SubFooter";
 import Footer from "./Footer";
+import StarterKit from "./StarterKit";
 
 const LandingPage = () => {
   return (
-    <div className="min-h-screen w-full flex flex-col overflow-x-hidden">
+    <div className="w-full h-auto flex flex-col overflow-x-hidden overflow-y-auto">
       <Navbar />
       <Hero />
+      <StarterKit />
       <ProblemAndSolution />
       <HowItWorks />
       <Features />

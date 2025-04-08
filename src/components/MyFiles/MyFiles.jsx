@@ -10,6 +10,7 @@ import axios from "axios";
 import Loader from "../../ui/Loader";
 import TemplateCard from "../../ui/TemplateCard";
 import { templates } from "../Home/Home";
+import { motion } from "framer-motion";
 
 const categoryOptions = [
   { value: "facebook", label: "Facebook" },
@@ -61,7 +62,6 @@ const MyFiles = () => {
       setSearchParams({ tab: "myTemplates" });
     }
   }, [searchParams, setSearchParams]);
-  
 
   function handleCategoryChange(selectedOption) {
     setSelectedCategory(selectedOption);
@@ -89,9 +89,12 @@ const MyFiles = () => {
     const now = dayjs();
     const filtered = userTemplates?.filter((template) => {
       const createdAt = dayjs(template.createdAt);
-      const matchesSearch = template?.title
-        ?.toLowerCase()
-        .includes(searchQuery?.toLowerCase());
+
+      const matchesSearch =
+        !searchQuery ||
+        (template?.title &&
+          template?.title?.toLowerCase().includes(searchQuery?.toLowerCase()));
+
       const matchesCategory =
         selectedCategory?.value === "all" ||
         template.category?.toLowerCase() ===
@@ -100,6 +103,7 @@ const MyFiles = () => {
           selectedCategory?.value.toLowerCase() ||
         template.platform?.toLowerCase() ===
           selectedCategory?.value.toLowerCase();
+
       let matchesDate = true;
       if (selectedDate?.value === "today") {
         matchesDate = createdAt.isSame(now, "day");
@@ -126,7 +130,13 @@ const MyFiles = () => {
   }
 
   return (
-    <div className="w-full flex flex-col gap-6 mt-6 mb-4 relative">
+    <motion.div
+      className="w-full flex flex-col gap-6 mt-6 mb-4 relative"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      transition={{ duration: 0.5, ease: "easeOut" }}
+    >
       <div
         className="h-[21rem] w-full rounded-lg flex items-center justify-start pl-20 relative"
         style={{
@@ -237,6 +247,7 @@ const MyFiles = () => {
                     imgFile={ele?.templatePoster}
                     platform={ele?.platform}
                     title={ele?.title}
+                    fetchTemplates={fetchTemplates}
                   />
                   {/* {selectedTemplateId?.includes(ele?.templateId) && (
                     <button className="absolute top-6 left-6">
@@ -283,7 +294,7 @@ const MyFiles = () => {
           />
         </div>
       )} */}
-    </div>
+    </motion.div>
   );
 };
 

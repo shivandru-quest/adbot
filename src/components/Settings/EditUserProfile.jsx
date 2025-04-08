@@ -10,6 +10,7 @@ import { AppContext } from "../../context/AppContext";
 import imageCompression from "browser-image-compression";
 import { importConfig } from "../../Config/importConfig";
 import GeneralSelect from "../../ui/GeneralSelect";
+import { motion } from "framer-motion";
 const roleOptions = [
   { label: "CEO", value: "CEO" },
   { label: "CTO", value: "CTO" },
@@ -242,7 +243,13 @@ const EditUserProfile = () => {
   return (
     <div>
       {isLoading && <Loader />}
-      <div className="flex flex-col gap-8 rounded-[10px] px-8">
+      <motion.div
+        className="flex flex-col gap-8 rounded-[10px] px-8"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
+        transition={{ duration: 0.5, ease: "easeOut" }}
+      >
         <p className="text-[#0D0D0D] text-[2.25rem] leading-[2.75rem] tracking-[-0.045rem] font-[600]">
           Account
         </p>
@@ -459,7 +466,7 @@ const EditUserProfile = () => {
             />
           </div>
         </div>
-      </div>
+      </motion.div>
       {isDisabled && (
         <div className="w-full flex justify-end gap-9 mt-8 pr-8">
           <button

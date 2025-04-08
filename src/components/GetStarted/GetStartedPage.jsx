@@ -4,6 +4,7 @@ import { mainConfig } from "../../Config/mainConfig";
 import { importConfig } from "../../Config/importConfig";
 import { useNavigate } from "react-router-dom";
 import { BiTargetLock } from "react-icons/bi";
+import { motion } from "framer-motion";
 
 const GetStartedPage = () => {
   const navigate = useNavigate();
@@ -24,7 +25,13 @@ const GetStartedPage = () => {
   };
 
   return (
-    <div className="p-4 flex flex-col gap-6">
+    <motion.div
+      className="p-4 flex flex-col gap-6"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      transition={{ duration: 0.5, ease: "easeOut" }}
+    >
       <div
         className="h-[21rem] w-full rounded-lg flex items-center justify-start pl-20"
         style={{
@@ -144,7 +151,7 @@ const GetStartedPage = () => {
           <GetStarted.Content />
         </GetStarted>
       </div>
-    </div>
+    </motion.div>
   );
 };
 

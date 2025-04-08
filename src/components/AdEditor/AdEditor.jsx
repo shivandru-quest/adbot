@@ -17,7 +17,6 @@ import {
   getUserCredentials,
   loadImageAsBase64,
   dataURLtoBlob,
-  compressImage,
   compressFileForTemplatePoster,
 } from "../../Config/generalFunctions";
 import Loader from "../../ui/Loader";
@@ -25,14 +24,12 @@ import AdEditorTopBar from "../../ui/AdEditorTopBar";
 import { motion } from "framer-motion";
 import SidePanel from "../../ui/SidePanel";
 import { AppContext } from "../../context/AppContext";
-import imageCompression from "browser-image-compression";
 
 const AdEditor = () => {
   const location = useLocation();
   const navigate = useNavigate();
-  const { state } = useContext(AppContext);
+  const { state, dispatch } = useContext(AppContext);
   const { templateId } = useParams();
-  const { formData } = location?.state || {};
   const [elements, setElements] = useState([]);
   const [selectedId, setSelectedId] = useState(null);
   const [history, setHistory] = useState([]);
@@ -54,9 +51,9 @@ const AdEditor = () => {
   useEffect(() => {
     setDownLoadFormat((prev) => ({
       ...prev,
-      fileName: adData?.title || formData?.title || "canvas",
+      fileName: adData?.title || "canvas",
     }));
-  }, [adData, formData]);
+  }, [adData]);
 
   function addImage(url) {
     const newElement = {
@@ -329,11 +326,10 @@ const AdEditor = () => {
       setElements(updatedElements);
       const payload = {
         ...adData,
-        images: undefined,
         isPublic: getUserCredentials()?.includes("questlabs") ? true : false,
+        canvasSize: state?.canvasSize?.name,
         templatePoster: tempPoster,
         elements: updatedElements,
-        canvasSize: state?.canvasSize?.name,
       };
       const reqData = createUrlBackend();
       const res = await axios.post(
@@ -378,6 +374,15 @@ const AdEditor = () => {
     }
   }, [templateId]);
 
+  useEffect(() => {
+    if (selectedTemplate) {
+      dispatch({
+        type: "user/adData",
+        payload: { ...adData, title: selectedTemplate.title },
+      });
+    }
+  }, [selectedTemplate]);
+
   async function updateTemplate() {
     setIsLoading(true);
     let tempPoster = await handleTemplatePoster();
@@ -417,9 +422,11 @@ const AdEditor = () => {
         return matchedUpload ? { ...el, src: matchedUpload.newSrc } : el;
       });
       const payload = {
-        ...formData,
+        ...adData,
         templatePoster: tempPoster,
         elements: updatedElements,
+        isPublic: getUserCredentials()?.includes("questlabs") ? true : false,
+        canvasSize: state?.canvasSize?.name,
       };
       const reqData = createUrlBackend(`${templateId}`);
       const res = await axios.patch(
@@ -505,6 +512,8 @@ const AdEditor = () => {
           setSocialMediaPlatform={setSocialMediaPlatform}
           socialMediaPlatForm={socialMediaPlatForm}
           shareToSocialMedia={shareToSocialMedia}
+          selectedTemplate={selectedTemplate}
+          setSelectedTemplate={setSelectedTemplate}
         />
       </div>
 

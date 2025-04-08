@@ -1,6 +1,7 @@
 import { useState } from "react";
 import PlanComparison from "./PlanComparison";
 import PriceCard from "./PriceCard";
+import { motion } from "framer-motion";
 
 const SubscriptionPage = () => {
   const [showComparison, setShowComparison] = useState(false);
@@ -53,7 +54,13 @@ const SubscriptionPage = () => {
   ];
 
   return (
-    <div className="h-auto">
+    <motion.div
+      className="h-auto"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      transition={{ duration: 0.5, ease: "easeOut" }}
+    >
       <div className="w-full">
         <div className="flex items-center justify-between mb-7">
           <div className="flex items-center">
@@ -90,7 +97,7 @@ const SubscriptionPage = () => {
           <PlanComparison onClose={() => setShowComparison(false)} />
         )}
       </div>
-    </div>
+    </motion.div>
   );
 };
 

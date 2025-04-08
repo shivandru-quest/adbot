@@ -74,10 +74,14 @@ const Login = () => {
       {isLoading && <Loader />}
 
       {/* Right Panel - Login Form */}
-      <div className="w-full lg:w-1/2 flex items-center justify-center p-8">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
+      <motion.div
+        className="w-full lg:w-1/2 flex items-center justify-center p-8"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
+        transition={{ duration: 0.5, ease: "easeOut" }}
+      >
+        <div
           className="w-full max-w-lg flex flex-col justify-center gap-11 h-full relative"
         >
           <AllSvgs type={"nexaLogo"} />
@@ -157,8 +161,8 @@ const Login = () => {
               </span>
             </a>
           </div>
-        </motion.div>
-      </div>
+        </div>
+      </motion.div>
       <div className="hidden lg:flex lg:w-1/2 bg-gradient-to-br from-black to-white">
         <div className="inset-0 bg-black opacity-10" />
         <div className="flex flex-col justify-center items-center h-screen">

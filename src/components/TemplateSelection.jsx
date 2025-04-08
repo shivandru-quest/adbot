@@ -7,6 +7,7 @@ import TemplateCard from "../ui/TemplateCard";
 import { templates } from "./Home/Home";
 import AllSvgs from "../assets/AllSvgs";
 import { AppContext } from "../context/AppContext";
+import { motion } from "framer-motion";
 
 const TemplateSelection = () => {
   const navigate = useNavigate();
@@ -56,7 +57,13 @@ const TemplateSelection = () => {
   }, [searchQuery]);
 
   return (
-    <div className="p-4">
+    <motion.div
+      className="p-4"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      transition={{ duration: 0.5, ease: "easeOut" }}
+    >
       <div className="flex items-center justify-between mb-8">
         <TemplateBanner
           setSelectedCategory={setSelectedCategory}
@@ -189,7 +196,7 @@ const TemplateSelection = () => {
         selectedImage={selectedImage}
         fetchTemplates={fetchTemplates}
       /> */}
-    </div>
+    </motion.div>
   );
 };
 

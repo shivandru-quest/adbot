@@ -4,12 +4,19 @@ import SubscriptionPage from "../Subscription/SubscriptionPage";
 import AllSvgs from "../../assets/AllSvgs";
 import Refer from "./Refer";
 import LoginSecurity from "./LoginSecurity";
+import { motion } from "framer-motion";
 
 const SettingsDashboard = () => {
   const [searchParams, setSearchParams] = useSearchParams();
 
   return (
-    <div className="flex flex-col h-auto">
+    <motion.div
+      className="flex flex-col h-auto"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      transition={{ duration: 0.5, ease: "easeOut" }}
+    >
       <div className="flex items-center gap-1 pt-[30px] w-56 ml-16">
         <AllSvgs type={"homeIcon"} />
         <AllSvgs type={"rightPointerIcon"} />
@@ -98,7 +105,7 @@ const SettingsDashboard = () => {
           )}
         </div>
       </div>
-    </div>
+    </motion.div>
   );
 };
 

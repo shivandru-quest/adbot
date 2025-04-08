@@ -14,6 +14,7 @@ import {
 } from "../../Config/generalFunctions";
 import { importConfig } from "../../Config/importConfig";
 import AllSvgs from "../../assets/AllSvgs";
+import { motion } from "framer-motion";
 const OtpModal = () => {
   const navigate = useNavigate();
   const inputRef = useRef([]);
@@ -326,7 +327,13 @@ const OtpModal = () => {
   return (
     <div className="flex items-center justify-between w-full min-h-screen h-screen overflow-hidden">
       {isLoading && <Loader />}
-      <div className="bg-[#fff] w-full lg:w-1/2 h-full flex flex-col justify-start items-center p-16 z-10">
+      <motion.div
+        className="bg-[#fff] w-full lg:w-1/2 h-full flex flex-col justify-start items-center p-16 z-10"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
+        transition={{ duration: 0.5, ease: "easeOut" }}
+      >
         <div className="flex w-full justify-between items-center mb-[2.75rem]">
           <AllSvgs type={"nexaLogo"} />
         </div>
@@ -398,7 +405,7 @@ const OtpModal = () => {
             </button>
           </div>
         </div>
-      </div>
+      </motion.div>
       <div className="hidden lg:flex lg:w-1/2 bg-gradient-to-br from-black to-white">
         <div className="inset-0 bg-black opacity-10" />
         <div className="flex flex-col justify-center items-center h-screen">
