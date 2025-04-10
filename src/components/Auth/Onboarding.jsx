@@ -6,6 +6,7 @@ import {
   getToken,
   getUserId,
   createLoginFlowUrl,
+  createUrlBackend,
 } from "../../Config/generalFunctions";
 import { mainConfig } from "../../Config/mainConfig";
 import axios from "axios";
@@ -63,10 +64,27 @@ const OnboardingPage = () => {
         dispatch({ type: "user/isAuthenticated", payload: true });
         dispatch({ type: "user/UserName", payload: userAnswers.fullName });
         setIsLoading(false);
+        await createUser();
       }
     } catch (error) {
       setIsLoading(false);
       console.log("error", error.message);
+    }
+  }
+
+  async function createUser() {
+    try {
+      const payload = {
+        fullName: answers["ca-43fbd040-68f5-4384-a572-58ae3e61c317"] || "",
+        email: answers["ca-28acc157-493e-4e84-8136-acaf096c8415"] || "",
+        role: answers["ca-cb42439e-0f90-46a9-9864-671259041b01"] || "",
+        mainGoal: answers["ca-1e90263f-5dea-41c3-9376-2e8def433e0f"] || "",
+      };
+      const { url, headers } = createUrlBackend(`user`);
+      const res = await axios.post(url, payload, { headers });
+      
+    } catch (error) {
+      console.log("error", error);
     }
   }
 

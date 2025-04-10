@@ -25,7 +25,6 @@ const isPublicRoute = (pathname) => {
 };
 
 const AllRoutes = () => {
-  const location = useLocation();
 
   const { state } = useContext(AppContext);
   const { isAuthenticated } = state;

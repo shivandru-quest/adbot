@@ -15,6 +15,7 @@ const initialState = {
     height: "300",
     name: "custom",
   },
+  getStartedStatus: [],
   adData: {
     title: "",
     category: "",
@@ -39,6 +40,8 @@ function appReducer(state, { type, payload }) {
           category: payload.category ?? state.adData.category,
         },
       };
+    case "user/getStartedStatus":
+      return { ...state, getStartedStatus: payload };
     default:
       throw new Error(`Unknown action type: ${type}`);
   }

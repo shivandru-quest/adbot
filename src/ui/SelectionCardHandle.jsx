@@ -17,7 +17,7 @@ const SelectionCardHandle = ({
         isDeleted: true,
       };
       const deleteRequests = selectedTemplateId?.map((id) => {
-        const { url, headers } = createUrlBackend(`delete/${id}`);
+        const { url, headers } = createUrlBackend(`template/delete/${id}`);
         return axios.patch(url, { payload }, { headers });
       });
       await Promise.all(deleteRequests);

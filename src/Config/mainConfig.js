@@ -1,10 +1,10 @@
 export const mainConfig = {
   QUEST_PRODUCTION_URL: "https://api.questlabs.ai/",
   QUEST_STAGING_URL: "https://staging-api.questlabs.ai/",
-  // QUEST_ADDONS_BACKEND_URL:
-  //   "http://localhost:8080/api/adbot/template/",
   QUEST_ADDONS_BACKEND_URL:
-    "https://addons.questprotocol.xyz/api/adbot/template/",
+    "http://localhost:8080/api/adbot/",
+  // QUEST_ADDONS_BACKEND_URL:
+  //   "https://addons.questprotocol.xyz/api/adbot/",
   ENVIRONMENT: "PRODUCTION", //STAGING
   QUEST_COMMUNITY_ID: "e-0000000000",
   QUEST_ADDBOT_ENTITY_ID: "e-0a447948-07e5-42a9-85ee-64ccfa6e8110",

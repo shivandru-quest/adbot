@@ -1,13 +1,20 @@
+import { useState, useEffect, useContext } from "react";
 import { GetStarted } from "@questlabs/react-sdk";
-import { getToken, getUserId } from "../../Config/generalFunctions";
+import {
+  createUrlBackend,
+  getToken,
+  getUserId,
+} from "../../Config/generalFunctions";
 import { mainConfig } from "../../Config/mainConfig";
 import { importConfig } from "../../Config/importConfig";
 import { useNavigate } from "react-router-dom";
-import { BiTargetLock } from "react-icons/bi";
 import { motion } from "framer-motion";
+import { AppContext } from "../../context/AppContext";
+import axios from "axios";
 
 const GetStartedPage = () => {
   const navigate = useNavigate();
+  const { dispatch } = useContext(AppContext);
   const clickAction = (link) => {
     switch (link) {
       case "/create":
@@ -23,6 +30,22 @@ const GetStartedPage = () => {
         window.open("https://calendly.com/shubham-quest/quick-chat", "_blank");
     }
   };
+
+  async function updateUser(status) {
+    try {
+      const payload = {
+        getStartedStatus: [status],
+      };
+      const { url, headers } = createUrlBackend(`user/update`);
+      const res = await axios.patch(url, payload, { headers });
+      dispatch({
+        type: "user/getStartedStatus",
+        payload: res.data.data.getStartedStatus,
+      });
+    } catch (error) {
+      console.log("error", error);
+    }
+  }
 
   return (
     <motion.div
@@ -48,6 +71,12 @@ const GetStartedPage = () => {
             <p className="text-[#fff] text-[2rem] font-[500] leading-[3.5rem] tracking-[-0.04rem]">
               Turn Clicks into Conversions Faster
             </p>
+            <button
+              className="text-[#181818] text-xs font-[600] px-3 py-2 bg-[#FAFAFA] w-28 flex items-center justify-center gap-2 rounded-md mt-4"
+              onClick={() => navigate("/editor/new")}
+            >
+              Create now
+            </button>
           </div>
           <div className="w-[39rem]">
             <img
@@ -69,13 +98,19 @@ const GetStartedPage = () => {
       <div className="w-full relative">
         <button
           className="text-[#181818] text-sm font-[600] px-3 py-2 border border-[#E2E2E2] rounded-md bg-white absolute right-4 top-5"
-          onClick={() => navigate("/editor/new")}
+          onClick={async () => {
+            navigate("/editor/new");
+            await updateUser("CREATE_FIRST_AD");
+          }}
         >
           Create now
         </button>
         <button
           className="absolute right-4 top-[7rem] w-24"
-          onClick={() => navigate("/templates")}
+          onClick={async () => {
+            navigate("/templates");
+            await updateUser("CHOOSE_A_TEMPLATE");
+          }}
         >
           <img
             src={importConfig.getStartedButtonIcon1}
@@ -84,7 +119,10 @@ const GetStartedPage = () => {
         </button>
         <button
           className="absolute right-4 top-[12.5rem] w-24"
-          onClick={() => navigate("/myfiles")}
+          onClick={async () => {
+            navigate("/myfiles");
+            await updateUser("UPLOAD_ASSETS");
+          }}
         >
           <img
             src={importConfig.getStartedButtonIcon2}
@@ -93,12 +131,13 @@ const GetStartedPage = () => {
         </button>
         <button
           className="absolute right-4 top-[18rem] w-24"
-          onClick={() =>
+          onClick={async () => {
             window.open(
               "https://calendly.com/shubham-quest/quick-chat",
               "_blank"
-            )
-          }
+            );
+            await updateUser("BOOK_A_CALL");
+          }}
         >
           <img
             src={importConfig.getStartedButtonIcon3}

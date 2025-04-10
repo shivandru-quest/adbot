@@ -85,7 +85,7 @@ const SelectionModal = ({
       const payload = {
         isDeleted: true,
       };
-      const { url, headers } = createUrlBackend(`delete/${selectedTemplateId}`);
+      const { url, headers } = createUrlBackend(`template/delete/${selectedTemplateId}`);
       const res = await axios.patch(url, { payload }, { headers });
       setIsLoading(false);
       Toast.success({
@@ -102,7 +102,7 @@ const SelectionModal = ({
 
   async function fetchTemplate() {
     try {
-      const { url, headers } = createUrlBackend(`${selectedTemplateId}`);
+      const { url, headers } = createUrlBackend(`template/${selectedTemplateId}`);
       const res = await axios.get(url, { headers });
       setTemplateData(res.data.data);
     } catch (error) {

@@ -54,6 +54,14 @@ const AdEditor = () => {
       fileName: adData?.title || "canvas",
     }));
   }, [adData]);
+  function handleToolBarClick(tool) {
+    if (tool === toolbarSelectedElement) {
+      setToolbarSelectedElement(null);
+    } else {
+      console.log("tool", tool);
+      setToolbarSelectedElement(tool);
+    }
+  }
 
   function addImage(url) {
     const newElement = {
@@ -93,8 +101,7 @@ const AdEditor = () => {
     };
     addElement(newElement);
   }
-  console.log("elements", elements);
-  console.log("downloadFormat", downloadFormat);
+
   function addShape(shapeType) {
     const newElement = {
       elementId: `ele-${uuidv4()}`,
@@ -331,7 +338,7 @@ const AdEditor = () => {
         templatePoster: tempPoster,
         elements: updatedElements,
       };
-      const reqData = createUrlBackend();
+      const reqData = createUrlBackend("template");
       const res = await axios.post(
         reqData.url,
         { payload },
@@ -356,7 +363,7 @@ const AdEditor = () => {
   async function getTemplateData() {
     setIsLoading(true);
     try {
-      const { url, headers } = createUrlBackend(`${templateId}`);
+      const { url, headers } = createUrlBackend(`template/${templateId}`);
       const res = await axios.get(url, { headers });
       const data = res.data;
       setSelectedTemplate(data.data);
@@ -428,7 +435,7 @@ const AdEditor = () => {
         isPublic: getUserCredentials()?.includes("questlabs") ? true : false,
         canvasSize: state?.canvasSize?.name,
       };
-      const reqData = createUrlBackend(`${templateId}`);
+      const reqData = createUrlBackend(`template/${templateId}`);
       const res = await axios.patch(
         reqData.url,
         { payload },
@@ -518,18 +525,19 @@ const AdEditor = () => {
       </div>
 
       <div className="w-full flex justify-between">
-        <div className="flex w-[calc(100%-25rem)] p-4 justify-between gap-4">
+        <div className="flex w-fit p-4 justify-start gap-4">
           <div className="w-full max-w-[6.5rem] min-w-[6.5rem] p-3 bg-[#FAFAFA] flex items-center justify-center rounded-[0.25rem] h-full">
             <Toolbar
               onAddText={addText}
-              setToolbarSelectedElement={setToolbarSelectedElement}
               toolbarSelectedElement={toolbarSelectedElement}
+              handleToolBarClick={handleToolBarClick}
             />
           </div>
           {(toolbarSelectedElement === "media" ||
             toolbarSelectedElement === "elements" ||
-            toolbarSelectedElement === "theme") && (
-            <div className="w-80 flex items-center justify-center">
+            toolbarSelectedElement === "theme" ||
+            toolbarSelectedElement === "chat") && (
+            <div className="w-fit flex items-center justify-center">
               <SidePanel
                 toolbarSelectedElement={toolbarSelectedElement}
                 setElements={setElements}
@@ -622,16 +630,18 @@ const AdEditor = () => {
           </div>
           {/* Right Property Panel */}
         </div>
-        <PropertyPanel
-          selectedElement={selectedElement}
-          onChange={(newProps) => handleElementChange(selectedId, newProps)}
-          onDelete={handleDelete}
-          onDuplicate={handleDuplicate}
-          selectedId={selectedId}
-          setElements={setElements}
-          setHistory={setHistory}
-          elements={elements}
-        />
+        <div className="w-full max-w-[20rem] min-w-[20rem] bg-[#FAFAFA] flex items-center justify-center rounded-[0.25rem] h-full mt-4 mr-4">
+          <PropertyPanel
+            selectedElement={selectedElement}
+            onChange={(newProps) => handleElementChange(selectedId, newProps)}
+            onDelete={handleDelete}
+            onDuplicate={handleDuplicate}
+            selectedId={selectedId}
+            setElements={setElements}
+            setHistory={setHistory}
+            elements={elements}
+          />
+        </div>
       </div>
     </div>
   );

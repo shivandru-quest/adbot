@@ -2,6 +2,7 @@ import Cookies from "universal-cookie";
 import { mainConfig } from "./mainConfig";
 import axios from "axios";
 import imageCompression from "browser-image-compression";
+import mammoth from "mammoth";
 const cookies = new Cookies(null, { path: "/" });
 
 export const getEntityId = () => {
@@ -150,7 +151,9 @@ export const dataURLtoBlob = (dataURL) => {
 
 export async function loadImageAsBase64(imageUrl) {
   try {
-    const { url, headers } = createUrlBackend(`download?url=${imageUrl}`);
+    const { url, headers } = createUrlBackend(
+      `template/download?url=${imageUrl}`
+    );
     const response = await axios.get(url, { headers });
     return response.data?.base64;
   } catch (error) {
@@ -204,11 +207,9 @@ export async function compressFileForTemplatePoster(file) {
     let blob;
     if (file instanceof File || file instanceof Blob) {
       blob = file;
-    }
-    else if (typeof file === "string" && file.startsWith("data:image")) {
+    } else if (typeof file === "string" && file.startsWith("data:image")) {
       blob = base64ToBlob(file);
-    }
-    else if (typeof file === "string") {
+    } else if (typeof file === "string") {
       const res = await fetch(file);
       blob = await res.blob();
     } else {
@@ -246,4 +247,113 @@ export async function compressFileForTemplatePoster(file) {
   } catch (error) {
     console.error("Error compressing image:", error);
   }
+}
+
+const allowedFileTypes = [
+  "image/jpeg",
+  "image/png",
+  "image/gif",
+  "image/webp",
+  "application/pdf",
+  "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+  "application/msword",
+  "text/plain",
+  "text/csv",
+];
+
+export async function convertFile(file) {
+  if (!allowedFileTypes.includes(file.type)) {
+    return {
+      success: false,
+      error: "Invalid file type",
+    };
+  }
+  if (file.type.includes("image")) {
+    const base64 = await new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = () => resolve(reader.result);
+      reader.onerror = (error) => reject(error);
+    });
+    return {
+      success: true,
+      data: {
+        documentType: "image",
+        title: file.name,
+        source: {
+          sourceType: "url",
+        },
+        metadata: {
+          file,
+          base64,
+          isLoading: true,
+        },
+      },
+    };
+  } else if (file.type === "application/pdf") {
+    return {
+      success: true,
+      data: {
+        documentType: "document",
+        title: file.name,
+        source: {
+          sourceType: "url",
+        },
+        metadata: {
+          file,
+          typeName: "pdf",
+          isLoading: true,
+        },
+      },
+    };
+  } else if (
+    file.type.includes("msword") ||
+    file.type.includes("wordprocessingml.document")
+  ) {
+    try {
+      const arrayBuffer = await file?.arrayBuffer();
+      const { value } = await mammoth.extractRawText({ arrayBuffer });
+      return {
+        success: true,
+        data: {
+          documentType: "document",
+          title: file.name,
+          source: {
+            data: value,
+            media_type: "text/plain",
+            sourceType: "text",
+          },
+          metadata: {
+            typeName: "document",
+          },
+        },
+      };
+    } catch (error) {
+      return {
+        success: false,
+        error: "Failed to convert DOC file",
+      };
+    }
+  } else if (file.type.startsWith("text")) {
+    const content = await file.text();
+    return {
+      success: true,
+      data: {
+        documentType: "document",
+        title: file.name,
+        source: {
+          data: content,
+          media_type: "text/plain",
+          sourceType: "text",
+        },
+        metadata: {
+          typeName: file.type.split("/")[1],
+        },
+      },
+    };
+  }
+  return {
+    success: false,
+    error: "Invalid file type",
+  };
 }

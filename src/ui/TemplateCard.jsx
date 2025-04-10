@@ -35,7 +35,7 @@ const TemplateCard = ({
       const payload = {
         isDeleted: true,
       };
-      const { url, headers } = createUrlBackend(`delete/${idx}`);
+      const { url, headers } = createUrlBackend(`template/delete/${idx}`);
       const res = await axios.patch(url, { payload }, { headers });
       setIsLoading(false);
       await fetchTemplates();

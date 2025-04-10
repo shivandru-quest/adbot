@@ -43,6 +43,8 @@ import dummyTemplate3 from "../assets/dummyTemplate3.png";
 import dummyTemplate4 from "../assets/dummyTemplate4.png";
 import priceSectionBg from "../assets/priceSectionBg.svg";
 import saveButton from "../assets/saveButton.png";
+import generateButton from "../assets/generateButton.png";
+import nexaShortLogo from "../assets/nexaShortLogo.svg";
 
 export const importConfig = {
   templateBannerBgImage,
@@ -90,4 +92,6 @@ export const importConfig = {
   dummyTemplate4,
   priceSectionBg,
   saveButton,
+  generateButton,
+  nexaShortLogo,
 };

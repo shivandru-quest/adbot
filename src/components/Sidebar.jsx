@@ -10,10 +10,12 @@ import {
 } from "react-icons/fi";
 import LogoutModal from "./LogoutModal";
 import { AppContext } from "../context/AppContext";
-import { clearAllCookies } from "../Config/generalFunctions";
+import { clearAllCookies, createUrlBackend } from "../Config/generalFunctions";
 import AllSvgs from "../assets/AllSvgs";
 import { importConfig } from "../Config/importConfig";
 import UserAccountMenu from "../ui/UserAccountMenu";
+import axios from "axios";
+
 const menuItems = [
   { icon: FiPlayCircle, label: "Get Started", path: "/get-started" },
   { icon: FiGrid, label: "Dashboard", path: "/dashboard" },
@@ -52,6 +54,23 @@ const Sidebar = ({ children }) => {
     window.dispatchEvent(new Event("authChange"));
     navigate("/");
   };
+
+  async function fetchUser() {
+    try {
+      const { url, headers } = createUrlBackend(`user`);
+      const res = await axios.get(url, { headers });
+      dispatch({
+        type: "user/getStartedStatus",
+        payload: res.data.data.getStartedStatus || [],
+      });
+    } catch (error) {
+      console.log("error", error);
+    }
+  }
+
+  useEffect(() => {
+    fetchUser();
+  }, []);
 
   return (
     <div className="w-full flex">
@@ -191,7 +210,9 @@ const Sidebar = ({ children }) => {
                 Get started
               </span>
               <AllSvgs type={"rightPointerTopbar"} />
-              <span className={`text-[#696969] font-[500] text-xs`}>0/4</span>
+              <span className={`text-[#696969] font-[500] text-xs`}>
+                {state.getStartedStatus?.length}/4
+              </span>
             </button>
             <button
               className="flex w-[6.8rem]"

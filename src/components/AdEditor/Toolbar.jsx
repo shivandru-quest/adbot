@@ -1,18 +1,13 @@
 import React, { useEffect } from "react";
 import AllSvgs from "../../assets/AllSvgs";
+import { useSearchParams } from "react-router-dom";
 
 const Toolbar = ({
   onAddText,
-  setToolbarSelectedElement,
   toolbarSelectedElement,
+  handleToolBarClick
 }) => {
-  function handleToolBarClick(tool) {
-    if (tool === toolbarSelectedElement) {
-      setToolbarSelectedElement(null);
-    } else {
-      setToolbarSelectedElement(tool);
-    }
-  }
+  const [searchParams, setSearchParams] = useSearchParams();
 
   useEffect(() => {
     if (toolbarSelectedElement === "text") {
@@ -44,6 +39,30 @@ const Toolbar = ({
           } text-sm `}
         >
           Text
+        </span>
+      </div>
+      <div
+        className={`w-full flex flex-col items-center justify-center cursor-pointer py-2 ${
+          toolbarSelectedElement === "chat" ? "rounded-md bg-[#E2E2E2]" : ""
+        }`}
+        onClick={() => handleToolBarClick("chat")}
+      >
+        <div className="w-full p-2 flex justify-center">
+          <AllSvgs
+            type={"messageIcon"}
+            fillColor={
+              toolbarSelectedElement === "chat" ? "#181818" : "#535353"
+            }
+          />
+        </div>
+        <span
+          className={`${
+            toolbarSelectedElement === "chat"
+              ? "text-[#181818] font-[600]"
+              : "text-[#535353] font-[500]"
+          } text-sm `}
+        >
+          Chat
         </span>
       </div>
       <div

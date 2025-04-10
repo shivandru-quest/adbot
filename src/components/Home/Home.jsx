@@ -53,7 +53,7 @@ const Home = () => {
   async function fetchTemplates() {
     setIsLoading(true);
     try {
-      const { url, headers } = createUrlBackend();
+      const { url, headers } = createUrlBackend("template");
       const res = await axios.get(url, { headers });
       setUserTemplates(res.data.data);
       setIsLoading(false);
