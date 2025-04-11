@@ -1,6 +1,7 @@
 import React from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import AllSvgs from "../../assets/AllSvgs";
+import { useNavigate } from "react-router-dom";
 
 const backdropVariants = {
   hidden: { opacity: 0 },
@@ -13,6 +14,7 @@ const modalVariants = {
 };
 
 const LandingPageModal = ({ isOpen, onClose, element, setSelectedItem }) => {
+  const navigate = useNavigate();
   return (
     <AnimatePresence>
       {isOpen && (
@@ -48,7 +50,10 @@ const LandingPageModal = ({ isOpen, onClose, element, setSelectedItem }) => {
               />
             </div>
             <div className="w-full flex items-center justify-center mt-4 sm:mt-6 md:mt-0 lg:mt-0">
-              <button className="text-[#181818] text-base px-3 py-2 font-[600] rounded-md border border-[#E2E2E2] bg-white">
+              <button
+                className="text-[#181818] text-base px-3 py-2 font-[600] rounded-md border border-[#E2E2E2] bg-white"
+                onClick={() => navigate("/editor/new")}
+              >
                 Customise this template
               </button>
             </div>

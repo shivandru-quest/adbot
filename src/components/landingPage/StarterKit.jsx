@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { importConfig } from "../../Config/importConfig";
 import LandingPageModal from "./LandingPageModal";
-import { set } from "react-hook-form";
+import { useNavigate } from "react-router-dom";
 
 const templates = [
   {
@@ -26,6 +26,7 @@ const templates = [
   },
 ];
 const StarterKit = () => {
+  const navigate = useNavigate();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedItem, setSelectedItem] = useState(null);
 
@@ -67,7 +68,10 @@ const StarterKit = () => {
         ))}
       </div>
       <div className="w-full mt-10 flex items-center justify-center">
-        <button className="px-3 py-2 rounded-md text-[#181818] text-xs font-[600] border border-[#E2E2E2]">
+        <button
+          className="px-3 py-2 rounded-md text-[#181818] text-xs font-[600] border border-[#E2E2E2]"
+          onClick={() => navigate("/templates")}
+        >
           Show more
         </button>
       </div>

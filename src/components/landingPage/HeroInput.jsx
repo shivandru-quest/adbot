@@ -1,8 +1,10 @@
 import React, { useState } from "react";
 import AllSvgs from "../../assets/AllSvgs";
 import { v4 as uuidv4 } from "uuid";
+import { useNavigate } from "react-router-dom";
 
 const HeroInput = () => {
+  const navigate = useNavigate();
   const [fileData, setFileData] = useState([]);
   function handleButtonClick(e) {
     document.getElementById("file-upload").click();
@@ -92,7 +94,10 @@ const HeroInput = () => {
           <AllSvgs type={"attachFile"} />
         </button>
 
-        <button className="flex items-center gap-2 px-3 py-2 border border-[#E2E2E2] rounded-md bg-white text-[#181818] text-xs font-[500]">
+        <button
+          className="flex items-center gap-2 px-3 py-2 border border-[#E2E2E2] rounded-md bg-white text-[#181818] text-xs font-[500]"
+          onClick={() => navigate("/editor/new")}
+        >
           <span>Generate</span>
           <AllSvgs type={"magicWand"} />
         </button>
