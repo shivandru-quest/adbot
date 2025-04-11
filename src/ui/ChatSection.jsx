@@ -220,7 +220,7 @@ const ChatSection = () => {
                 )}
               </div>
               {msg.sender === "user" && (
-                <div className="min-w-8 h-8 rounded-full bg-[#E2E2E2] flex items-center justify-center">
+                <div className="min-w-8 max-w-8 w-8 h-8 rounded-full bg-[#E2E2E2] flex items-center justify-center">
                   {cookies.get("avatar" || "") ? (
                     <img
                       src={cookies.get("avatar" || "")}
